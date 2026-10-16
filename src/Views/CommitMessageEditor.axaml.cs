@@ -24,7 +24,7 @@ namespace SourceGit.Views
             var gitDir = new Commands.QueryGitDir(Path.GetDirectoryName(file)).GetResult();
             if (!string.IsNullOrEmpty(gitDir))
             {
-                var settingsFile = Path.Combine(gitDir, "sourcegit.settings");
+                var settingsFile = Path.Combine(gitDir, "gitstrand.settings");
                 if (File.Exists(settingsFile))
                 {
                     try

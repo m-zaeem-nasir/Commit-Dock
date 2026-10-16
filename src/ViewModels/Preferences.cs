@@ -825,7 +825,7 @@ namespace SourceGit.ViewModels
         private bool _useGitHubStyleAvatar = true;
         private bool _useCompactBranchNamesInGraph = true;
 
-        private bool _check4UpdatesOnStartup = true;
+        private bool _check4UpdatesOnStartup = false;
         private double _lastCheckUpdateTime = 0;
         private string _ignoreUpdateTag = string.Empty;
 
