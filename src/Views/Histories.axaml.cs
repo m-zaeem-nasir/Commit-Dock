@@ -46,9 +46,19 @@ namespace SourceGit.Views
             RefreshLayout();
         }
 
+        protected override void OnSizeChanged(SizeChangedEventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            // Side-by-side only when there is room for both the graph and the details; otherwise stack them.
+            if (UseHorizontal && (e.NewSize.Width >= MIN_HORIZONTAL_WIDTH) != _isHorizontalApplied)
+                RefreshLayout();
+        }
+
         private void RefreshLayout()
         {
-            if (UseHorizontal)
+            _isHorizontalApplied = UseHorizontal && (Bounds.Width <= 0 || Bounds.Width >= MIN_HORIZONTAL_WIDTH);
+            if (_isHorizontalApplied)
             {
                 var rowSpan = RowDefinitions.Count;
                 for (int i = 0; i < Children.Count; i++)
@@ -80,7 +90,10 @@ namespace SourceGit.Views
             }
         }
 
+        private const double MIN_HORIZONTAL_WIDTH = 1000;
+
         private bool _useHorizontal = false;
+        private bool _isHorizontalApplied = false;
     }
 
     public class HistoriesCommitList : DataGrid
@@ -783,10 +796,13 @@ namespace SourceGit.Views
 
             IsScrollToTopVisible = startY >= rowHeight;
 
+            var listWidth = dataGrid.Bounds.Width;
+            UpdateRefsColumnForWidth(dataGrid.Columns[5], listWidth);
+
             var graphColumn = dataGrid.Columns[6];
             if (CommitGraph.Graph is { } graph)
             {
-                var wanted = Math.Clamp(graph.Width + 12, 80, 420);
+                var wanted = Math.Clamp(graph.Width + 12, 80, Math.Max(120, Math.Min(420, listWidth * 0.35)));
                 if (Math.Abs(graphColumn.Width.Value - wanted) > 0.5)
                     graphColumn.Width = new(wanted, DataGridLengthUnitType.Pixel);
             }
@@ -800,6 +816,24 @@ namespace SourceGit.Views
                 Math.Abs(lastLayout.ClipWidth - clipWidth) > 0.01 ||
                 Math.Abs(lastLayout.RowHeight - rowHeight) > 0.01)
                 CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight);
+        }
+
+        private void UpdateRefsColumnForWidth(DataGridColumn refsColumn, double listWidth)
+        {
+            if (listWidth <= 0)
+                return;
+
+            // Branch/tag labels give up space first as the list gets narrower, then hide entirely.
+            var visible = listWidth >= 620;
+            if (refsColumn.IsVisible != visible)
+            {
+                refsColumn.IsVisible = visible;
+                CommitGraph.ShowRefConnectors = visible;
+            }
+
+            var width = listWidth >= 1100 ? 170 : (listWidth >= 800 ? 130 : 96);
+            if (visible && Math.Abs(refsColumn.Width.Value - width) > 0.5)
+                refsColumn.Width = new(width, DataGridLengthUnitType.Pixel);
         }
 
         private double GetColumnStartX(DataGridColumn column)

@@ -45,10 +45,38 @@
     <Style Selector="Button.tool:pointerover TextBlock.tool_label">
       <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
     </Style>
+
+    <!-- Narrow windows: drop the text labels and tighten the buttons. -->
+    <ContainerQuery Name="RepoToolbar" Query="max-width:1080">
+      <Style Selector="TextBlock.tool_label">
+        <Setter Property="IsVisible" Value="False"/>
+      </Style>
+      <Style Selector="StackPanel.tool_label_row">
+        <Setter Property="IsVisible" Value="False"/>
+      </Style>
+      <Style Selector="Button.tool">
+        <Setter Property="MinWidth" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Padding" Value="6,0"/>
+      </Style>
+      <Style Selector="Border.current_branch">
+        <Setter Property="MaxWidth" Value="160"/>
+      </Style>
+    </ContainerQuery>
+
+    <!-- Very narrow windows: keep only the core git actions. -->
+    <ContainerQuery Name="RepoToolbar" Query="max-width:820">
+      <Style Selector="StackPanel.toolbar_left">
+        <Setter Property="IsVisible" Value="False"/>
+      </Style>
+      <Style Selector="Border.current_branch">
+        <Setter Property="MaxWidth" Value="90"/>
+      </Style>
+    </ContainerQuery>
   </UserControl.Styles>
 
-  <Grid ColumnDefinitions="*,Auto,0,*">
-    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="6,0,0,0">
+  <Grid ColumnDefinitions="*,Auto,0,*" Container.Name="RepoToolbar" Container.Sizing="Width">
+    <StackPanel Grid.Column="0" Classes="toolbar_left" Orientation="Horizontal" Margin="6,0,0,0">
       <Button Classes="tool" Click="OpenWithExternalTools" ToolTip.Tip="{DynamicResource Text.Repository.OpenWithExternalTools}">
         <StackPanel>
           <Path Width="15" Height="15" Data="{StaticResource Icons.OpenWith}"/>
@@ -161,7 +189,7 @@
       <Button Classes="tool" Click="OpenToolsMenu" ToolTip.Tip="{DynamicResource Text.Toolbar.ToolsTip}">
         <StackPanel>
           <Path Width="15" Height="15" Data="{StaticResource Icons.Tool}"/>
-          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+          <StackPanel Classes="tool_label_row" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
             <TextBlock Classes="tool_label" Margin="0" Text="{DynamicResource Text.Toolbar.Tools}"/>
             <Path Width="7" Height="7" Margin="4,1,0,0" Data="{StaticResource Icons.Down}" Fill="{DynamicResource Brush.FG2}"/>
           </StackPanel>
@@ -182,6 +210,7 @@
             Data="{StaticResource Icons.Branch}"/>
 
       <Border Grid.Column="1"
+              Classes="current_branch"
               Margin="6,0,0,0"
               Background="Transparent"
               ToolTip.Tip="{Binding CurrentBranch?.Name, TargetNullValue='--', Mode=OneWay}">

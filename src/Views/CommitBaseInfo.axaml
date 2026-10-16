@@ -9,9 +9,22 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SourceGit.Views.CommitBaseInfo"
              x:Name="ThisControl">
+  <UserControl.Styles>
+    <!-- Narrow panel: move the parent links under the author instead of squeezing them beside it. -->
+    <ContainerQuery Name="CommitInfo" Query="max-width:440">
+      <Style Selector="StackPanel.commit_parents">
+        <Setter Property="Grid.Row" Value="1"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.ColumnSpan" Value="2"/>
+        <Setter Property="Margin" Value="12,6,0,0"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+      </Style>
+    </ContainerQuery>
+  </UserControl.Styles>
+
   <UserControl.DataTemplates>
     <DataTemplate DataType="m:Commit">
-      <StackPanel Orientation="Vertical" Margin="8,6,0,4">
+      <StackPanel Orientation="Vertical" Margin="8,6,0,4" Container.Name="CommitInfo" Container.Sizing="Width">
         <!-- Header: commit id & quick actions -->
         <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto" Height="28">
           <TextBlock Grid.Column="0" Text="{DynamicResource Text.CommitDetail.Info.Commit}" Foreground="{DynamicResource Brush.FG2}" VerticalAlignment="Center"/>
@@ -117,8 +130,8 @@
         </Border>
 
         <!-- Author, date & parents -->
-        <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,14,0,0">
-          <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8" ClipToBounds="True" VerticalAlignment="Top">
+        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto" Margin="0,14,0,0">
+          <Border Grid.Column="0" Grid.RowSpan="2" Width="40" Height="40" CornerRadius="8" ClipToBounds="True" VerticalAlignment="Top">
             <v:Avatar Width="40" Height="40" User="{Binding Author}"/>
           </Border>
 
@@ -140,7 +153,7 @@
             </StackPanel>
           </StackPanel>
 
-          <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2,0,0" IsVisible="{Binding Parents, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}">
+          <StackPanel Grid.Column="2" Classes="commit_parents" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2,0,0" IsVisible="{Binding Parents, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}">
             <TextBlock Text="{DynamicResource Text.CommitDetail.Info.Parent}" Foreground="{DynamicResource Brush.FG2}" Margin="0,0,6,0"/>
             <ItemsControl ItemsSource="{Binding Parents}">
               <ItemsControl.ItemsPanel>

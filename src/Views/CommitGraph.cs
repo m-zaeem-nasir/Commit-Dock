@@ -46,6 +46,18 @@ namespace SourceGit.Views
             set => SetValue(DotBrushProperty, value);
         }
 
+        public bool ShowRefConnectors
+        {
+            get => _showRefConnectors;
+            set
+            {
+                if (_showRefConnectors == value)
+                    return;
+                _showRefConnectors = value;
+                InvalidateVisual();
+            }
+        }
+
         public CommitGraph()
         {
             RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
@@ -227,7 +239,7 @@ namespace SourceGit.Views
                 var pen = dot.IsHighlighted ? Models.CommitGraph.Pens[dot.Color] : Models.CommitGraph.DimPens[dot.Color];
 
                 // Connect the branch/tag labels (drawn in the column on the left) to this commit.
-                if (dot.HasRefs)
+                if (dot.HasRefs && _showRefConnectors)
                     context.DrawLine(new Pen(pen.Brush, 2), new Point(-4, center.Y), center);
 
                 if (dot.Type == Models.CommitGraph.DotType.Merge)
@@ -306,6 +318,7 @@ namespace SourceGit.Views
 
         private Models.CommitGraph _graph = null;
         private Models.CommitGraphLayout _layout = null;
+        private bool _showRefConnectors = true;
         private readonly Dictionary<string, Bitmap> _avatars = new Dictionary<string, Bitmap>();
     }
 }
