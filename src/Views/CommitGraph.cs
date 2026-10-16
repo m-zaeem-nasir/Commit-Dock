@@ -1,12 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 
 namespace SourceGit.Views
 {
-    public class CommitGraph : Control
+    public class CommitGraph : Control, Models.IAvatarHost
     {
         public static readonly DirectProperty<CommitGraph, Models.CommitGraph> GraphProperty =
             AvaloniaProperty.RegisterDirect<CommitGraph, Models.CommitGraph>(
@@ -41,6 +46,11 @@ namespace SourceGit.Views
             set => SetValue(DotBrushProperty, value);
         }
 
+        public CommitGraph()
+        {
+            RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
+        }
+
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -57,9 +67,31 @@ namespace SourceGit.Views
             using (context.PushClip(new Rect(_layout.StartX, 0, clipWidth, clipHeight)))
             using (context.PushTransform(Matrix.CreateTranslation(_layout.StartX, -startY)))
             {
+                DrawTrails(context, _graph, startY, endY, rowHeight, clipWidth);
                 DrawCurves(context, _graph, startY, endY, rowHeight);
                 DrawAnchors(context, _graph, startY, endY, rowHeight);
             }
+        }
+
+        public void OnAvatarResourceChanged(string email, Bitmap image)
+        {
+            if (_avatars.ContainsKey(email))
+            {
+                _avatars[email] = image;
+                InvalidateVisual();
+            }
+        }
+
+        protected override void OnLoaded(RoutedEventArgs e)
+        {
+            base.OnLoaded(e);
+            Models.AvatarManager.Instance.Subscribe(this);
+        }
+
+        protected override void OnUnloaded(RoutedEventArgs e)
+        {
+            base.OnUnloaded(e);
+            Models.AvatarManager.Instance.Unsubscribe(this);
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -70,6 +102,23 @@ namespace SourceGit.Views
                 change.Property == LayoutProperty ||
                 change.Property == DotBrushProperty)
                 InvalidateVisual();
+        }
+
+        private void DrawTrails(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight, double width)
+        {
+            // A soft band in the lane color runs from each commit to the edge of the graph column.
+            foreach (var dot in graph.Dots)
+            {
+                var y = dot.Center.Y * rowHeight;
+                if (y < top - rowHeight)
+                    continue;
+                if (y > bottom)
+                    break;
+
+                var color = ((ISolidColorBrush)Models.CommitGraph.Pens[dot.Color].Brush).Color;
+                var brush = new SolidColorBrush(color, dot.IsHighlighted ? 0.13 : 0.05);
+                context.FillRectangle(brush, new Rect(dot.Center.X, y - rowHeight / 2 + 2, Math.Max(0, width - dot.Center.X), rowHeight - 4));
+            }
         }
 
         private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
@@ -158,15 +207,13 @@ namespace SourceGit.Views
                 context.DrawGeometry(null, Models.CommitGraph.DimPens[color], geo);
 
             foreach (var (geo, color) in highlighted)
-                context.DrawGeometry(null, Models.CommitGraph.GlowPens[color], geo);
-
-            foreach (var (geo, color) in highlighted)
                 context.DrawGeometry(null, Models.CommitGraph.Pens[color], geo);
         }
 
         private void DrawAnchors(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
         {
             var halo = DotBrush;
+            var typeface = new Typeface(TextElement.GetFontFamily(this), FontStyle.Normal, FontWeight.Bold);
 
             foreach (var dot in graph.Dots)
             {
@@ -178,30 +225,87 @@ namespace SourceGit.Views
                     break;
 
                 var pen = dot.IsHighlighted ? Models.CommitGraph.Pens[dot.Color] : Models.CommitGraph.DimPens[dot.Color];
-                var ringPen = new Pen(pen.Brush, 2.5);
-                switch (dot.Type)
+
+                // Connect the branch/tag labels (drawn in the column on the left) to this commit.
+                if (dot.HasRefs)
+                    context.DrawLine(new Pen(pen.Brush, 2), new Point(-4, center.Y), center);
+
+                if (dot.Type == Models.CommitGraph.DotType.Merge)
                 {
-                    case Models.CommitGraph.DotType.Head:
-                        if (dot.IsHighlighted)
-                            context.DrawEllipse(Models.CommitGraph.GlowPens[dot.Color].Brush, null, center, 15, 15);
-                        context.DrawEllipse(halo, null, center, 10.5, 10.5);
-                        context.DrawEllipse(null, ringPen, center, 9, 9);
-                        context.DrawEllipse(pen.Brush, null, center, 5, 5);
-                        break;
-                    case Models.CommitGraph.DotType.Merge:
-                        context.DrawEllipse(halo, null, center, 9.5, 9.5);
-                        context.DrawEllipse(null, ringPen, center, 6.5, 6.5);
-                        context.DrawEllipse(pen.Brush, null, center, 2.5, 2.5);
-                        break;
-                    default:
-                        context.DrawEllipse(halo, null, center, 9.5, 9.5);
-                        context.DrawEllipse(pen.Brush, null, center, 7, 7);
-                        break;
+                    context.DrawEllipse(halo, null, center, 8, 8);
+                    context.DrawEllipse(pen.Brush, null, center, 6, 6);
+                    continue;
                 }
+
+                var isHead = dot.Type == Models.CommitGraph.DotType.Head;
+                if (isHead && dot.IsHighlighted)
+                    context.DrawEllipse(Models.CommitGraph.GlowPens[dot.Color].Brush, null, center, AVATAR_RADIUS + 6, AVATAR_RADIUS + 6);
+
+                context.DrawEllipse(halo, null, center, AVATAR_RADIUS + 2, AVATAR_RADIUS + 2);
+
+                using (context.PushOpacity(dot.IsHighlighted ? 1.0 : 0.4))
+                    DrawAvatar(context, dot, center, typeface);
+
+                context.DrawEllipse(null, new Pen(Models.CommitGraph.Pens[dot.Color].Brush, isHead ? 3 : 2), center, AVATAR_RADIUS, AVATAR_RADIUS);
             }
         }
 
+        private void DrawAvatar(DrawingContext context, Models.CommitGraph.Dot dot, Point center, Typeface typeface)
+        {
+            var rect = new Rect(center.X - AVATAR_RADIUS, center.Y - AVATAR_RADIUS, AVATAR_RADIUS * 2, AVATAR_RADIUS * 2);
+            var image = GetAvatar(dot.Author);
+            if (image != null)
+            {
+                using (context.PushGeometryClip(new EllipseGeometry(rect)))
+                    context.DrawImage(image, rect);
+                return;
+            }
+
+            // No picture (yet): show the author's initials on a disc tinted with the lane color.
+            var color = ((ISolidColorBrush)Models.CommitGraph.Pens[dot.Color].Brush).Color;
+            var bg = new SolidColorBrush(Color.FromArgb(255, (byte)(color.R * 0.32), (byte)(color.G * 0.32), (byte)(color.B * 0.32)));
+            context.DrawEllipse(bg, null, center, AVATAR_RADIUS, AVATAR_RADIUS);
+
+            var initials = new FormattedText(
+                GetInitials(dot.Author?.Name),
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                typeface,
+                8,
+                new SolidColorBrush(color));
+            context.DrawText(initials, new Point(center.X - initials.Width / 2, center.Y - initials.Height / 2));
+        }
+
+        private Bitmap GetAvatar(Models.User user)
+        {
+            if (user == null || string.IsNullOrEmpty(user.Email))
+                return null;
+
+            if (!_avatars.TryGetValue(user.Email, out var image))
+            {
+                image = Models.AvatarManager.Instance.Request(user.Email, false);
+                _avatars[user.Email] = image;
+            }
+
+            return image;
+        }
+
+        private static string GetInitials(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return "?";
+
+            var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 2 && char.IsLetterOrDigit(parts[0][0]) && char.IsLetterOrDigit(parts[^1][0]))
+                return $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}";
+
+            return char.ToUpperInvariant(name.Trim()[0]).ToString();
+        }
+
+        private const double AVATAR_RADIUS = 9.5;
+
         private Models.CommitGraph _graph = null;
         private Models.CommitGraphLayout _layout = null;
+        private readonly Dictionary<string, Bitmap> _avatars = new Dictionary<string, Bitmap>();
     }
 }

@@ -19,13 +19,13 @@ namespace SourceGit.Models
         {
             get;
             set;
-        } = true;
+        } = false;
 
         public bool IsSHAColumnVisibleInHistory
         {
             get;
             set;
-        } = true;
+        } = false;
 
         public bool IsAuthorTimeColumnVisibleInHistory
         {

@@ -373,8 +373,10 @@ namespace SourceGit.Views
         {
             InitializeComponent();
 
-            // Show the commit time as the first column, before the graph.
+            // Display order: commit time, branch/tag labels, graph, then the commit message.
             CommitListContainer.Columns[4].DisplayIndex = 0;
+            CommitListContainer.Columns[5].DisplayIndex = 1;
+            CommitListContainer.Columns[6].DisplayIndex = 2;
         }
 
         public async Task GotoParent()
@@ -482,7 +484,7 @@ namespace SourceGit.Views
             var pos = e.GetPosition(border);
             if (_resizingAuthorColumn)
             {
-                var posX = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth;
+                var posX = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth;
                 var maxW = posX + CommitListContainer.Columns[1].ActualWidth - 100;
                 var delta = posX - pos.X;
                 var w = Math.Max(Math.Min(vm.AuthorColumnWidth + delta, maxW), 80);
@@ -491,7 +493,7 @@ namespace SourceGit.Views
             }
             else
             {
-                var dis = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+                var dis = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
                 if (dis < 4 && dis > -4)
                 {
                     if (border.Cursor != _resizingCursor)
@@ -510,7 +512,7 @@ namespace SourceGit.Views
                 return;
 
             var pos = e.GetPosition(border);
-            var dis = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+            var dis = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
             if (dis > 4 || dis < -4)
                 return;
 
@@ -781,8 +783,16 @@ namespace SourceGit.Views
 
             IsScrollToTopVisible = startY >= rowHeight;
 
-            var startX = GetGraphColumnStartX();
-            var clipWidth = dataGrid.Columns[0].ActualWidth - 4;
+            var graphColumn = dataGrid.Columns[6];
+            if (CommitGraph.Graph is { } graph)
+            {
+                var wanted = Math.Clamp(graph.Width + 12, 80, 420);
+                if (Math.Abs(graphColumn.Width.Value - wanted) > 0.5)
+                    graphColumn.Width = new(wanted, DataGridLengthUnitType.Pixel);
+            }
+
+            var startX = GetColumnStartX(graphColumn);
+            var clipWidth = graphColumn.ActualWidth;
             var lastLayout = CommitGraph.Layout;
             if (lastLayout == null ||
                 Math.Abs(lastLayout.StartX - startX) > 0.01 ||
@@ -792,14 +802,12 @@ namespace SourceGit.Views
                 CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight);
         }
 
-        private double GetGraphColumnStartX()
+        private double GetColumnStartX(DataGridColumn column)
         {
-            var columns = CommitListContainer.Columns;
-            var graphIndex = columns[0].DisplayIndex;
             var x = 0.0;
-            foreach (var col in columns)
+            foreach (var col in CommitListContainer.Columns)
             {
-                if (col.IsVisible && col.DisplayIndex < graphIndex)
+                if (col.IsVisible && col.DisplayIndex < column.DisplayIndex)
                     x += col.ActualWidth;
             }
             return x;

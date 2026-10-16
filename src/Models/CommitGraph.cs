@@ -19,13 +19,13 @@ namespace SourceGit.Models
 
     public class CommitGraph
     {
-        public const double LaneWidth = 22;
+        public const double LaneWidth = 24;
 
         public static List<Pen> Pens { get; } = [];
         public static List<Pen> DimPens { get; } = [];
         public static List<Pen> GlowPens { get; } = [];
 
-        public static void SetDefaultPens(double thickness = 3)
+        public static void SetDefaultPens(double thickness = 2)
         {
             SetPens(s_defaultPenColors, thickness);
         }
@@ -75,11 +75,14 @@ namespace SourceGit.Models
             public Point Center;
             public int Color;
             public bool IsHighlighted;
+            public bool HasRefs;
+            public User Author;
         }
 
         public List<Path> Paths { get; } = [];
         public List<Link> Links { get; } = [];
         public List<Dot> Dots { get; } = [];
+        public double Width { get; private set; } = 0;
 
         public static CommitGraph Generate(List<Commit> commits, bool firstParentOnlyEnabled, CommitGraphHighlighting highlighting, HashSet<string> highlightExtraCommits)
         {
@@ -209,7 +212,14 @@ namespace SourceGit.Models
                 // Calculate link position of this commit.
                 var position = new Point(major?.LastX ?? offsetX, offsetY);
                 var dotColor = major?.Path.Color ?? 0;
-                var anchor = new Dot() { Center = position, Color = dotColor, IsHighlighted = isHighlighted };
+                var anchor = new Dot()
+                {
+                    Center = position,
+                    Color = dotColor,
+                    IsHighlighted = isHighlighted,
+                    HasRefs = commit.HasDecorators,
+                    Author = commit.Author,
+                };
                 if (commit.IsCurrentHead)
                     anchor.Type = DotType.Head;
                 else if (commit.Parents.Count > 1)
@@ -261,6 +271,7 @@ namespace SourceGit.Models
                 // Margins & colors (used by Views.Histories).
                 commit.Color = dotColor;
                 commit.LeftMargin = Math.Max(offsetX, maxOffsetOld) + halfWidth + 2;
+                temp.Width = Math.Max(temp.Width, commit.LeftMargin);
             }
 
             // Deal with curves haven't ended yet.
