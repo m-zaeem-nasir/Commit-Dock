@@ -122,12 +122,8 @@ namespace SourceGit
             if (Current is not App app)
                 return;
 
-            if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Light;
-            else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Dark;
-            else
-                app.RequestedThemeVariant = ThemeVariant.Default;
+            app.RequestedThemeVariant = Models.ThemeVariants.Parse(theme);
+            var variantPalette = Models.ThemeVariants.GetGraphPalette(app.RequestedThemeVariant);
 
             if (app._themeOverrides != null)
             {
@@ -152,6 +148,8 @@ namespace SourceGit
 
                     if (overrides.GraphColors.Count > 0)
                         Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
+                    else if (variantPalette != null)
+                        Models.CommitGraph.SetPens(variantPalette, overrides.GraphPenThickness);
                     else
                         Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
 
@@ -162,6 +160,10 @@ namespace SourceGit
                 {
                     // ignore
                 }
+            }
+            else if (variantPalette != null)
+            {
+                Models.CommitGraph.SetPens(variantPalette, 2);
             }
             else
             {

@@ -197,13 +197,26 @@
                       MinHeight="28"
                       Padding="8,0"
                       HorizontalAlignment="Stretch"
-                      DisplayMemberBinding="{Binding Key, x:DataType=ThemeVariant}"
+                      ItemsSource="{x:Static m:ThemeVariants.Selectable}"
                       SelectedItem="{Binding Theme, Mode=TwoWay, Converter={x:Static c:StringConverters.ToTheme}}">
-              <ComboBox.Items>
-                <ThemeVariant>Default</ThemeVariant>
-                <ThemeVariant>Dark</ThemeVariant>
-                <ThemeVariant>Light</ThemeVariant>
-              </ComboBox.Items>
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="ThemeVariant">
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Border Width="26" Height="14"
+                            CornerRadius="4"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource Brush.Border2}"
+                            Background="{Binding Converter={x:Static c:ThemeVariantConverters.ToContentsBrush}}"
+                            VerticalAlignment="Center">
+                      <Ellipse Width="8" Height="8"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,3,0"
+                               Fill="{Binding Converter={x:Static c:ThemeVariantConverters.ToAccentBrush}}"/>
+                    </Border>
+                    <TextBlock Text="{Binding Key}" VerticalAlignment="Center"/>
+                  </StackPanel>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
             </ComboBox>
 
             <TextBlock Grid.Row="1" Grid.Column="0"
