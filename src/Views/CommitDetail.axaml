@@ -31,12 +31,15 @@
                             WebLinks="{Binding WebLinks}"
                             Margin="0,0,12,0"/>
 
+          <!-- Change Summary -->
+          <v:ChangeSummaryPresenter Margin="16,16,12,8" Changes="{Binding Changes}"/>
+
           <!-- Line -->
-          <Rectangle Height=".65" Margin="8,8,12,8" Fill="{DynamicResource Brush.Border2}"/>
+          <Rectangle Height=".65" Margin="8,0,12,6" Fill="{DynamicResource Brush.Border2}"/>
 
           <!-- Change List -->
           <ListBox Background="Transparent"
-                   Margin="64,0,12,4"
+                   Margin="4,0,12,4"
                    SelectionMode="Single"
                    ItemsSource="{Binding Changes, Converter={x:Static c:ListConverters.Top100Changes}}"
                    KeyDown="OnCommitListKeyDown">
@@ -56,7 +59,7 @@
 
             <ListBox.ItemTemplate>
               <DataTemplate DataType="m:Change">
-                <Grid Background="Transparent" Height="24" ColumnDefinitions="36,*" ContextRequested="OnChangeContextRequested" DoubleTapped="OnChangeDoubleTapped">
+                <Grid Background="Transparent" Height="28" ColumnDefinitions="36,*" ContextRequested="OnChangeContextRequested" DoubleTapped="OnChangeDoubleTapped">
                   <ToolTip.Tip>
                     <TextBlock TextWrapping="Wrap">
                       <Run Text="{Binding Path, Mode=OneWay}"/>
@@ -68,16 +71,18 @@
                   <v:ChangeStatusIcon Grid.Column="0"
                                       Width="14" Height="14"
                                       HorizontalAlignment="Left"
-                                      Margin="16,0,0,0"
+                                      Margin="12,0,0,0"
                                       Change="{Binding}"/>
-                  <TextBlock Grid.Column="1" Text="{Binding Path}" Margin="8,0" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis"/>
+                  <TextBlock Grid.Column="1" Margin="4,0,8,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextTrimming="CharacterEllipsis">
+                    <Run Text="{Binding Path, Mode=OneWay, Converter={x:Static c:StringConverters.ToParentDirWithSlash}}" Foreground="{DynamicResource Brush.FG2}"/><Run Text="{Binding Path, Mode=OneWay, Converter={x:Static c:StringConverters.ToFileNameOnly}}" Foreground="{DynamicResource Brush.FG1}"/>
+                  </TextBlock>
                 </Grid>
               </DataTemplate>
             </ListBox.ItemTemplate>
           </ListBox>
 
           <!-- Only Top100 Tip -->
-          <TextBlock Margin="108,0,12,16"
+          <TextBlock Margin="52,0,12,16"
                      Text="{DynamicResource Text.CommitDetail.Info.GotoChangesPage}"
                      Foreground="{DynamicResource Brush.FG2}"
                      IsVisible="{Binding Changes, Converter={x:Static c:ListConverters.IsOnlyTop100Shows}}"/>

@@ -14,14 +14,14 @@ namespace SourceGit.Views
         private static readonly Color[] COLOR =
         [
             Colors.Transparent,
-            Colors.Goldenrod,
-            Colors.Goldenrod,
-            Colors.LimeGreen,
-            Colors.Tomato,
-            Colors.Orchid,
-            Colors.Goldenrod,
-            Colors.SkyBlue,
-            Colors.OrangeRed,
+            Color.Parse("#E8A93A"), // modified
+            Color.Parse("#E8A93A"), // type changed
+            Color.Parse("#3FBF82"), // added
+            Color.Parse("#E5555D"), // deleted
+            Color.Parse("#4D8FE6"), // renamed
+            Color.Parse("#E8A93A"), // copied
+            Color.Parse("#4D8FE6"), // untracked
+            Color.Parse("#F06A3C"), // conflicted
         ];
 
         public static readonly DirectProperty<ChangeStatusIcon, bool> IsUnstagedChangeProperty =
