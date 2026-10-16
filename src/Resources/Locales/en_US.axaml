@@ -1013,6 +1013,15 @@
   <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ into ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Push ${0}$...</x:String>
   <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
+  <x:String x:Key="Text.Toolbar.Branch" xml:space="preserve">Branch</x:String>
+  <x:String x:Key="Text.Toolbar.FetchNow" xml:space="preserve">Fetch now (all remotes)</x:String>
+  <x:String x:Key="Text.Toolbar.Open" xml:space="preserve">Open</x:String>
+  <x:String x:Key="Text.Toolbar.PullNow" xml:space="preserve">Pull now (default options)</x:String>
+  <x:String x:Key="Text.Toolbar.PullOptions" xml:space="preserve">Pull &amp; fetch options</x:String>
+  <x:String x:Key="Text.Toolbar.PullWithOptions" xml:space="preserve">Pull with options...</x:String>
+  <x:String x:Key="Text.Toolbar.Terminal" xml:space="preserve">Terminal</x:String>
+  <x:String x:Key="Text.Toolbar.Tools" xml:space="preserve">Tools</x:String>
+  <x:String x:Key="Text.Toolbar.ToolsTip" xml:space="preserve">Git Flow, LFS, bisect, cleanup and more</x:String>
   <x:String x:Key="Text.TrustRepository" xml:space="preserve">Untrusted Repository</x:String>
   <x:String x:Key="Text.TrustRepository.CommandTip" xml:space="preserve">Do you want to run `git config --global --add safe.directory {0}` command to trust this path?</x:String>
   <x:String x:Key="Text.TrustRepository.Description" xml:space="preserve">Git refused to access this repository:  </x:String>
