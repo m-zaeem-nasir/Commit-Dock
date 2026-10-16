@@ -113,6 +113,11 @@ namespace SourceGit.ViewModels
             }
         }
 
+        public Repository Repo
+        {
+            get => _repo;
+        }
+
         public Models.CommitGraph Graph
         {
             get => _graph;

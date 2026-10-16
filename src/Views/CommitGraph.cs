@@ -72,16 +72,25 @@ namespace SourceGit.Views
 
             var startY = _layout.StartY;
             var clipWidth = _layout.ClipWidth;
-            var clipHeight = Bounds.Height;
+            var inset = _layout.TopInset;
+            var clipHeight = Bounds.Height - inset;
             var rowHeight = _layout.RowHeight;
             var endY = startY + clipHeight + 28;
 
-            using (context.PushClip(new Rect(_layout.StartX, 0, clipWidth, clipHeight)))
-            using (context.PushTransform(Matrix.CreateTranslation(_layout.StartX, -startY)))
+            using (context.PushClip(new Rect(_layout.StartX, inset, clipWidth, clipHeight)))
+            using (context.PushTransform(Matrix.CreateTranslation(_layout.StartX, inset - startY)))
             {
                 DrawTrails(context, _graph, startY, endY, rowHeight, clipWidth);
                 DrawCurves(context, _graph, startY, endY, rowHeight);
+                DrawWipConnector(context, _graph, startY, endY, rowHeight, inset);
                 DrawAnchors(context, _graph, startY, endY, rowHeight);
+            }
+
+            if (inset > 0)
+            {
+                using (context.PushClip(new Rect(_layout.StartX, 0, clipWidth, inset)))
+                using (context.PushTransform(Matrix.CreateTranslation(_layout.StartX, 0)))
+                    DrawWipNode(context, _graph, inset);
             }
         }
 
@@ -131,6 +140,55 @@ namespace SourceGit.Views
                 var brush = new SolidColorBrush(color, dot.IsHighlighted ? 0.13 : 0.05);
                 context.FillRectangle(brush, new Rect(dot.Center.X, y - rowHeight / 2 + 2, Math.Max(0, width - dot.Center.X), rowHeight - 4));
             }
+        }
+
+        private static Models.CommitGraph.Dot FindHead(Models.CommitGraph graph)
+        {
+            foreach (var dot in graph.Dots)
+            {
+                if (dot.Type == Models.CommitGraph.DotType.Head)
+                    return dot;
+            }
+
+            return null;
+        }
+
+        private static double GetWipX(Models.CommitGraph graph)
+        {
+            return FindHead(graph)?.Center.X ?? Models.CommitGraph.LaneWidth / 2 + 8;
+        }
+
+        private static IBrush GetWipBrush(Models.CommitGraph graph)
+        {
+            var head = FindHead(graph);
+            return Models.CommitGraph.Pens[head?.Color ?? 0].Brush;
+        }
+
+        private void DrawWipNode(DrawingContext context, Models.CommitGraph graph, double inset)
+        {
+            // Uncommitted work: a dashed, hollow node sitting above the current HEAD's lane.
+            var center = new Point(GetWipX(graph), inset / 2);
+            var brush = GetWipBrush(graph);
+            context.DrawEllipse(DotBrush, new Pen(brush, 2, new DashStyle([2, 1.5], 0)), center, AVATAR_RADIUS - 1, AVATAR_RADIUS - 1);
+            context.DrawLine(new Pen(brush, 2, new DashStyle([0.1, 2.2], 0), PenLineCap.Round), new Point(center.X, center.Y + AVATAR_RADIUS + 1), new Point(center.X, inset + 2));
+        }
+
+        private void DrawWipConnector(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight, double inset)
+        {
+            if (inset <= 0)
+                return;
+
+            var head = FindHead(graph);
+            if (head == null)
+                return;
+
+            // Dotted line from the top of the list down to the HEAD commit, while HEAD is below the top edge.
+            var headY = head.Center.Y * rowHeight;
+            if (headY <= top)
+                return;
+
+            var pen = new Pen(Models.CommitGraph.Pens[head.Color].Brush, 2, new DashStyle([0.1, 2.2], 0), PenLineCap.Round);
+            context.DrawLine(pen, new Point(head.Center.X, top - 2), new Point(head.Center.X, Math.Min(headY, bottom)));
         }
 
         private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)

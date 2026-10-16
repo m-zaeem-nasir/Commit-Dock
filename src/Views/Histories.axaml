@@ -33,6 +33,7 @@
                              SelectedCommits="{Binding SelectedCommits, Mode=TwoWay}"
                              ColumnHeaderHeight="24"
                              RowHeight="30"
+                             Classes.has_wip="{Binding Repo.LocalChangesCount, Converter={x:Static c:IntConverters.IsGreaterThanZero}}"
                              LayoutUpdated="OnCommitListLayoutUpdated"
                              ContextRequested="OnCommitListContextRequested"
                              DoubleTapped="OnCommitListDoubleTapped">
@@ -53,6 +54,11 @@
             <Style Selector="^ /template/ ScrollBar">
               <Setter Property="Background" Value="{DynamicResource Brush.Contents}"/>
             </Style>
+          </Style>
+
+          <!-- Leave room under the header for the pinned WIP row when there are local changes. -->
+          <Style Selector="DataGrid.has_wip /template/ DataGridRowsPresenter#PART_RowsPresenter">
+            <Setter Property="Margin" Value="0,30,0,0"/>
           </Style>
 
           <Style Selector="DataGridColumnHeader">
@@ -304,6 +310,39 @@
                   Data="{StaticResource Icons.Settings2}"/>
           </Button>
         </StackPanel>
+      </Border>
+
+      <Border x:Name="WipBar"
+              Margin="0,24,0,0"
+              Height="30"
+              VerticalAlignment="Top"
+              Background="{DynamicResource Brush.Contents}"
+              Cursor="Hand"
+              ToolTip.Tip="{DynamicResource Text.Histories.WIP.Tip}"
+              IsVisible="{Binding Repo.LocalChangesCount, Converter={x:Static c:IntConverters.IsGreaterThanZero}}"
+              PointerPressed="OnWipBarPointerPressed">
+        <Grid>
+          <Rectangle Margin="0,2" Fill="{DynamicResource Brush.Accent}" Opacity="0.14"/>
+
+          <StackPanel x:Name="WipContent" Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
+            <Border CornerRadius="4" Padding="8,2" Background="{DynamicResource Brush.Popup}" BorderBrush="{DynamicResource Brush.Border2}" BorderThickness="1">
+              <TextBlock Text="// WIP" FontFamily="{DynamicResource Fonts.Monospace}" Foreground="{DynamicResource Brush.FG2}"/>
+            </Border>
+
+            <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesModified, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
+              <Run Text="✎" Foreground="#FFFFC857"/>
+              <Run Text="{Binding Repo.LocalChangesModified, Mode=OneWay}" FontWeight="SemiBold"/>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesAdded, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
+              <Run Text="+" Foreground="#FF5EE6A0" FontWeight="Bold"/>
+              <Run Text="{Binding Repo.LocalChangesAdded, Mode=OneWay}" FontWeight="SemiBold"/>
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesDeleted, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
+              <Run Text="−" Foreground="#FFFF6B6B" FontWeight="Bold"/>
+              <Run Text="{Binding Repo.LocalChangesDeleted, Mode=OneWay}" FontWeight="SemiBold"/>
+            </TextBlock>
+          </StackPanel>
+        </Grid>
       </Border>
 
       <v:CommitGraph x:Name="CommitGraph"

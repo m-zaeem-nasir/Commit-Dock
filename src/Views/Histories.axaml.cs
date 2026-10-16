@@ -808,14 +808,17 @@ namespace SourceGit.Views
             }
 
             var startX = GetColumnStartX(graphColumn);
+            var topInset = WipBar.IsVisible ? WipBar.Height : 0;
+            WipContent.Margin = new Thickness(GetColumnStartX(dataGrid.Columns[0]) + 6, 0, 0, 0);
             var clipWidth = graphColumn.ActualWidth;
             var lastLayout = CommitGraph.Layout;
             if (lastLayout == null ||
                 Math.Abs(lastLayout.StartX - startX) > 0.01 ||
+                Math.Abs(lastLayout.TopInset - topInset) > 0.01 ||
                 Math.Abs(lastLayout.StartY - startY) > 0.01 ||
                 Math.Abs(lastLayout.ClipWidth - clipWidth) > 0.01 ||
                 Math.Abs(lastLayout.RowHeight - rowHeight) > 0.01)
-                CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight);
+                CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight, topInset);
         }
 
         private void UpdateRefsColumnForWidth(DataGridColumn refsColumn, double listWidth)
@@ -845,6 +848,14 @@ namespace SourceGit.Views
                     x += col.ActualWidth;
             }
             return x;
+        }
+
+        private void OnWipBarPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (DataContext is ViewModels.Histories histories)
+                histories.Repo.SelectedViewIndex = 1;
+
+            e.Handled = true;
         }
 
         private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)
