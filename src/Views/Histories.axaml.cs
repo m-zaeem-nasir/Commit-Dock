@@ -372,6 +372,9 @@ namespace SourceGit.Views
         public Histories()
         {
             InitializeComponent();
+
+            // Show the commit time as the first column, before the graph.
+            CommitListContainer.Columns[4].DisplayIndex = 0;
         }
 
         public async Task GotoParent()
@@ -479,7 +482,7 @@ namespace SourceGit.Views
             var pos = e.GetPosition(border);
             if (_resizingAuthorColumn)
             {
-                var posX = CommitListContainer.Columns[0].ActualWidth;
+                var posX = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth;
                 var maxW = posX + CommitListContainer.Columns[1].ActualWidth - 100;
                 var delta = posX - pos.X;
                 var w = Math.Max(Math.Min(vm.AuthorColumnWidth + delta, maxW), 80);
@@ -488,7 +491,7 @@ namespace SourceGit.Views
             }
             else
             {
-                var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+                var dis = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
                 if (dis < 4 && dis > -4)
                 {
                     if (border.Cursor != _resizingCursor)
@@ -507,7 +510,7 @@ namespace SourceGit.Views
                 return;
 
             var pos = e.GetPosition(border);
-            var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+            var dis = GetGraphColumnStartX() + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
             if (dis > 4 || dis < -4)
                 return;
 
@@ -778,13 +781,28 @@ namespace SourceGit.Views
 
             IsScrollToTopVisible = startY >= rowHeight;
 
+            var startX = GetGraphColumnStartX();
             var clipWidth = dataGrid.Columns[0].ActualWidth - 4;
             var lastLayout = CommitGraph.Layout;
             if (lastLayout == null ||
+                Math.Abs(lastLayout.StartX - startX) > 0.01 ||
                 Math.Abs(lastLayout.StartY - startY) > 0.01 ||
                 Math.Abs(lastLayout.ClipWidth - clipWidth) > 0.01 ||
                 Math.Abs(lastLayout.RowHeight - rowHeight) > 0.01)
-                CommitGraph.Layout = new(startY, clipWidth, rowHeight);
+                CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight);
+        }
+
+        private double GetGraphColumnStartX()
+        {
+            var columns = CommitListContainer.Columns;
+            var graphIndex = columns[0].DisplayIndex;
+            var x = 0.0;
+            foreach (var col in columns)
+            {
+                if (col.IsVisible && col.DisplayIndex < graphIndex)
+                    x += col.ActualWidth;
+            }
+            return x;
         }
 
         private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)

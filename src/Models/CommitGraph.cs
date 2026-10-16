@@ -6,7 +6,7 @@ using Avalonia.Media;
 
 namespace SourceGit.Models
 {
-    public record CommitGraphLayout(double StartY, double ClipWidth, double RowHeight);
+    public record CommitGraphLayout(double StartX, double StartY, double ClipWidth, double RowHeight);
 
     public enum CommitGraphHighlighting
     {
@@ -19,9 +19,13 @@ namespace SourceGit.Models
 
     public class CommitGraph
     {
-        public static List<Pen> Pens { get; } = [];
+        public const double LaneWidth = 22;
 
-        public static void SetDefaultPens(double thickness = 2)
+        public static List<Pen> Pens { get; } = [];
+        public static List<Pen> DimPens { get; } = [];
+        public static List<Pen> GlowPens { get; } = [];
+
+        public static void SetDefaultPens(double thickness = 3)
         {
             SetPens(s_defaultPenColors, thickness);
         }
@@ -29,9 +33,15 @@ namespace SourceGit.Models
         public static void SetPens(List<Color> colors, double thickness)
         {
             Pens.Clear();
+            DimPens.Clear();
+            GlowPens.Clear();
 
             foreach (var c in colors)
-                Pens.Add(new Pen(c.ToUInt32(), thickness));
+            {
+                Pens.Add(new Pen(new SolidColorBrush(c), thickness, null, PenLineCap.Round, PenLineJoin.Round));
+                DimPens.Add(new Pen(new SolidColorBrush(c, 0.28), thickness, null, PenLineCap.Round, PenLineJoin.Round));
+                GlowPens.Add(new Pen(new SolidColorBrush(c, 0.16), thickness + 6, null, PenLineCap.Round, PenLineJoin.Round));
+            }
 
             s_penCount = colors.Count;
         }
@@ -73,8 +83,9 @@ namespace SourceGit.Models
 
         public static CommitGraph Generate(List<Commit> commits, bool firstParentOnlyEnabled, CommitGraphHighlighting highlighting, HashSet<string> highlightExtraCommits)
         {
-            const double unitWidth = 12;
-            const double halfWidth = 6;
+            const double unitWidth = LaneWidth;
+            const double halfWidth = LaneWidth / 2;
+            const double laneMargin = 8;
             const double unitHeight = 1;
             const double halfHeight = 0.5;
 
@@ -93,7 +104,7 @@ namespace SourceGit.Models
                 offsetY += unitHeight;
 
                 // Find first curves that links to this commit and marks others that links to this commit ended.
-                var offsetX = 4 - halfWidth;
+                var offsetX = laneMargin - halfWidth;
                 var maxOffsetOld = unsolved.Count > 0 ? unsolved[^1].LastX : offsetX + unitWidth;
                 var isHighlighted = defHighlighting;
                 foreach (var l in unsolved)
@@ -261,7 +272,7 @@ namespace SourceGit.Models
                 if (path.Path.Points.Count == 1 && Math.Abs(path.Path.Points[0].Y - endY) < 0.0001)
                     continue;
 
-                path.End((i + 0.5) * unitWidth + 4, endY + halfHeight, halfHeight);
+                path.End((i + 0.5) * unitWidth + laneMargin, endY + halfHeight, halfHeight);
             }
             unsolved.Clear();
 
@@ -421,16 +432,18 @@ namespace SourceGit.Models
 
         private static int s_penCount = 0;
         private static readonly List<Color> s_defaultPenColors = [
-            Colors.Orange,
-            Colors.ForestGreen,
-            Colors.Turquoise,
-            Colors.Olive,
-            Colors.Magenta,
-            Colors.Red,
-            Colors.Khaki,
-            Colors.Lime,
-            Colors.RoyalBlue,
-            Colors.Teal,
+            Color.Parse("#9D8CFF"), // violet
+            Color.Parse("#3DD6E0"), // cyan
+            Color.Parse("#FF8A6B"), // coral
+            Color.Parse("#5EE6A0"), // mint
+            Color.Parse("#FFC857"), // amber
+            Color.Parse("#FF6FAE"), // pink
+            Color.Parse("#5AA9FF"), // sky
+            Color.Parse("#B8E05C"), // lime
+            Color.Parse("#FFA94D"), // orange
+            Color.Parse("#C792EA"), // orchid
+            Color.Parse("#FF6B6B"), // red
+            Color.Parse("#2EC4B6"), // teal
         ];
     }
 }

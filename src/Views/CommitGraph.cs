@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
@@ -43,7 +45,7 @@ namespace SourceGit.Views
         {
             base.Render(context);
 
-            if (_graph == null || _layout == null)
+            if (_graph == null || _layout == null || Models.CommitGraph.Pens.Count == 0)
                 return;
 
             var startY = _layout.StartY;
@@ -52,8 +54,8 @@ namespace SourceGit.Views
             var rowHeight = _layout.RowHeight;
             var endY = startY + clipHeight + 28;
 
-            using (context.PushClip(new Rect(0, 0, clipWidth, clipHeight)))
-            using (context.PushTransform(Matrix.CreateTranslation(0, -startY)))
+            using (context.PushClip(new Rect(_layout.StartX, 0, clipWidth, clipHeight)))
+            using (context.PushTransform(Matrix.CreateTranslation(_layout.StartX, -startY)))
             {
                 DrawCurves(context, _graph, startY, endY, rowHeight);
                 DrawAnchors(context, _graph, startY, endY, rowHeight);
@@ -72,7 +74,8 @@ namespace SourceGit.Views
 
         private void DrawCurves(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
         {
-            var grayedPen = new Pen(new SolidColorBrush(Colors.Gray, 0.4), Models.CommitGraph.Pens[0].Thickness);
+            var dimmed = new List<(StreamGeometry, int)>();
+            var highlighted = new List<(StreamGeometry, int)>();
 
             foreach (var link in graph.Links)
             {
@@ -91,8 +94,7 @@ namespace SourceGit.Views
                     ctx.QuadraticBezierTo(new Point(link.Control.X, link.Control.Y * rowHeight), new Point(link.End.X, endY));
                 }
 
-                var pen = link.IsHighlighted ? Models.CommitGraph.Pens[link.Color] : grayedPen;
-                context.DrawGeometry(null, pen, geo);
+                (link.IsHighlighted ? highlighted : dimmed).Add((geo, link.Color));
             }
 
             foreach (var line in graph.Paths)
@@ -107,8 +109,6 @@ namespace SourceGit.Views
                     break;
 
                 var geo = new StreamGeometry();
-                var pen = line.IsHighlighted ? Models.CommitGraph.Pens[line.Color] : grayedPen;
-
                 using (var ctx = geo.Open())
                 {
                     var started = false;
@@ -134,21 +134,11 @@ namespace SourceGit.Views
                             ended = true;
                         }
 
-                        if (cur.X > last.X)
+                        // Lane changes are drawn as smooth S-curves with vertical tangents at both ends.
+                        if (cur.X != last.X)
                         {
-                            ctx.QuadraticBezierTo(new Point(cur.X, last.Y), cur);
-                        }
-                        else if (cur.X < last.X)
-                        {
-                            if (i < size - 1)
-                            {
-                                var midY = (last.Y + cur.Y) / 2;
-                                ctx.CubicBezierTo(new Point(last.X, midY + 4), new Point(cur.X, midY - 4), cur);
-                            }
-                            else
-                            {
-                                ctx.QuadraticBezierTo(new Point(last.X, cur.Y), cur);
-                            }
+                            var midY = (last.Y + cur.Y) / 2;
+                            ctx.CubicBezierTo(new Point(last.X, midY), new Point(cur.X, midY), cur);
                         }
                         else
                         {
@@ -161,15 +151,22 @@ namespace SourceGit.Views
                     }
                 }
 
-                context.DrawGeometry(null, pen, geo);
+                (line.IsHighlighted ? highlighted : dimmed).Add((geo, line.Color));
             }
+
+            foreach (var (geo, color) in dimmed)
+                context.DrawGeometry(null, Models.CommitGraph.DimPens[color], geo);
+
+            foreach (var (geo, color) in highlighted)
+                context.DrawGeometry(null, Models.CommitGraph.GlowPens[color], geo);
+
+            foreach (var (geo, color) in highlighted)
+                context.DrawGeometry(null, Models.CommitGraph.Pens[color], geo);
         }
 
         private void DrawAnchors(DrawingContext context, Models.CommitGraph graph, double top, double bottom, double rowHeight)
         {
-            var dotFill = DotBrush;
-            var dotFillPen = new Pen(dotFill, 2);
-            var grayedPen = new Pen(Brushes.Gray, Models.CommitGraph.Pens[0].Thickness);
+            var halo = DotBrush;
 
             foreach (var dot in graph.Dots)
             {
@@ -180,20 +177,25 @@ namespace SourceGit.Views
                 if (center.Y > bottom)
                     break;
 
-                var pen = dot.IsHighlighted ? Models.CommitGraph.Pens[dot.Color] : grayedPen;
+                var pen = dot.IsHighlighted ? Models.CommitGraph.Pens[dot.Color] : Models.CommitGraph.DimPens[dot.Color];
+                var ringPen = new Pen(pen.Brush, 2.5);
                 switch (dot.Type)
                 {
                     case Models.CommitGraph.DotType.Head:
-                        context.DrawEllipse(dotFill, pen, center, 6, 6);
-                        context.DrawEllipse(pen.Brush, null, center, 3, 3);
+                        if (dot.IsHighlighted)
+                            context.DrawEllipse(Models.CommitGraph.GlowPens[dot.Color].Brush, null, center, 15, 15);
+                        context.DrawEllipse(halo, null, center, 10.5, 10.5);
+                        context.DrawEllipse(null, ringPen, center, 9, 9);
+                        context.DrawEllipse(pen.Brush, null, center, 5, 5);
                         break;
                     case Models.CommitGraph.DotType.Merge:
-                        context.DrawEllipse(pen.Brush, null, center, 6, 6);
-                        context.DrawLine(dotFillPen, new Point(center.X, center.Y - 3), new Point(center.X, center.Y + 3));
-                        context.DrawLine(dotFillPen, new Point(center.X - 3, center.Y), new Point(center.X + 3, center.Y));
+                        context.DrawEllipse(halo, null, center, 9.5, 9.5);
+                        context.DrawEllipse(null, ringPen, center, 6.5, 6.5);
+                        context.DrawEllipse(pen.Brush, null, center, 2.5, 2.5);
                         break;
                     default:
-                        context.DrawEllipse(dotFill, pen, center, 3, 3);
+                        context.DrawEllipse(halo, null, center, 9.5, 9.5);
+                        context.DrawEllipse(pen.Brush, null, center, 7, 7);
                         break;
                 }
             }

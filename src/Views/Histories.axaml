@@ -32,7 +32,7 @@
                              TotalCommits="{Binding Commits.Count, Mode=OneWay}"
                              SelectedCommits="{Binding SelectedCommits, Mode=TwoWay}"
                              ColumnHeaderHeight="24"
-                             RowHeight="26"
+                             RowHeight="34"
                              LayoutUpdated="OnCommitListLayoutUpdated"
                              ContextRequested="OnCommitListContextRequested"
                              DoubleTapped="OnCommitListDoubleTapped">
@@ -137,7 +137,7 @@
                                            HasSingleRemote="{Binding $parent[v:Histories].HasSingleRemote}"/>
 
                     <v:CommitSubjectPresenter Grid.Column="3"
-                                              Height="26"
+                                              Height="34"
                                               FontFamily="{DynamicResource Fonts.Default}"
                                               FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize}"
                                               CodeFontFamily="{DynamicResource Fonts.Monospace}"
