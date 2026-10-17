@@ -9,43 +9,36 @@
              x:Class="SourceGit.Views.RepositoryToolbar"
              x:DataType="vm:Repository">
   <UserControl.Styles>
-    <Style Selector="Button.tool">
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="BorderThickness" Value="0"/>
-      <Setter Property="Padding" Value="8,4,8,3"/>
-      <Setter Property="MinWidth" Value="50"/>
-      <Setter Property="Height" Value="44"/>
-      <Setter Property="CornerRadius" Value="6"/>
-      <Setter Property="VerticalAlignment" Value="Center"/>
-      <Setter Property="HorizontalContentAlignment" Value="Center"/>
-      <Setter Property="Cursor" Value="Hand"/>
+    <Style Selector="Border.sync_badge">
+      <Setter Property="Height" Value="14"/>
+      <Setter Property="MinWidth" Value="14"/>
+      <Setter Property="Padding" Value="4,0"/>
+      <Setter Property="CornerRadius" Value="7"/>
+      <Setter Property="Margin" Value="0,-5,-9,0"/>
+      <Setter Property="HorizontalAlignment" Value="Right"/>
+      <Setter Property="VerticalAlignment" Value="Top"/>
+      <Setter Property="Background" Value="{DynamicResource Brush.Accent}"/>
     </Style>
-    <Style Selector="Button.tool:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-      <Setter Property="Background" Value="{DynamicResource Brush.FlatButton.BackgroundHovered}"/>
-    </Style>
-    <Style Selector="Button.tool:pressed /template/ ContentPresenter#PART_ContentPresenter">
-      <Setter Property="Background" Value="{DynamicResource Brush.FlatButton.Background}"/>
-    </Style>
-    <Style Selector="Button.tool.arrow">
-      <Setter Property="MinWidth" Value="16"/>
-      <Setter Property="Padding" Value="2,0"/>
-    </Style>
-    <Style Selector="Button.tool Path">
-      <Setter Property="Fill" Value="{DynamicResource Brush.FG1}"/>
-    </Style>
-    <Style Selector="Button.tool:pointerover Path">
-      <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
-    </Style>
-    <Style Selector="TextBlock.tool_label">
-      <Setter Property="FontSize" Value="11"/>
-      <Setter Property="Margin" Value="0,4,0,0"/>
+    <Style Selector="Border.sync_badge > TextBlock">
+      <Setter Property="FontSize" Value="9.5"/>
+      <Setter Property="FontWeight" Value="Bold"/>
       <Setter Property="HorizontalAlignment" Value="Center"/>
-      <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Foreground" Value="{DynamicResource Brush.OnAccent}"/>
     </Style>
-    <Style Selector="Button.tool:pointerover TextBlock.tool_label">
-      <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+    <Style Selector="Button.branch_chip">
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="10,0"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border2}"/>
+      <Setter Property="Background" Value="{DynamicResource Brush.Contents}"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-
+    <Style Selector="Button.branch_chip:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource Brush.Hover}"/>
+      <Setter Property="BorderBrush" Value="{DynamicResource Brush.Accent}"/>
+    </Style>
     <!-- Narrow windows: drop the text labels and tighten the buttons. -->
     <ContainerQuery Name="RepoToolbar" Query="max-width:1080">
       <Style Selector="TextBlock.tool_label">
@@ -112,17 +105,16 @@
           <StackPanel>
             <Grid Width="22" Height="15" HorizontalAlignment="Center">
               <Path Width="15" Height="15" Data="{StaticResource Icons.Pull}"/>
-              <Ellipse Width="7" Height="7"
-                       HorizontalAlignment="Right" VerticalAlignment="Top"
-                       Fill="#FF5EE6A0"
-                       IsVisible="{Binding CurrentBranch?.Behind, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
+<Border Classes="sync_badge" IsVisible="{Binding CurrentBranch?.Behind, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}">
+              <TextBlock Text="{Binding CurrentBranch?.Behind, Mode=OneWay, Converter={x:Static c:ListConverters.ToCountNumber}}"/>
+            </Border>
             </Grid>
             <TextBlock Classes="tool_label" Text="{DynamicResource Text.Pull}"/>
           </StackPanel>
         </Button>
 
         <Button Classes="tool arrow" Click="OpenPullOptions" ToolTip.Tip="{DynamicResource Text.Toolbar.PullOptions}">
-          <Path Width="8" Height="8" Margin="0,0,0,12" Data="{StaticResource Icons.Down}"/>
+          <Path Width="9" Height="9" VerticalAlignment="Top" Margin="0,8,0,0" Data="{StaticResource Icons.Down}"/>
         </Button>
       </StackPanel>
 
@@ -137,10 +129,9 @@
         <StackPanel>
           <Grid Width="22" Height="15" HorizontalAlignment="Center">
             <Path Width="15" Height="15" Data="{StaticResource Icons.Push}"/>
-            <Ellipse Width="7" Height="7"
-                     HorizontalAlignment="Right" VerticalAlignment="Top"
-                     Fill="#FF5EE6A0"
-                     IsVisible="{Binding CurrentBranch?.Ahead, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"/>
+<Border Classes="sync_badge" IsVisible="{Binding CurrentBranch?.Ahead, Mode=OneWay, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}">
+              <TextBlock Text="{Binding CurrentBranch?.Ahead, Mode=OneWay, Converter={x:Static c:ListConverters.ToCountNumber}}"/>
+            </Border>
           </Grid>
           <TextBlock Classes="tool_label" Text="{DynamicResource Text.Push}"/>
         </StackPanel>
@@ -203,28 +194,29 @@
       <Button Width="0" Height="0" Click="FetchDirectlyByHotKey" IsVisible="False" HotKey="{OnPlatform Ctrl+Down, macOS=⌘+Down}"/>
     </StackPanel>
 
-    <Grid Grid.Column="3" HorizontalAlignment="Right" ColumnDefinitions="Auto,*,32">
-      <Path Grid.Column="0"
-            Width="13" Height="13"
-            Margin="18,0,0,0"
-            Data="{StaticResource Icons.Branch}"/>
-
-      <Border Grid.Column="1"
-              Classes="current_branch"
-              Margin="6,0,0,0"
-              Background="Transparent"
+    <Grid Grid.Column="3" HorizontalAlignment="Right" ColumnDefinitions="*,Auto" Margin="18,0,8,0">
+      <Button Grid.Column="0"
+              Classes="branch_chip"
+              Click="OpenBranchSwitcher"
               ToolTip.Tip="{Binding CurrentBranch?.Name, TargetNullValue='--', Mode=OneWay}">
-        <TextBlock Text="{Binding CurrentBranch?.Name, TargetNullValue='--', Mode=OneWay}"
-                   TextTrimming="CharacterEllipsis"/>
-      </Border>
+        <Grid ColumnDefinitions="Auto,*,Auto">
+          <Path Grid.Column="0" Width="13" Height="13" Data="{StaticResource Icons.Branch}" Fill="{DynamicResource Brush.Accent}"/>
+          <Border Grid.Column="1" Classes="current_branch" Margin="8,0" MaxWidth="260">
+            <TextBlock Text="{Binding CurrentBranch?.Name, TargetNullValue='--', Mode=OneWay}"
+                       FontWeight="SemiBold"
+                       TextTrimming="CharacterEllipsis"/>
+          </Border>
+          <Path Grid.Column="2" Width="9" Height="9" Data="{StaticResource Icons.Down}" Fill="{DynamicResource Brush.FG2}"/>
+        </Grid>
+      </Button>
 
-      <Button Grid.Column="2"
+      <Button Grid.Column="1"
               Classes="icon_button"
-              Width="32"
+              Width="32" Height="32"
+              Margin="4,0,0,0"
               Click="NavigateToHead"
               ToolTip.Tip="{DynamicResource Text.Repository.NavigateToCurrentHead}">
-        <Path Width="13" Height="13"
-              Margin="0,2,0,0"
+        <Path Width="14" Height="14"
               Data="{StaticResource Icons.Target}"/>
       </Button>
     </Grid>

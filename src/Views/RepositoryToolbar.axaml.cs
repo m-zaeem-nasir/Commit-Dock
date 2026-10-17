@@ -652,6 +652,15 @@ namespace SourceGit.Views
             }
         }
 
+        private void OpenBranchSwitcher(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ViewModels.Repository repo)
+            {
+                new ViewModels.CheckoutCommandPalette(repo).Open();
+                e.Handled = true;
+            }
+        }
+
         private void NavigateToHead(object sender, RoutedEventArgs e)
         {
             if (DataContext is ViewModels.Repository { CurrentBranch: { } head } repo)
