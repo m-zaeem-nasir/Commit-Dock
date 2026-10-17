@@ -787,6 +787,10 @@
   <x:String x:Key="Text.PushToNewBranch" xml:space="preserve">Push to a NEW branch</x:String>
   <x:String x:Key="Text.PushToNewBranch.Title" xml:space="preserve">Input name of the new remote branch:</x:String>
   <x:String x:Key="Text.Quit" xml:space="preserve">Quit</x:String>
+  <x:String x:Key="Text.Rail.Changes" xml:space="preserve">Changes</x:String>
+  <x:String x:Key="Text.Rail.Graph" xml:space="preserve">Graph</x:String>
+  <x:String x:Key="Text.Rail.Settings" xml:space="preserve">Settings</x:String>
+  <x:String x:Key="Text.Rail.Stashes" xml:space="preserve">Stashes</x:String>
   <x:String x:Key="Text.Rebase" xml:space="preserve">Rebase Current Branch</x:String>
   <x:String x:Key="Text.Rebase.AutoStash" xml:space="preserve">Stash &amp; reapply local changes</x:String>
   <x:String x:Key="Text.Rebase.NoVerify" xml:space="preserve">Bypass the pre-rebase hook</x:String>
@@ -1024,11 +1028,13 @@
   <x:String x:Key="Text.Terminate" xml:space="preserve">Terminate</x:String>
   <x:String x:Key="Text.Toolbar.AddFolder" xml:space="preserve">Add Folder</x:String>
   <x:String x:Key="Text.Toolbar.Branch" xml:space="preserve">Branch</x:String>
+  <x:String x:Key="Text.Toolbar.Clone" xml:space="preserve">Clone</x:String>
   <x:String x:Key="Text.Toolbar.FetchNow" xml:space="preserve">Fetch now (all remotes)</x:String>
   <x:String x:Key="Text.Toolbar.Open" xml:space="preserve">Open</x:String>
   <x:String x:Key="Text.Toolbar.PullNow" xml:space="preserve">Pull now (default options)</x:String>
   <x:String x:Key="Text.Toolbar.PullOptions" xml:space="preserve">Pull &amp; fetch options</x:String>
   <x:String x:Key="Text.Toolbar.PullWithOptions" xml:space="preserve">Pull with options...</x:String>
+  <x:String x:Key="Text.Toolbar.Scan" xml:space="preserve">Scan</x:String>
   <x:String x:Key="Text.Toolbar.Terminal" xml:space="preserve">Terminal</x:String>
   <x:String x:Key="Text.Toolbar.Tools" xml:space="preserve">Tools</x:String>
   <x:String x:Key="Text.Toolbar.ToolsTip" xml:space="preserve">Git Flow, LFS, bisect, cleanup and more</x:String>
@@ -1056,6 +1062,8 @@
   <x:String x:Key="Text.Welcome.Delete" xml:space="preserve">Delete</x:String>
   <x:String x:Key="Text.Welcome.DragDropTip" xml:space="preserve">Tip: drag &amp; drop folders here to add them, and group repositories however you like.</x:String>
   <x:String x:Key="Text.Welcome.Edit" xml:space="preserve">Edit</x:String>
+  <x:String x:Key="Text.Welcome.Empty.Desc" xml:space="preserve">Open a folder you already have, or clone one from a remote, to get started.</x:String>
+  <x:String x:Key="Text.Welcome.Empty.Title" xml:space="preserve">Welcome to Commit Dock</x:String>
   <x:String x:Key="Text.Welcome.Move" xml:space="preserve">Move to Another Group</x:String>
   <x:String x:Key="Text.Welcome.OpenAllInNode" xml:space="preserve">Open All Repositories</x:String>
   <x:String x:Key="Text.Welcome.OpenOrInit" xml:space="preserve">Open Repository</x:String>
