@@ -862,6 +862,33 @@ namespace SourceGit.Views
             e.Handled = true;
         }
 
+        private void OnCloseLocalChangeDiff(object sender, RoutedEventArgs e)
+        {
+            CloseLocalChangeDiff();
+            e.Handled = true;
+        }
+
+        private bool CloseLocalChangeDiff()
+        {
+            if (DataContext is not ViewModels.Histories { IsLocalChangesInDetail: true, Repo.WorkingCopy: { DetailContext: not null } workingCopy })
+                return false;
+
+            // Deselecting the file drops its diff; the WIP panel stays open next to the graph.
+            workingCopy.ClearSelection();
+            return true;
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && e.KeyModifiers == KeyModifiers.None && CloseLocalChangeDiff())
+            {
+                e.Handled = true;
+                return;
+            }
+
+            base.OnKeyDown(e);
+        }
+
         private void OnWipBarDoubleTapped(object sender, TappedEventArgs e)
         {
             if (DataContext is ViewModels.Histories histories)

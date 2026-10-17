@@ -531,6 +531,9 @@
   <x:String x:Key="Text.Histories.Header.Message" xml:space="preserve">COMMIT MESSAGE</x:String>
   <x:String x:Key="Text.Histories.Header.Refs" xml:space="preserve">BRANCH / TAG</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff" xml:space="preserve">Local change</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff.Close" xml:space="preserve">Close and return to the graph (Esc)</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff.Tip" xml:space="preserve">press Esc or ✕ to return to the graph</x:String>
   <x:String x:Key="Text.Histories.WIP.Tip" xml:space="preserve">Uncommitted local changes. Click to review and commit them here, double-click to open the full Local Changes page.</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>

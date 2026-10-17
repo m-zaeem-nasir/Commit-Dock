@@ -217,7 +217,7 @@
                   Focusable="False"/>
 
     <!-- Right -->
-    <Grid Grid.Column="2" Margin="4,4,6,0">
+    <Grid x:Name="RightPane" Grid.Column="2" Margin="4,4,6,0">
       <Grid.RowDefinitions>
         <RowDefinition Height="*" MinHeight="100"/>
         <RowDefinition Height="4"/>
@@ -226,7 +226,7 @@
       </Grid.RowDefinitions>
 
       <!-- Select Change Detail -->
-      <Grid Grid.Row="0">
+      <Grid x:Name="DiffArea" Grid.Row="0">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Path Width="64" Height="64" Data="{StaticResource Icons.Diff}" Fill="{DynamicResource Brush.FG2}"/>
           <TextBlock Margin="0,16,0,0"
@@ -236,7 +236,7 @@
                      HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <ContentControl Content="{Binding DetailContext}">
+        <ContentControl x:Name="DiffContent" Content="{Binding DetailContext}">
           <ContentControl.DataTemplates>
             <DataTemplate DataType="vm:Conflict">
               <v:Conflict/>
@@ -250,7 +250,7 @@
       </Grid>
 
       <!-- Splitter -->
-      <GridSplitter Grid.Row="1" MinHeight="1"
+      <GridSplitter x:Name="DiffSplitter" Grid.Row="1" MinHeight="1"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Background="Transparent"
                     Focusable="False"/>

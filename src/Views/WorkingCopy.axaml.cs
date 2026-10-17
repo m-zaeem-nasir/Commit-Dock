@@ -38,6 +38,22 @@ namespace SourceGit.Views
             }
         }
 
+        /// <summary>
+        ///     When greater than zero, the stacked bottom part gets exactly this height and the lists take the rest.
+        /// </summary>
+        public double StackedBottomHeight
+        {
+            get => _stackedBottomHeight;
+            set
+            {
+                if (Math.Abs(_stackedBottomHeight - value) < 0.01)
+                    return;
+
+                _stackedBottomHeight = value;
+                InvalidateMeasure();
+            }
+        }
+
         protected override Type StyleKeyOverride => typeof(Grid);
 
         protected override Size MeasureOverride(Size availableSize)
@@ -64,22 +80,60 @@ namespace SourceGit.Views
             return finalSize;
         }
 
-        private static (double, double, double) GetStackedHeights(double height)
+        private (double, double, double) GetStackedHeights(double height)
         {
             const double splitter = 4;
-            var top = Math.Max(220, Math.Round(height * 0.4));
+            var top = _stackedBottomHeight > 0
+                ? Math.Max(120, height - _stackedBottomHeight - splitter)
+                : Math.Max(220, Math.Round(height * 0.4));
             var bottom = Math.Max(0, height - top - splitter);
             return (top, splitter, bottom);
         }
 
         private bool _isStacked = false;
+        private double _stackedBottomHeight = 0;
     }
 
     public partial class WorkingCopy : UserControl
     {
+        public static readonly StyledProperty<bool> ShowDiffExternallyProperty =
+            AvaloniaProperty.Register<WorkingCopy, bool>(nameof(ShowDiffExternally));
+
+        /// <summary>
+        ///     The selected change's diff is shown by the host (e.g. over the history graph) instead of in this view,
+        ///     which then only keeps the change lists and the commit box.
+        /// </summary>
+        public bool ShowDiffExternally
+        {
+            get => GetValue(ShowDiffExternallyProperty);
+            set => SetValue(ShowDiffExternallyProperty, value);
+        }
+
         public WorkingCopy()
         {
             InitializeComponent();
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == ShowDiffExternallyProperty)
+                ApplyDiffPlacement();
+        }
+
+        private void ApplyDiffPlacement()
+        {
+            var external = ShowDiffExternally;
+            DiffArea.IsVisible = !external;
+            DiffSplitter.IsVisible = !external;
+            RightPane.RowDefinitions[0].MinHeight = external ? 0 : 100;
+            RightPane.RowDefinitions[0].Height = external ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+            RightPane.RowDefinitions[1].Height = new GridLength(external ? 0 : 4);
+
+            // Avoid building a second, hidden diff viewer for the same change.
+            if (external)
+                DiffContent.Content = null;
         }
 
         private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
@@ -88,7 +142,9 @@ namespace SourceGit.Views
                 return;
 
             // Too narrow for lists and diff side by side (e.g. in the history details panel): stack them.
-            grid.IsStacked = grid.Bounds.Width < STACKED_LAYOUT_WIDTH;
+            // When the diff is shown elsewhere, always stack and keep just the commit box below the lists.
+            grid.IsStacked = ShowDiffExternally || grid.Bounds.Width < STACKED_LAYOUT_WIDTH;
+            grid.StackedBottomHeight = ShowDiffExternally ? STACKED_COMMIT_AREA_HEIGHT : 0;
             if (grid.IsStacked)
                 return;
 
@@ -1491,5 +1547,6 @@ namespace SourceGit.Views
         }
 
         private const double STACKED_LAYOUT_WIDTH = 820;
+        private const double STACKED_COMMIT_AREA_HEIGHT = 176;
     }
 }
