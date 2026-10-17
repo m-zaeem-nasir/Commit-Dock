@@ -28,6 +28,7 @@ namespace CommitDock.Models
         public int NewLineNumber { get; set; } = 0;
         public List<TextRange> Highlights { get; set; } = new List<TextRange>();
         public bool NoNewLineEndOfFile { get; set; } = false;
+        public bool IsMoved { get; set; } = false;
 
         public string OldLine => OldLineNumber == 0 ? string.Empty : OldLineNumber.ToString();
         public string NewLine => NewLineNumber == 0 ? string.Empty : NewLineNumber.ToString();
