@@ -52,8 +52,8 @@ ln -rsf CommitDock.AppDir/usr/share/applications/io.github.mzaeemnasir.CommitDoc
 cp resources/appimage/commitdock.appdata.xml CommitDock.AppDir/usr/share/metainfo/io.github.mzaeemnasir.CommitDock.appdata.xml
 
 ARCH="$appimage_arch" ./appimagetool -v \
-    -u "gh-releases-zsync|mzaeemnasir|Commit-Dock|latest|commitdock-*.linux.$arch.AppImage.zsync" \
-    CommitDock.AppDir "commitdock-$VERSION.linux.$arch.AppImage"
+    -u "gh-releases-zsync|mzaeemnasir|Commit-Dock|latest|CommitDock-v*-linux-$arch.AppImage.zsync" \
+    CommitDock.AppDir "CommitDock-v$VERSION-linux-$arch.AppImage"
 
 mkdir -p resources/deb/opt/commitdock/
 mkdir -p resources/deb/usr/bin
@@ -82,7 +82,7 @@ sed -i -e "s/^Version:.*/Version: $VERSION/" \
     resources/deb/DEBIAN/control
 
 # Build deb package with gzip compression
-dpkg-deb -Zgzip --root-owner-group --build resources/deb "commitdock_$VERSION-1_$arch.deb"
+dpkg-deb -Zgzip --root-owner-group --build resources/deb "CommitDock-v$VERSION-linux-$arch.deb"
 
 rpmbuild -bb --target="$target" resources/rpm/SPECS/build.spec --define "_topdir $(pwd)/resources/rpm" --define "_version $VERSION"
-mv "resources/rpm/RPMS/$target/commitdock-$VERSION-1.$target.rpm" ./
+mv "resources/rpm/RPMS/$target/commitdock-$VERSION-1.$target.rpm" "./CommitDock-v$VERSION-linux-$target.rpm"

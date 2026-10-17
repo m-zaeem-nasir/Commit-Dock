@@ -37,14 +37,14 @@ jobs:
         shell: pwsh
         run: |
           ./build/scripts/package.win-installer.ps1 -Runtime ${{ matrix.runtime }} -Version "${{ inputs.version }}" -PublishDir build/CommitDock -SkipPublish
-          Copy-Item build/installer/CommitDock-Setup-*.exe build/
+          Copy-Item build/installer/CommitDock-v*-setup-*.exe build/
       - name: Upload package artifact
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
           path: |
-            build/commitdock_*.zip
-            build/CommitDock-Setup-*.exe
+            build/CommitDock-v*.zip
+            build/CommitDock-v*-setup-*.exe
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
-          path: build/commitdock_*.zip
+          path: build/CommitDock-v*.zip
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
@@ -115,10 +115,10 @@ jobs:
         with:
           name: package.${{ matrix.runtime }}
           path: |
-            build/commitdock-*.AppImage
-            build/commitdock-*.AppImage.zsync
-            build/commitdock_*.deb
-            build/commitdock-*.rpm
+            build/CommitDock-v*.AppImage
+            build/CommitDock-v*.AppImage.zsync
+            build/CommitDock-v*.deb
+            build/CommitDock-v*.rpm
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
