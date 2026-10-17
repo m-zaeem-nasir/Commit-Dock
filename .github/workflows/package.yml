@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       version:
-        description: SourceGit package version
+        description: Commit Dock package version
         required: true
         type: string
 jobs:
@@ -19,8 +19,8 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v8
         with:
-          name: sourcegit.${{ matrix.runtime }}
-          path: build/SourceGit
+          name: commitdock.${{ matrix.runtime }}
+          path: build/CommitDock
       - name: Package
         shell: pwsh
         env:
@@ -36,19 +36,19 @@ jobs:
       - name: Build installer
         shell: pwsh
         run: |
-          ./build/scripts/package.win-installer.ps1 -Runtime ${{ matrix.runtime }} -Version "${{ inputs.version }}" -PublishDir build/SourceGit -SkipPublish
+          ./build/scripts/package.win-installer.ps1 -Runtime ${{ matrix.runtime }} -Version "${{ inputs.version }}" -PublishDir build/CommitDock -SkipPublish
           Copy-Item build/installer/CommitDock-Setup-*.exe build/
       - name: Upload package artifact
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
           path: |
-            build/sourcegit_*.zip
+            build/commitdock_*.zip
             build/CommitDock-Setup-*.exe
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: commitdock.${{ matrix.runtime }}
   osx-app:
     name: Package macOS
     runs-on: macos-latest
@@ -61,25 +61,25 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v8
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: commitdock.${{ matrix.runtime }}
           path: build
       - name: Package
         env:
           VERSION: ${{ inputs.version }}
           RUNTIME: ${{ matrix.runtime }}
         run: |
-          mkdir build/SourceGit
-          tar -xf "build/sourcegit.${{ matrix.runtime }}.tar" -C build/SourceGit
+          mkdir build/CommitDock
+          tar -xf "build/commitdock.${{ matrix.runtime }}.tar" -C build/CommitDock
           ./build/scripts/package.osx-app.sh
       - name: Upload package artifact
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
-          path: build/sourcegit_*.zip
+          path: build/commitdock_*.zip
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: commitdock.${{ matrix.runtime }}
   linux:
     name: Package Linux
     runs-on: ubuntu-latest
@@ -99,7 +99,7 @@ jobs:
       - name: Download build
         uses: actions/download-artifact@v8
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: commitdock.${{ matrix.runtime }}
           path: build
       - name: Package
         env:
@@ -107,19 +107,19 @@ jobs:
           RUNTIME: ${{ matrix.runtime }}
           APPIMAGE_EXTRACT_AND_RUN: 1
         run: |
-          mkdir build/SourceGit
-          tar -xf "build/sourcegit.${{ matrix.runtime }}.tar" -C build/SourceGit
+          mkdir build/CommitDock
+          tar -xf "build/commitdock.${{ matrix.runtime }}.tar" -C build/CommitDock
           ./build/scripts/package.linux.sh
       - name: Upload package artifacts
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
           path: |
-            build/sourcegit-*.AppImage
-            build/sourcegit-*.AppImage.zsync
-            build/sourcegit_*.deb
-            build/sourcegit-*.rpm
+            build/commitdock-*.AppImage
+            build/commitdock-*.AppImage.zsync
+            build/commitdock_*.deb
+            build/commitdock-*.rpm
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
-          name: sourcegit.${{ matrix.runtime }}
+          name: commitdock.${{ matrix.runtime }}
