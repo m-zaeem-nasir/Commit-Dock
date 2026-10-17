@@ -35,11 +35,11 @@ namespace SourceGit.Views
         public Launcher()
         {
             if (OperatingSystem.IsMacOS())
-                CaptionHeight = new GridLength(34);
+                CaptionHeight = new GridLength(40);
             else if (UseSystemWindowFrame)
-                CaptionHeight = new GridLength(30);
-            else
                 CaptionHeight = new GridLength(38);
+            else
+                CaptionHeight = new GridLength(42);
 
             InitializeComponent();
             PositionChanged += OnPositionChanged;
@@ -95,7 +95,7 @@ namespace SourceGit.Views
                 _lastWindowState = (WindowState)change.OldValue!;
 
                 if (!OperatingSystem.IsMacOS() && !UseSystemWindowFrame)
-                    CaptionHeight = new GridLength(state == WindowState.Maximized ? 30 : 38);
+                    CaptionHeight = new GridLength(state == WindowState.Maximized ? 38 : 42);
 
                 ViewModels.Preferences.Instance.Layout.LauncherWindowState = state;
             }
