@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="build/logo/commitdock-256.png" alt="Commit Dock logo" width="128" height="128">
+
 # Commit Dock
 
 **A fast, graph-first Git client for Windows, macOS and Linux.**
