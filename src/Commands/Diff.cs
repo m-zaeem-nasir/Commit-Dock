@@ -35,9 +35,6 @@ namespace CommitDock.Commands
         private const string SPECIAL_NO_NEWLINE = " No newline at end of file";
         private const string SPECIAL_SUBMODULE = "Subproject commit ";
 
-        private const int MAX_INLINE_CONTENT_LENGTH = 1024;
-        private const int MAX_INLINE_CHUNKS_PER_LINE = 16;
-
         public Diff(string repo, Models.DiffOption opt, int numContextLines, bool ignoreWhitespace, bool ignoreCRAtEOL)
         {
             _result.TextDiff = new Models.TextDiff();
@@ -46,7 +43,8 @@ namespace CommitDock.Commands
             Context = repo;
 
             var builder = new StringBuilder(256);
-            builder.Append("diff --no-color --no-ext-diff --full-index --patch ");
+            // Histogram matches unique lines first, so hunks anchor on real code instead of stray braces or blank lines.
+            builder.Append("diff --no-color --no-ext-diff --full-index --patch --diff-algorithm=histogram ");
             if (ignoreWhitespace)
                 builder.Append("--ignore-space-change --ignore-blank-lines ");
             if (ignoreCRAtEOL)
@@ -104,9 +102,11 @@ namespace CommitDock.Commands
             {
                 if (_isInChunk)
                 {
-                    ProcessInlineHighlights();
+                    FlushChangeBlock();
                     _isInChunk = false;
                 }
+
+                Models.TextDiffRefiner.Refine(_result.TextDiff.Lines);
 
                 if (_result.TextDiff.Lines.Count < 4)
                 {
@@ -154,7 +154,7 @@ namespace CommitDock.Commands
                 if (ParseChunkBodyLine(line, lineBytes))
                     return;
 
-                ProcessInlineHighlights();
+                FlushChangeBlock();
                 _isInChunk = false;
             }
 
@@ -233,7 +233,7 @@ namespace CommitDock.Commands
 
             if (prefix == PREFIX_CONTEXT)
             {
-                ProcessInlineHighlights();
+                FlushChangeBlock();
 
                 _last = new Models.TextDiffLine(Models.TextDiffLineType.Normal, content, rawContent, _oldLine, _newLine);
                 _result.TextDiff.Lines.Add(_last);
@@ -322,35 +322,10 @@ namespace CommitDock.Commands
             return false;
         }
 
-        private void ProcessInlineHighlights()
+        private void FlushChangeBlock()
         {
             if (_deleted.Count > 0)
             {
-                if (_added.Count == _deleted.Count)
-                {
-                    for (int i = _added.Count - 1; i >= 0; i--)
-                    {
-                        var left = _deleted[i];
-                        var right = _added[i];
-
-                        if (left.Content.Length > MAX_INLINE_CONTENT_LENGTH || right.Content.Length > MAX_INLINE_CONTENT_LENGTH)
-                            continue;
-
-                        var chunks = Models.TextInlineChange.Compare(left.Content, right.Content);
-                        if (chunks.Count > MAX_INLINE_CHUNKS_PER_LINE)
-                            continue;
-
-                        foreach (var chunk in chunks)
-                        {
-                            if (chunk.DeletedCount > 0)
-                                left.Highlights.Add(new Models.TextRange(chunk.DeletedStart, chunk.DeletedCount));
-
-                            if (chunk.AddedCount > 0)
-                                right.Highlights.Add(new Models.TextRange(chunk.AddedStart, chunk.AddedCount));
-                        }
-                    }
-                }
-
                 _result.TextDiff.Lines.AddRange(_deleted);
                 _deleted.Clear();
             }

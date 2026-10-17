@@ -28,6 +28,8 @@
       <Color x:Key="Color.Diff.EmptyBG">#10000000</Color>
       <Color x:Key="Color.Diff.AddedBG">#80CDEFD6</Color>
       <Color x:Key="Color.Diff.DeletedBG">#80FFD0D3</Color>
+      <Color x:Key="Color.Diff.MovedFromBG">#80EBD9FA</Color>
+      <Color x:Key="Color.Diff.MovedToBG">#80D3E3FF</Color>
       <Color x:Key="Color.Diff.AddedHighlight">#FF9EDCAF</Color>
       <Color x:Key="Color.Diff.DeletedHighlight">#FFF4A6AC</Color>
       <Color x:Key="Color.Diff.BlockBorderHighlight">#FF0E8F99</Color>
@@ -75,6 +77,8 @@
       <Color x:Key="Color.Diff.EmptyBG">#3C000000</Color>
       <Color x:Key="Color.Diff.AddedBG">#C0244A3A</Color>
       <Color x:Key="Color.Diff.DeletedBG">#C0532E3C</Color>
+      <Color x:Key="Color.Diff.MovedFromBG">#C0462F63</Color>
+      <Color x:Key="Color.Diff.MovedToBG">#C0233F66</Color>
       <Color x:Key="Color.Diff.AddedHighlight">#A02E8F62</Color>
       <Color x:Key="Color.Diff.DeletedHighlight">#A0A23B5A</Color>
       <Color x:Key="Color.Diff.BlockBorderHighlight">#FF3DD6E0</Color>
@@ -279,6 +283,8 @@
   <SolidColorBrush x:Key="Brush.Diff.EmptyBG" Color="{DynamicResource Color.Diff.EmptyBG}"/>
   <SolidColorBrush x:Key="Brush.Diff.AddedBG" Color="{DynamicResource Color.Diff.AddedBG}"/>
   <SolidColorBrush x:Key="Brush.Diff.DeletedBG" Color="{DynamicResource Color.Diff.DeletedBG}"/>
+  <SolidColorBrush x:Key="Brush.Diff.MovedFromBG" Color="{DynamicResource Color.Diff.MovedFromBG}"/>
+  <SolidColorBrush x:Key="Brush.Diff.MovedToBG" Color="{DynamicResource Color.Diff.MovedToBG}"/>
   <SolidColorBrush x:Key="Brush.Diff.AddedHighlight" Color="{DynamicResource Color.Diff.AddedHighlight}"/>
   <SolidColorBrush x:Key="Brush.Diff.DeletedHighlight" Color="{DynamicResource Color.Diff.DeletedHighlight}"/>
   <SolidColorBrush x:Key="Brush.Diff.BlockBorderHighlight" Color="{DynamicResource Color.Diff.BlockBorderHighlight}"/>

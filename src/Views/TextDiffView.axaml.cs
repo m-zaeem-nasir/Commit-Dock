@@ -239,7 +239,7 @@ namespace CommitDock.Views
                     var startY = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.LineTop) - textView.VerticalOffset;
                     var endY = line.GetTextLineVisualYPosition(lastTextLine, VisualYPosition.LineBottom) - textView.VerticalOffset;
 
-                    var bg = GetBrushByLineType(info.Type);
+                    var bg = GetBrushByLine(info);
                     if (bg != null)
                     {
                         drawingContext.DrawRectangle(bg, null, new Rect(0, startY, width, endY - startY));
@@ -327,13 +327,13 @@ namespace CommitDock.Views
                 }
             }
 
-            private IBrush GetBrushByLineType(Models.TextDiffLineType type)
+            private IBrush GetBrushByLine(Models.TextDiffLine line)
             {
-                return type switch
+                return line.Type switch
                 {
                     Models.TextDiffLineType.None => _presenter.EmptyContentBackground,
-                    Models.TextDiffLineType.Added => _presenter.AddedContentBackground,
-                    Models.TextDiffLineType.Deleted => _presenter.DeletedContentBackground,
+                    Models.TextDiffLineType.Added => line.IsMoved ? _presenter.MovedToBackground : _presenter.AddedContentBackground,
+                    Models.TextDiffLineType.Deleted => line.IsMoved ? _presenter.MovedFromBackground : _presenter.DeletedContentBackground,
                     _ => null,
                 };
             }
@@ -444,6 +444,24 @@ namespace CommitDock.Views
         {
             get => GetValue(DeletedContentBackgroundProperty);
             set => SetValue(DeletedContentBackgroundProperty, value);
+        }
+
+        public static readonly StyledProperty<IBrush> MovedFromBackgroundProperty =
+            AvaloniaProperty.Register<ThemedTextDiffPresenter, IBrush>(nameof(MovedFromBackground), new SolidColorBrush(Color.FromArgb(60, 170, 90, 255)));
+
+        public IBrush MovedFromBackground
+        {
+            get => GetValue(MovedFromBackgroundProperty);
+            set => SetValue(MovedFromBackgroundProperty, value);
+        }
+
+        public static readonly StyledProperty<IBrush> MovedToBackgroundProperty =
+            AvaloniaProperty.Register<ThemedTextDiffPresenter, IBrush>(nameof(MovedToBackground), new SolidColorBrush(Color.FromArgb(60, 60, 140, 255)));
+
+        public IBrush MovedToBackground
+        {
+            get => GetValue(MovedToBackgroundProperty);
+            set => SetValue(MovedToBackgroundProperty, value);
         }
 
         public static readonly StyledProperty<IBrush> AddedHighlightBrushProperty =
