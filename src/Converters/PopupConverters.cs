@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
-namespace SourceGit.Converters
+namespace CommitDock.Converters
 {
     public static class PopupConverters
     {

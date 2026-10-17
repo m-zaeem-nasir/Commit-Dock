@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SourceGit.Commands
+namespace CommitDock.Commands
 {
     public class QueryCurrentBranch : Command
     {

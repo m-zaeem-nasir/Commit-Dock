@@ -3,7 +3,7 @@ using System.ClientModel.Primitives;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SourceGit.AI
+namespace CommitDock.AI
 {
     public class ExtraHeadersPolicy : PipelinePolicy
     {

@@ -9,7 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class RepositoryTreeNodeToggleButton : ToggleButton
     {
@@ -354,7 +354,7 @@ namespace SourceGit.Views
                             if (pageView is { DataContext: ViewModels.LauncherPage page })
                             {
                                 page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, null, false, false, 0);
-                                break; // Stop processing further because `SourceGit` only supports processing one popup at a time.
+                                break; // Stop processing further because the app only supports processing one popup at a time.
                             }
                         }
                     }
@@ -435,7 +435,7 @@ namespace SourceGit.Views
                             if (pageView is { DataContext: ViewModels.LauncherPage page })
                             {
                                 page.Popup = new ViewModels.TrustRepository(page.Node.Id, root, rs.StdErr, safeDirectory, to, false, false, 0);
-                                break; // Stop processing further because `SourceGit` only supports processing one popup at a time.
+                                break; // Stop processing further because the app only supports processing one popup at a time.
                             }
                         }
                     }
@@ -469,7 +469,7 @@ namespace SourceGit.Views
 
         private PointerPressedEventArgs _pressTreeNodeEvent = null;
         private bool _startDragTreeNode = false;
-        private readonly DataFormat<string> _dndRepoNode = DataFormat.CreateStringApplicationFormat("sourcegit-dnd-repo-node");
+        private readonly DataFormat<string> _dndRepoNode = DataFormat.CreateStringApplicationFormat("commitdock-dnd-repo-node");
         private CancellationTokenSource _cancellation = new CancellationTokenSource();
     }
 }

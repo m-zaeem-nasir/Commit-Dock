@@ -12,7 +12,7 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class BinaryFileAddressTextBox : TextBox
     {

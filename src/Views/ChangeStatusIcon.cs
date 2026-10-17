@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class ChangeStatusIcon : Control
     {

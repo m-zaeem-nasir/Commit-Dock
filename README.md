@@ -2,8 +2,6 @@
 
 A fast, open-source Git GUI client for Windows, macOS and Linux, with a redesigned commit graph, a focused history view and a family of dark themes.
 
-Commit Dock is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit) and keeps its full feature set while reworking the look and the day-to-day history workflow.
-
 [![license](https://img.shields.io/github/license/mzaeemnasir/Commit-Dock.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/mzaeemnasir/Commit-Dock.svg)](https://github.com/mzaeemnasir/Commit-Dock/stargazers)
 
@@ -88,7 +86,7 @@ Commit Dock is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit)
 
 Commit Dock does not publish pre-built releases yet. Build it from source (see [Building from Source](#building-from-source)).
 
-Commit Dock stores user settings, downloaded avatars and crash logs in a platform-dependent folder. It does not share settings with SourceGit, so both can be installed side by side.
+Commit Dock stores user settings, downloaded avatars and crash logs in a platform-dependent folder.
 
 | OS      | PATH                                                                                                 |
 |---------|------------------------------------------------------------------------------------------------------|
@@ -238,16 +236,12 @@ git clone --recurse-submodules https://github.com/mzaeemnasir/Commit-Dock.git
 cd Commit-Dock
 dotnet restore
 dotnet build
-dotnet run --project src/SourceGit.csproj
+dotnet run --project src/CommitDock.csproj
 ```
 
 ## Contributing
 
 Everyone is welcome to submit a PR. Please base your work on the latest `master` branch, use a separate branch per feature, and target `master` with your PR.
-
-## Credits
-
-Commit Dock is built on [SourceGit](https://github.com/sourcegit-scm/sourcegit) by sourcegit-scm and its contributors. Thanks to everyone who made it possible.
 
 ## Translation Status
 

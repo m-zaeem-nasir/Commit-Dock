@@ -8,7 +8,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public record PieChartToolTip(string Title, int Count, double Percentage, IBrush Brush);
 

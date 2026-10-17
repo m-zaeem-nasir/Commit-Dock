@@ -6,7 +6,7 @@ using System.Text;
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class ConventionalCommitMessageBuilder : ObservableValidator
     {

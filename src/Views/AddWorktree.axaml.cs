@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class AddWorktree : UserControl
     {

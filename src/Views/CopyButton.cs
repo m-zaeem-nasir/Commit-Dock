@@ -7,7 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class CopyButton : Button
     {

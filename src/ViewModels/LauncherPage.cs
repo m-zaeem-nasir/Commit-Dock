@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class LauncherPage : ObservableObject
     {

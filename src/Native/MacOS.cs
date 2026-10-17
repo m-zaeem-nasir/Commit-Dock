@@ -10,7 +10,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace SourceGit.Native
+namespace CommitDock.Native
 {
     [SupportedOSPlatform("macOS")]
     internal class MacOS : OS.IBackend

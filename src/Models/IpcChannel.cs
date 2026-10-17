@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class IpcChannel : IDisposable
     {

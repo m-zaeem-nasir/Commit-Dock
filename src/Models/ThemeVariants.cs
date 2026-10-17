@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     /// <summary>
     ///     Built-in dark theme variants. Each one inherits from <see cref="ThemeVariant.Dark"/>, so any

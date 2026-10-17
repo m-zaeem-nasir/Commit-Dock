@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Media;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public record CommitGraphLayout(double StartX, double StartY, double ClipWidth, double RowHeight, double TopInset = 0);
 

@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class ViewLogs : ChromelessWindow
     {

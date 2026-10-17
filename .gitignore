@@ -30,12 +30,7 @@ package.json
 package-lock.json
 
 
-# Flatpak
-!build/resources/flatpak
-
 build/resources/
-build/SourceGit/
-build/SourceGit.app/
 build/CommitDock/
 build/CommitDock.app/
 build/CommitDock.AppDir/
@@ -45,7 +40,7 @@ build/*.tar.gz
 build/*.deb
 build/*.rpm
 build/*.AppImage
-SourceGit.app/
+CommitDock.app/
 build.command
 src/Properties/launchSettings.json
 *.lscache

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class MoveRepositoryNode : Popup
     {

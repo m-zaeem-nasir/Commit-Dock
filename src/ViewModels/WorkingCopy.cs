@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class WorkingCopy : ObservableObject
     {
@@ -817,7 +817,7 @@ namespace SourceGit.ViewModels
             if (_inProgressContext != null && _inProgressContext.GetType() == oldType && !string.IsNullOrEmpty(_commitMessage))
                 return;
 
-            // The operation that filled the commit message ended outside SourceGit (for example, a
+            // The operation that filled the commit message ended outside the app (for example, a
             // rebase or merge finished/aborted from the terminal). Drop the stale message unless the
             // user has edited it since it was loaded.
             if (_inProgressContext == null && oldType != null && IsAutoLoadedCommitMessage())

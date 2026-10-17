@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace SourceGit.Commands
+namespace CommitDock.Commands
 {
     public class Remove : Command
     {

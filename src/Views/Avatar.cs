@@ -13,7 +13,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class Avatar : Control, Models.IAvatarHost
     {

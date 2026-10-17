@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace SourceGit.Commands
+namespace CommitDock.Commands
 {
     public class QueryGitDir : Command
     {

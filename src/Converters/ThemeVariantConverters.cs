@@ -4,7 +4,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit.Converters
+namespace CommitDock.Converters
 {
     public static class ThemeVariantConverters
     {

@@ -9,15 +9,11 @@
 	</Folder>
 
 	<Folder Name="/build/resources/_common/applications/">
-		<File Path="build/resources/_common/applications/sourcegit.desktop"/>
+		<File Path="build/resources/_common/applications/commitdock.desktop"/>
 	</Folder>
 
 	<Folder Name="/build/resources/_common/icons/">
-		<File Path="build/resources/_common/icons/sourcegit.png"/>
-	</Folder>
-
-	<Folder Name="/build/resources/_common/">
-		<File Path="build/resources/_common/sourcegit"/>
+		<File Path="build/resources/_common/icons/commitdock.png"/>
 	</Folder>
 
 	<Folder Name="/build/resources/app/">
@@ -26,8 +22,7 @@
 	</Folder>
 
 	<Folder Name="/build/resources/appimage/">
-		<File Path="build/resources/appimage/sourcegit"/>
-		<File Path="build/resources/appimage/sourcegit.appdata.xml"/>
+		<File Path="build/resources/appimage/commitdock.appdata.xml"/>
 	</Folder>
 
 	<Folder Name="/build/resources/deb/DEBIAN/">
@@ -45,6 +40,11 @@
 		<File Path="build/scripts/package.linux.sh"/>
 		<File Path="build/scripts/package.osx-app.sh"/>
 		<File Path="build/scripts/package.win.ps1"/>
+		<File Path="build/scripts/package.win-installer.ps1"/>
+	</Folder>
+
+	<Folder Name="/build/windows/">
+		<File Path="build/windows/CommitDock.iss"/>
 	</Folder>
 
 	<Folder Name="/build/">
@@ -57,7 +57,7 @@
 	</Folder>
 
 	<Folder Name="/src/">
-		<Project Path="src/SourceGit.csproj" />
+		<Project Path="src/CommitDock.csproj" />
 	</Folder>
 
 	<Folder Name="/files/">

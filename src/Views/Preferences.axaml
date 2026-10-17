@@ -2,14 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:s="using:SourceGit"
-                    xmlns:ai="using:SourceGit.AI"
-                    xmlns:m="using:SourceGit.Models"
-                    xmlns:c="using:SourceGit.Converters"
-                    xmlns:vm="using:SourceGit.ViewModels"
-                    xmlns:v="using:SourceGit.Views"
+                    xmlns:s="using:CommitDock"
+                    xmlns:ai="using:CommitDock.AI"
+                    xmlns:m="using:CommitDock.Models"
+                    xmlns:c="using:CommitDock.Converters"
+                    xmlns:vm="using:CommitDock.ViewModels"
+                    xmlns:v="using:CommitDock.Views"
                     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                    x:Class="SourceGit.Views.Preferences"
+                    x:Class="CommitDock.Views.Preferences"
                     x:DataType="vm:Preferences"
                     x:Name="ThisControl"
                     Icon="/App.ico"
@@ -297,9 +297,6 @@
                     <Path Width="16" Height="16" Data="{StaticResource Icons.Folder.Open}" Margin="0,2,0,0" Fill="{DynamicResource Brush.FG1}"/>
                   </Button>
 
-                  <Button Classes="icon_button" Width="28" Height="28" Click="OpenThemeRepository">
-                    <Path Width="14" Height="14" Data="{StaticResource Icons.Remotes}" Fill="{DynamicResource Brush.FG1}"/>
-                  </Button>
                 </StackPanel>
               </TextBox.InnerRightContent>
             </TextBox>

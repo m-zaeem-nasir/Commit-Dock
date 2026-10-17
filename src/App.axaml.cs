@@ -15,7 +15,7 @@ using Avalonia.Platform;
 using Avalonia.Styling;
 using Avalonia.Threading;
 
-namespace SourceGit
+namespace CommitDock
 {
     public partial class App : Application
     {
@@ -441,7 +441,7 @@ namespace SourceGit
 
         private bool TryLaunchAsAskpass(IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var launchAsAskpass = Environment.GetEnvironmentVariable("SOURCEGIT_LAUNCH_AS_ASKPASS");
+            var launchAsAskpass = Environment.GetEnvironmentVariable("COMMITDOCK_LAUNCH_AS_ASKPASS");
             if (launchAsAskpass is not "TRUE")
                 return false;
 
@@ -549,8 +549,10 @@ namespace SourceGit
                     // Fetch latest release information.
                     using var client = new HttpClient();
                     client.Timeout = TimeSpan.FromSeconds(5);
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("CommitDock");
+                    client.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github+json");
 
-                    var data = await client.GetStringAsync("https://sourcegit-scm.github.io/data/version.json");
+                    var data = await client.GetStringAsync("https://api.github.com/repos/mzaeemnasir/Commit-Dock/releases/latest");
                     var ver = JsonSerializer.Deserialize(data, JsonCodeGen.Default.Version);
                     if (ver == null)
                         return;

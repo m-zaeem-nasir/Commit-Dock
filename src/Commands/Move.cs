@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SourceGit.Commands
+namespace CommitDock.Commands
 {
     public class Move : Command
     {

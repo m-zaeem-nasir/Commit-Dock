@@ -7,7 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class Preferences : ChromelessWindow
     {
@@ -245,12 +245,6 @@ namespace SourceGit.Views
                 await new Alert().ShowAsync(this, $"Failed to select theme override file: {ex.Message}", true);
             }
 
-            e.Handled = true;
-        }
-
-        private void OpenThemeRepository(object _, RoutedEventArgs e)
-        {
-            Native.OS.OpenBrowser($"https://github.com/sourcegit-scm/sourcegit-theme");
             e.Handled = true;
         }
 

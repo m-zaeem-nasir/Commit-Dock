@@ -10,7 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     /// <summary>
     ///     Lays out the change lists, splitter and diff/commit area side by side like a normal Grid, or stacks

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class CommitSearchView : UserControl
     {

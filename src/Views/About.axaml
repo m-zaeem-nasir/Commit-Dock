@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:v="using:SourceGit.Views"
+                    xmlns:v="using:CommitDock.Views"
                     mc:Ignorable="d" d:DesignWidth="520" d:DesignHeight="230"
-                    x:Class="SourceGit.Views.About"
+                    x:Class="CommitDock.Views.About"
                     x:Name="ThisControl"
                     Icon="/App.ico"
                     Title="{DynamicResource Text.About}"
@@ -61,11 +61,7 @@
         </Border>
 
         <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-          <Button Width="18" Height="18" Classes="icon_button" Click="OnVisitWebsite" ToolTip.Tip="https://sourcegit-scm.github.io/">
-            <Path Width="16" Height="16" Data="{StaticResource Icons.Remotes}"/>
-          </Button>
-
-          <Button Width="18" Height="18" Margin="8,0,0,0" Classes="icon_button" Click="OnVisitSourceCode" ToolTip.Tip="https://github.com/sourcegit-scm/sourcegit">
+          <Button Width="18" Height="18" Classes="icon_button" Click="OnVisitSourceCode" ToolTip.Tip="https://github.com/mzaeemnasir/Commit-Dock">
             <Path Width="16" Height="16" Data="{StaticResource Icons.GitHub}"/>
           </Button>
         </StackPanel>

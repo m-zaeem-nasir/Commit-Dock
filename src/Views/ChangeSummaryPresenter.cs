@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class ChangeSummaryPresenter : TextBlock
     {

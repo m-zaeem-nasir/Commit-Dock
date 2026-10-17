@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class MoveRepositoryNode : UserControl
     {

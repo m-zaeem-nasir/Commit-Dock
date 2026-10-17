@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Data.Converters;
 
-namespace SourceGit.Converters
+namespace CommitDock.Converters
 {
     public static class DoubleConverters
     {

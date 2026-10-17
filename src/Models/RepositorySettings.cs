@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using Avalonia.Collections;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class RepositorySettings
     {

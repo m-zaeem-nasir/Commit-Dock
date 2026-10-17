@@ -13,7 +13,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public interface IAvatarHost
     {

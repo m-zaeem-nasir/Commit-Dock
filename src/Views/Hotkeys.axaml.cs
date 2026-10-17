@@ -1,4 +1,4 @@
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class Hotkeys : ChromelessWindow
     {

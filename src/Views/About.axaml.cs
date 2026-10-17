@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class About : ChromelessWindow
     {
@@ -47,19 +47,13 @@ namespace SourceGit.Views
             if (endOfTagIdx > 0)
                 ver = ver.Substring(0, endOfTagIdx);
 
-            Native.OS.OpenBrowser($"https://github.com/sourcegit-scm/sourcegit/releases/tag/{ver}");
-            e.Handled = true;
-        }
-
-        private void OnVisitWebsite(object _, RoutedEventArgs e)
-        {
-            Native.OS.OpenBrowser("https://sourcegit-scm.github.io/");
+            Native.OS.OpenBrowser($"https://github.com/mzaeemnasir/Commit-Dock/releases/tag/{ver}");
             e.Handled = true;
         }
 
         private void OnVisitSourceCode(object _, RoutedEventArgs e)
         {
-            Native.OS.OpenBrowser("https://github.com/sourcegit-scm/sourcegit");
+            Native.OS.OpenBrowser("https://github.com/mzaeemnasir/Commit-Dock");
             e.Handled = true;
         }
 
