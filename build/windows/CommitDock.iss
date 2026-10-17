@@ -15,6 +15,13 @@
   #define Arch "x64"
 #endif
 
+; Inno Setup architecture identifiers: x64 builds also run on ARM64 Windows through emulation.
+#if Arch == "arm64"
+  #define ArchAllowed "arm64"
+#else
+  #define ArchAllowed "x64compatible"
+#endif
+
 #define AppName "Commit Dock"
 #define AppExe "CommitDock.exe"
 #define AppPublisher "Commit Dock"
@@ -35,8 +42,8 @@ DisableProgramGroupPage=yes
 ; Install for the current user without admin rights; the user may switch to all users.
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
-ArchitecturesAllowed={#Arch}compatible
-ArchitecturesInstallIn64BitMode={#Arch}compatible
+ArchitecturesAllowed={#ArchAllowed}
+ArchitecturesInstallIn64BitMode={#ArchAllowed}
 MinVersion=10.0
 LicenseFile=..\..\LICENSE
 SetupIconFile=..\..\src\App.ico
