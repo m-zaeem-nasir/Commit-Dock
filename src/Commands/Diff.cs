@@ -46,7 +46,8 @@ namespace CommitDock.Commands
             Context = repo;
 
             var builder = new StringBuilder(256);
-            builder.Append("diff --no-color --no-ext-diff --full-index --patch ");
+            // Histogram matches unique lines first, so hunks anchor on real code instead of stray braces or blank lines.
+            builder.Append("diff --no-color --no-ext-diff --full-index --patch --diff-algorithm=histogram ");
             if (ignoreWhitespace)
                 builder.Append("--ignore-space-change --ignore-blank-lines ");
             if (ignoreCRAtEOL)
