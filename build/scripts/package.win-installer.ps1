@@ -1,22 +1,26 @@
 # Builds the Commit Dock Windows installer (CommitDock-Setup-<version>-<arch>.exe).
 #
 # Usage (from the repository root):
-#   pwsh build/scripts/package.win-installer.ps1 [-Runtime win-x64|win-arm64] [-SkipPublish]
+#   pwsh build/scripts/package.win-installer.ps1 [-Runtime win-x64|win-arm64] [-Version 2026.22] [-PublishDir <dir>] [-SkipPublish]
 #
 # Requires the .NET 10 SDK, the Visual Studio C++ build tools (for the native AOT publish)
-# and Inno Setup 6 (winget install JRSoftware.InnoSetup).
+# and Inno Setup 6 (winget install JRSoftware.InnoSetup). With -SkipPublish the app files
+# already in -PublishDir are packaged as they are (this is what the release workflow does).
 
 param(
     [ValidateSet("win-x64", "win-arm64")]
     [string]$Runtime = "win-x64",
+    [string]$Version = "",
+    [string]$PublishDir = "",
     [switch]$SkipPublish
 )
 
 $ErrorActionPreference = "Stop"
 $root = Resolve-Path (Join-Path $PSScriptRoot "..\..")
-$version = (Get-Content (Join-Path $root "VERSION") -Raw).Trim()
+if (-not $Version) { $Version = (Get-Content (Join-Path $root "VERSION") -Raw).Trim() }
+if (-not $PublishDir) { $PublishDir = Join-Path $root "build\publish-$Runtime" }
+$PublishDir = [System.IO.Path]::GetFullPath($PublishDir)
 $arch = $Runtime.Substring(4)
-$publishDir = Join-Path $root "build\publish-$Runtime"
 $outputDir = Join-Path $root "build\installer"
 
 if (-not $SkipPublish) {
@@ -26,10 +30,12 @@ if (-not $SkipPublish) {
         $env:PATH = "$vsInstaller;$env:PATH"
     }
 
-    if (Test-Path $publishDir) { Remove-Item $publishDir -Recurse -Force }
-    dotnet publish (Join-Path $root "src\SourceGit.csproj") -c Release -r $Runtime -o $publishDir
+    if (Test-Path $PublishDir) { Remove-Item $PublishDir -Recurse -Force }
+    dotnet publish (Join-Path $root "src\SourceGit.csproj") -c Release -r $Runtime -o $PublishDir
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 }
+
+if (-not (Test-Path (Join-Path $PublishDir "CommitDock.exe"))) { throw "CommitDock.exe not found in $PublishDir" }
 
 $iscc = @(
     (Get-Command iscc.exe -ErrorAction SilentlyContinue)?.Source,
@@ -39,9 +45,8 @@ $iscc = @(
 ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
 if (-not $iscc) { throw "Inno Setup 6 (ISCC.exe) not found. Install it with: winget install JRSoftware.InnoSetup" }
 
-$innoArch = if ($arch -eq "arm64") { "arm64" } else { "x64" }
-& $iscc "/DAppVersion=$version" "/DSourceDir=$publishDir" "/DOutputDir=$outputDir" "/DArch=$innoArch" `
+& $iscc "/DAppVersion=$Version" "/DSourceDir=$PublishDir" "/DOutputDir=$outputDir" "/DArch=$arch" `
     (Join-Path $root "build\windows\CommitDock.iss")
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup compile failed" }
 
-Write-Host "Installer: $(Join-Path $outputDir "CommitDock-Setup-$version-$innoArch.exe")"
+Write-Host "Installer: $(Join-Path $outputDir "CommitDock-Setup-$Version-$arch.exe")"
