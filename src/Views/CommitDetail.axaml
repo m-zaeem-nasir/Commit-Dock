@@ -41,6 +41,7 @@
           <ListBox Background="Transparent"
                    Margin="4,0,12,4"
                    SelectionMode="Single"
+                   SelectedItem="{Binding PreviewChange, Mode=TwoWay}"
                    ItemsSource="{Binding Changes, Converter={x:Static c:ListConverters.Top100Changes}}"
                    KeyDown="OnCommitListKeyDown">
             <ListBox.Styles>

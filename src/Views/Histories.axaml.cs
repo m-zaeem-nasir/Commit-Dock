@@ -870,12 +870,8 @@ namespace SourceGit.Views
 
         private bool CloseLocalChangeDiff()
         {
-            if (DataContext is not ViewModels.Histories { IsLocalChangesInDetail: true, Repo.WorkingCopy: { DetailContext: not null } workingCopy })
-                return false;
-
-            // Deselecting the file drops its diff; the WIP panel stays open next to the graph.
-            workingCopy.ClearSelection();
-            return true;
+            // Deselecting the file drops its diff; the details panel stays open next to the graph.
+            return DataContext is ViewModels.Histories histories && histories.CloseGraphOverlay();
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

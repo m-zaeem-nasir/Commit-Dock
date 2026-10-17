@@ -57,8 +57,43 @@ namespace SourceGit.ViewModels
                     return;
 
                 if (SetProperty(ref _commit, value))
+                {
+                    PreviewChange = null;
                     Refresh();
+                }
             }
+        }
+
+        /// <summary>
+        ///     Set by hosts that can show a diff outside the details panel (the history graph area).
+        /// </summary>
+        public bool EnablePreviewDiff
+        {
+            get => _enablePreviewDiff;
+            set
+            {
+                if (_enablePreviewDiff == value)
+                    return;
+
+                _enablePreviewDiff = value;
+                UpdatePreviewDiff();
+            }
+        }
+
+        public Models.Change PreviewChange
+        {
+            get => _previewChange;
+            set
+            {
+                if (SetProperty(ref _previewChange, value))
+                    UpdatePreviewDiff();
+            }
+        }
+
+        public DiffContext PreviewDiff
+        {
+            get => _previewDiff;
+            private set => SetProperty(ref _previewDiff, value);
         }
 
         public Models.CommitFullMessage FullMessage
@@ -539,6 +574,14 @@ namespace SourceGit.ViewModels
             }, token);
         }
 
+        private void UpdatePreviewDiff()
+        {
+            if (_enablePreviewDiff && _commit != null && _previewChange != null)
+                PreviewDiff = new DiffContext(_repo.FullPath, new Models.DiffOption(_commit, _previewChange), _previewDiff);
+            else
+                PreviewDiff = null;
+        }
+
         private void UpdateDetails()
         {
             if (ActiveTabIndex == 1 && _changeSelection is { Count: 1, HasFolder: false })
@@ -738,6 +781,9 @@ namespace SourceGit.ViewModels
         private ChangeSelection _changeSelection = new(null);
         private string _searchChangeFilter = string.Empty;
         private DiffContext _diffContext = null;
+        private bool _enablePreviewDiff = false;
+        private Models.Change _previewChange = null;
+        private DiffContext _previewDiff = null;
         private string _viewRevisionFilePath = string.Empty;
         private object _viewRevisionFileContent = null;
         private CancellationTokenSource _cancellationSource = null;
