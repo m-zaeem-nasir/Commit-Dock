@@ -27,11 +27,24 @@ jobs:
           VERSION: ${{ inputs.version }}
           RUNTIME: ${{ matrix.runtime }}
         run: ./build/scripts/package.win.ps1
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup -y --no-progress
+          }
+      - name: Build installer
+        shell: pwsh
+        run: |
+          ./build/scripts/package.win-installer.ps1 -Runtime ${{ matrix.runtime }} -Version "${{ inputs.version }}" -PublishDir build/SourceGit -SkipPublish
+          Copy-Item build/installer/CommitDock-Setup-*.exe build/
       - name: Upload package artifact
         uses: actions/upload-artifact@v7
         with:
           name: package.${{ matrix.runtime }}
-          path: build/sourcegit_*.zip
+          path: |
+            build/sourcegit_*.zip
+            build/CommitDock-Setup-*.exe
       - name: Delete temp artifacts
         uses: geekyeggo/delete-artifact@v6
         with:
