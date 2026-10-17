@@ -63,8 +63,8 @@ namespace SourceGit
             builder.ConfigureFonts(manager =>
             {
                 var monospace = new EmbeddedFontCollection(
-                    new Uri("fonts:SourceGit", UriKind.Absolute),
-                    new Uri("avares://SourceGit/Resources/Fonts", UriKind.Absolute));
+                    new Uri("fonts:GitStrand", UriKind.Absolute),
+                    new Uri("avares://GitStrand/Resources/Fonts", UriKind.Absolute));
                 manager.AddFontCollection(monospace);
             });
 
@@ -122,12 +122,8 @@ namespace SourceGit
             if (Current is not App app)
                 return;
 
-            if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Light;
-            else if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                app.RequestedThemeVariant = ThemeVariant.Dark;
-            else
-                app.RequestedThemeVariant = ThemeVariant.Default;
+            app.RequestedThemeVariant = Models.ThemeVariants.Parse(theme);
+            var variantPalette = Models.ThemeVariants.GetGraphPalette(app.RequestedThemeVariant);
 
             if (app._themeOverrides != null)
             {
@@ -152,6 +148,8 @@ namespace SourceGit
 
                     if (overrides.GraphColors.Count > 0)
                         Models.CommitGraph.SetPens(overrides.GraphColors, overrides.GraphPenThickness);
+                    else if (variantPalette != null)
+                        Models.CommitGraph.SetPens(variantPalette, overrides.GraphPenThickness);
                     else
                         Models.CommitGraph.SetDefaultPens(overrides.GraphPenThickness);
 
@@ -162,6 +160,10 @@ namespace SourceGit
                 {
                     // ignore
                 }
+            }
+            else if (variantPalette != null)
+            {
+                Models.CommitGraph.SetPens(variantPalette, 2);
             }
             else
             {
@@ -191,7 +193,7 @@ namespace SourceGit
             {
                 if (!string.IsNullOrEmpty(defaultFont))
                 {
-                    monospaceFont = $"fonts:SourceGit#JetBrains Mono NL,{defaultFont}";
+                    monospaceFont = $"fonts:GitStrand#JetBrains Mono NL,{defaultFont}";
                     resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
                 }
             }
@@ -295,7 +297,7 @@ namespace SourceGit
             if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
                 return true;
 
-            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "sourcegit.interactive_rebase");
+            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "gitstrand.interactive_rebase");
             if (!File.Exists(jobsFile))
                 return true;
 
@@ -324,7 +326,7 @@ namespace SourceGit
             var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
             var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
             var doneFile = Path.Combine(gitDir, "rebase-merge", "done");
-            var jobsFile = Path.Combine(gitDir, "sourcegit.interactive_rebase");
+            var jobsFile = Path.Combine(gitDir, "gitstrand.interactive_rebase");
             if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
                 return true;
 

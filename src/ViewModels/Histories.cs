@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -113,6 +114,11 @@ namespace SourceGit.ViewModels
             }
         }
 
+        public Repository Repo
+        {
+            get => _repo;
+        }
+
         public Models.CommitGraph Graph
         {
             get => _graph;
@@ -148,9 +154,39 @@ namespace SourceGit.ViewModels
             get => _detailContext;
             set
             {
+                var old = _detailContext;
                 if (SetProperty(ref _detailContext, value))
+                {
+                    if (old is INotifyPropertyChanged oldNotifier)
+                        oldNotifier.PropertyChanged -= OnDetailContextPropertyChanged;
+                    if (value is INotifyPropertyChanged newNotifier)
+                        newNotifier.PropertyChanged += OnDetailContextPropertyChanged;
+
                     OnPropertyChanged(nameof(IsOpenAsStandaloneVisible));
+                    OnPropertyChanged(nameof(IsLocalChangesInDetail));
+                    UpdateGraphOverlay();
+                }
             }
+        }
+
+        /// <summary>
+        ///     A file diff picked in the details panel (local change or committed file), shown over the graph.
+        /// </summary>
+        public object GraphOverlay
+        {
+            get => _graphOverlay;
+            private set => SetProperty(ref _graphOverlay, value);
+        }
+
+        public string GraphOverlayTitle
+        {
+            get => _graphOverlayTitle;
+            private set => SetProperty(ref _graphOverlayTitle, value);
+        }
+
+        public bool IsLocalChangesInDetail
+        {
+            get => _detailContext is WorkingCopy;
         }
 
         public Models.Bisect Bisect
@@ -519,6 +555,49 @@ namespace SourceGit.ViewModels
             SelectedCommits = selected;
         }
 
+        public void ShowLocalChangesInDetail()
+        {
+            if (_repo.WorkingCopy != null)
+                DetailContext = _repo.WorkingCopy;
+        }
+
+        public bool CloseGraphOverlay()
+        {
+            if (_graphOverlay == null)
+                return false;
+
+            if (_detailContext is WorkingCopy workingCopy)
+                workingCopy.ClearSelection();
+            else if (_detailContext is CommitDetail commitDetail)
+                commitDetail.PreviewChange = null;
+
+            return true;
+        }
+
+        private void OnDetailContextPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is nameof(WorkingCopy.DetailContext) or nameof(CommitDetail.PreviewDiff) or nameof(CommitDetail.Commit))
+                UpdateGraphOverlay();
+        }
+
+        private void UpdateGraphOverlay()
+        {
+            switch (_detailContext)
+            {
+                case WorkingCopy workingCopy:
+                    GraphOverlayTitle = App.Text("Histories.LocalChangeDiff");
+                    GraphOverlay = workingCopy.DetailContext;
+                    break;
+                case CommitDetail { Commit: { } commit } commitDetail:
+                    GraphOverlayTitle = App.Text("Histories.CommitFileDiff", commit.SHA.Substring(0, Math.Min(10, commit.SHA.Length)));
+                    GraphOverlay = commitDetail.PreviewDiff;
+                    break;
+                default:
+                    GraphOverlay = null;
+                    break;
+            }
+        }
+
         private void PostSelectedCommitsChanged()
         {
             if (_ignoreSelectionChange)
@@ -578,6 +657,8 @@ namespace SourceGit.ViewModels
         }
 
         private Repository _repo = null;
+        private object _graphOverlay = null;
+        private string _graphOverlayTitle = string.Empty;
         private Models.Branch _currentBranch = null;
         private bool _hasSingleRemote = false;
         private CommitDetailSharedData _commitDetailSharedData = null;
@@ -592,7 +673,7 @@ namespace SourceGit.ViewModels
         private bool _isSearchingCommits = false;
         private SearchCommitContext _searchCommitContext = null;
 
-        private GridLength _leftArea = new(1, GridUnitType.Star);
+        private GridLength _leftArea = new(1.8, GridUnitType.Star);
         private GridLength _rightArea = new(1, GridUnitType.Star);
         private GridLength _topArea = new(1, GridUnitType.Star);
         private GridLength _bottomArea = new(1, GridUnitType.Star);

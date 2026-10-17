@@ -46,9 +46,19 @@ namespace SourceGit.Views
             RefreshLayout();
         }
 
+        protected override void OnSizeChanged(SizeChangedEventArgs e)
+        {
+            base.OnSizeChanged(e);
+
+            // Side-by-side only when there is room for both the graph and the details; otherwise stack them.
+            if (UseHorizontal && (e.NewSize.Width >= MIN_HORIZONTAL_WIDTH) != _isHorizontalApplied)
+                RefreshLayout();
+        }
+
         private void RefreshLayout()
         {
-            if (UseHorizontal)
+            _isHorizontalApplied = UseHorizontal && (Bounds.Width <= 0 || Bounds.Width >= MIN_HORIZONTAL_WIDTH);
+            if (_isHorizontalApplied)
             {
                 var rowSpan = RowDefinitions.Count;
                 for (int i = 0; i < Children.Count; i++)
@@ -80,7 +90,10 @@ namespace SourceGit.Views
             }
         }
 
+        private const double MIN_HORIZONTAL_WIDTH = 1000;
+
         private bool _useHorizontal = false;
+        private bool _isHorizontalApplied = false;
     }
 
     public class HistoriesCommitList : DataGrid
@@ -372,6 +385,11 @@ namespace SourceGit.Views
         public Histories()
         {
             InitializeComponent();
+
+            // Display order: commit time, branch/tag labels, graph, then the commit message.
+            CommitListContainer.Columns[4].DisplayIndex = 0;
+            CommitListContainer.Columns[5].DisplayIndex = 1;
+            CommitListContainer.Columns[6].DisplayIndex = 2;
         }
 
         public async Task GotoParent()
@@ -479,7 +497,7 @@ namespace SourceGit.Views
             var pos = e.GetPosition(border);
             if (_resizingAuthorColumn)
             {
-                var posX = CommitListContainer.Columns[0].ActualWidth;
+                var posX = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth;
                 var maxW = posX + CommitListContainer.Columns[1].ActualWidth - 100;
                 var delta = posX - pos.X;
                 var w = Math.Max(Math.Min(vm.AuthorColumnWidth + delta, maxW), 80);
@@ -488,7 +506,7 @@ namespace SourceGit.Views
             }
             else
             {
-                var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+                var dis = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
                 if (dis < 4 && dis > -4)
                 {
                     if (border.Cursor != _resizingCursor)
@@ -507,7 +525,7 @@ namespace SourceGit.Views
                 return;
 
             var pos = e.GetPosition(border);
-            var dis = CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
+            var dis = GetColumnStartX(CommitListContainer.Columns[0]) + CommitListContainer.Columns[0].ActualWidth - 4 - pos.X;
             if (dis > 4 || dis < -4)
                 return;
 
@@ -778,13 +796,101 @@ namespace SourceGit.Views
 
             IsScrollToTopVisible = startY >= rowHeight;
 
-            var clipWidth = dataGrid.Columns[0].ActualWidth - 4;
+            var listWidth = dataGrid.Bounds.Width;
+            UpdateRefsColumnForWidth(dataGrid.Columns[5], listWidth);
+
+            var graphColumn = dataGrid.Columns[6];
+            if (CommitGraph.Graph is { } graph)
+            {
+                var wanted = Math.Clamp(graph.Width + 12, 80, Math.Max(120, Math.Min(420, listWidth * 0.35)));
+                if (Math.Abs(graphColumn.Width.Value - wanted) > 0.5)
+                    graphColumn.Width = new(wanted, DataGridLengthUnitType.Pixel);
+            }
+
+            var startX = GetColumnStartX(graphColumn);
+            var topInset = WipBar.IsVisible ? WipBar.Height : 0;
+            WipContent.Margin = new Thickness(GetColumnStartX(dataGrid.Columns[0]) + 6, 0, 0, 0);
+            var clipWidth = graphColumn.ActualWidth;
             var lastLayout = CommitGraph.Layout;
             if (lastLayout == null ||
+                Math.Abs(lastLayout.StartX - startX) > 0.01 ||
+                Math.Abs(lastLayout.TopInset - topInset) > 0.01 ||
                 Math.Abs(lastLayout.StartY - startY) > 0.01 ||
                 Math.Abs(lastLayout.ClipWidth - clipWidth) > 0.01 ||
                 Math.Abs(lastLayout.RowHeight - rowHeight) > 0.01)
-                CommitGraph.Layout = new(startY, clipWidth, rowHeight);
+                CommitGraph.Layout = new(startX, startY, clipWidth, rowHeight, topInset);
+        }
+
+        private void UpdateRefsColumnForWidth(DataGridColumn refsColumn, double listWidth)
+        {
+            if (listWidth <= 0)
+                return;
+
+            // Branch/tag labels give up space first as the list gets narrower, then hide entirely.
+            var visible = listWidth >= 620;
+            if (refsColumn.IsVisible != visible)
+            {
+                refsColumn.IsVisible = visible;
+                CommitGraph.ShowRefConnectors = visible;
+            }
+
+            var width = listWidth >= 1100 ? 170 : (listWidth >= 800 ? 130 : 96);
+            if (visible && Math.Abs(refsColumn.Width.Value - width) > 0.5)
+                refsColumn.Width = new(width, DataGridLengthUnitType.Pixel);
+        }
+
+        private double GetColumnStartX(DataGridColumn column)
+        {
+            var x = 0.0;
+            foreach (var col in CommitListContainer.Columns)
+            {
+                if (col.IsVisible && col.DisplayIndex < column.DisplayIndex)
+                    x += col.ActualWidth;
+            }
+            return x;
+        }
+
+        private void OnWipBarPointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            if (DataContext is ViewModels.Histories histories && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                // Show the local changes in the details panel; deselect commits so picking one again switches back.
+                CommitListContainer.SelectedItems.Clear();
+                histories.ShowLocalChangesInDetail();
+            }
+
+            e.Handled = true;
+        }
+
+        private void OnCloseLocalChangeDiff(object sender, RoutedEventArgs e)
+        {
+            CloseLocalChangeDiff();
+            e.Handled = true;
+        }
+
+        private bool CloseLocalChangeDiff()
+        {
+            // Deselecting the file drops its diff; the details panel stays open next to the graph.
+            return DataContext is ViewModels.Histories histories && histories.CloseGraphOverlay();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && e.KeyModifiers == KeyModifiers.None && CloseLocalChangeDiff())
+            {
+                e.Handled = true;
+                return;
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        private void OnWipBarDoubleTapped(object sender, TappedEventArgs e)
+        {
+            if (DataContext is ViewModels.Histories histories)
+                histories.Repo.SelectedViewIndex = 1;
+
+            e.Handled = true;
         }
 
         private void OnScrollToTopPointerPressed(object sender, PointerPressedEventArgs e)

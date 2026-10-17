@@ -241,6 +241,24 @@ namespace SourceGit.ViewModels
             private set => SetProperty(ref _localChangesCount, value);
         }
 
+        public int LocalChangesModified
+        {
+            get => _localChangesModified;
+            private set => SetProperty(ref _localChangesModified, value);
+        }
+
+        public int LocalChangesAdded
+        {
+            get => _localChangesAdded;
+            private set => SetProperty(ref _localChangesAdded, value);
+        }
+
+        public int LocalChangesDeleted
+        {
+            get => _localChangesDeleted;
+            private set => SetProperty(ref _localChangesDeleted, value);
+        }
+
         public int StashesCount
         {
             get => _stashesCount;
@@ -1339,6 +1357,18 @@ namespace SourceGit.ViewModels
 
                 changes.Sort((l, r) => Models.NumericSort.Compare(l.Path, r.Path));
 
+                int modified = 0, added = 0, deleted = 0;
+                foreach (var c in changes)
+                {
+                    var state = c.WorkTree != Models.ChangeState.None ? c.WorkTree : c.Index;
+                    if (state is Models.ChangeState.Added or Models.ChangeState.Untracked)
+                        added++;
+                    else if (state == Models.ChangeState.Deleted)
+                        deleted++;
+                    else
+                        modified++;
+                }
+
                 Dispatcher.UIThread.Invoke(() =>
                 {
                     if (token.IsCancellationRequested)
@@ -1346,6 +1376,9 @@ namespace SourceGit.ViewModels
 
                     _workingCopy.SetData(changes);
                     LocalChangesCount = changes.Count;
+                    LocalChangesModified = modified;
+                    LocalChangesAdded = added;
+                    LocalChangesDeleted = deleted;
                     OnPropertyChanged(nameof(InProgressContext));
                     GetOwnerPage()?.ChangeDirtyState(Models.DirtyState.HasLocalChanges, changes.Count == 0);
                 });
@@ -1954,6 +1987,9 @@ namespace SourceGit.ViewModels
 
         private int _localBranchesCount = 0;
         private int _localChangesCount = 0;
+        private int _localChangesModified = 0;
+        private int _localChangesAdded = 0;
+        private int _localChangesDeleted = 0;
         private int _stashesCount = 0;
 
         private string _filter = string.Empty;

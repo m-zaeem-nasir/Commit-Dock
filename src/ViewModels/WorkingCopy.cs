@@ -250,6 +250,12 @@ namespace SourceGit.ViewModels
             _repo = repo;
         }
 
+        public void ClearSelection()
+        {
+            SelectedUnstaged = new(null);
+            SelectedStaged = new(null);
+        }
+
         public void SetData(List<Models.Change> changes)
         {
             if (!IsChanged(_cached, changes))

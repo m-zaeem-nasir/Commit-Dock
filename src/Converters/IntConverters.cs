@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Data.Converters;
+using Avalonia.Media;
 
 namespace SourceGit.Converters
 {
@@ -25,5 +26,12 @@ namespace SourceGit.Converters
 
         public static readonly FuncValueConverter<int, bool> IsMaxCountOfStatistics =
             new(v => v >= 200000);
+
+        public static readonly FuncValueConverter<int, IBrush> ToGraphLaneBrush =
+            new(v =>
+            {
+                var pens = Models.CommitGraph.Pens;
+                return pens.Count == 0 ? Brushes.Gray : pens[v % pens.Count].Brush;
+            });
     }
 }

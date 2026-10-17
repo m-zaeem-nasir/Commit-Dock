@@ -28,17 +28,7 @@ namespace SourceGit.Converters
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
-                var theme = (string)value;
-                if (string.IsNullOrEmpty(theme))
-                    return ThemeVariant.Default;
-
-                if (theme.Equals("Light", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Light;
-
-                if (theme.Equals("Dark", StringComparison.OrdinalIgnoreCase))
-                    return ThemeVariant.Dark;
-
-                return ThemeVariant.Default;
+                return Models.ThemeVariants.Parse(value as string);
             }
 
             public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -88,6 +78,24 @@ namespace SourceGit.Converters
 
         public static readonly FuncValueConverter<string, string> ToFriendlyUpstream =
             new FuncValueConverter<string, string>(v => v is { Length: > 13 } ? v.Substring(13) : string.Empty);
+
+        public static readonly FuncValueConverter<string, string> ToParentDirWithSlash =
+            new FuncValueConverter<string, string>(v =>
+            {
+                if (string.IsNullOrEmpty(v))
+                    return string.Empty;
+                var idx = v.LastIndexOf('/');
+                return idx < 0 ? string.Empty : v.Substring(0, idx + 1);
+            });
+
+        public static readonly FuncValueConverter<string, string> ToFileNameOnly =
+            new FuncValueConverter<string, string>(v =>
+            {
+                if (string.IsNullOrEmpty(v))
+                    return string.Empty;
+                var idx = v.LastIndexOf('/');
+                return idx < 0 ? v : v.Substring(idx + 1);
+            });
 
         public static readonly FuncValueConverter<KeyGesture, string> FromKeyGesture =
             new FuncValueConverter<KeyGesture, string>(v => v?.ToString("p", null) ?? string.Empty);

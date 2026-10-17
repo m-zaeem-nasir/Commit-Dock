@@ -8,12 +8,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
              x:Class="SourceGit.Views.WorkingCopy"
              x:DataType="vm:WorkingCopy">
-  <Grid SizeChanged="OnMainLayoutSizeChanged" Background="{DynamicResource Brush.SubPanel}">
-    <Grid.ColumnDefinitions>
+  <v:WorkingCopyLayout SizeChanged="OnMainLayoutSizeChanged" Background="{DynamicResource Brush.SubPanel}">
+    <v:WorkingCopyLayout.ColumnDefinitions>
       <ColumnDefinition Width="{Binding Source={x:Static vm:Preferences.Instance}, Path=Layout.WorkingCopyLeftWidth, Mode=TwoWay}" MinWidth="300"/>
       <ColumnDefinition Width="4"/>
       <ColumnDefinition Width="*" MinWidth="470"/>
-    </Grid.ColumnDefinitions>
+    </v:WorkingCopyLayout.ColumnDefinitions>
 
     <!-- Left -->
     <Grid Grid.Column="0" Background="{DynamicResource Brush.Window}">
@@ -217,7 +217,7 @@
                   Focusable="False"/>
 
     <!-- Right -->
-    <Grid Grid.Column="2" Margin="4,4,6,0">
+    <Grid x:Name="RightPane" Grid.Column="2" Margin="4,4,6,0">
       <Grid.RowDefinitions>
         <RowDefinition Height="*" MinHeight="100"/>
         <RowDefinition Height="4"/>
@@ -226,7 +226,7 @@
       </Grid.RowDefinitions>
 
       <!-- Select Change Detail -->
-      <Grid Grid.Row="0">
+      <Grid x:Name="DiffArea" Grid.Row="0">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
           <Path Width="64" Height="64" Data="{StaticResource Icons.Diff}" Fill="{DynamicResource Brush.FG2}"/>
           <TextBlock Margin="0,16,0,0"
@@ -236,7 +236,7 @@
                      HorizontalAlignment="Center"/>
         </StackPanel>
 
-        <ContentControl Content="{Binding DetailContext}">
+        <ContentControl x:Name="DiffContent" Content="{Binding DetailContext}">
           <ContentControl.DataTemplates>
             <DataTemplate DataType="vm:Conflict">
               <v:Conflict/>
@@ -250,7 +250,7 @@
       </Grid>
 
       <!-- Splitter -->
-      <GridSplitter Grid.Row="1" MinHeight="1"
+      <GridSplitter x:Name="DiffSplitter" Grid.Row="1" MinHeight="1"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Background="Transparent"
                     Focusable="False"/>
@@ -460,5 +460,5 @@
         </Button>
       </Grid>
     </Grid>
-  </Grid>
+  </v:WorkingCopyLayout>
 </UserControl>

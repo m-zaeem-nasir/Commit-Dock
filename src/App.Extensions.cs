@@ -4,9 +4,29 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using Avalonia.Media;
+using Avalonia.Styling;
 
 namespace SourceGit
 {
+    public static class ThemeVariantExtensions
+    {
+        /// <summary>
+        ///     True for Dark and for every custom variant that inherits from it.
+        /// </summary>
+        public static bool IsDark(this ThemeVariant variant)
+        {
+            for (var v = variant; v != null; v = v.InheritVariant)
+            {
+                if (v == ThemeVariant.Dark)
+                    return true;
+                if (v == ThemeVariant.Light)
+                    return false;
+            }
+
+            return false;
+        }
+    }
+
     public static class StringExtensions
     {
         public static string Quoted(this string value)

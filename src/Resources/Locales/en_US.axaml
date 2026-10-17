@@ -1,6 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:String x:Key="Text.About" xml:space="preserve">About</x:String>
-  <x:String x:Key="Text.About.Menu" xml:space="preserve">About SourceGit</x:String>
+  <x:String x:Key="Text.About.Menu" xml:space="preserve">About GitStrand</x:String>
   <x:String x:Key="Text.About.ReleaseDate" xml:space="preserve">Release Date: {0}</x:String>
   <x:String x:Key="Text.About.ReleaseNotes" xml:space="preserve">Release Notes</x:String>
   <x:String x:Key="Text.About.SubTitle" xml:space="preserve">Opensource &amp; Free Git GUI Client</x:String>
@@ -17,7 +17,7 @@
   <x:String x:Key="Text.AIAssistant.Regen" xml:space="preserve">RE-GENERATE</x:String>
   <x:String x:Key="Text.AIAssistant.Tip" xml:space="preserve">Use AI to generate commit message</x:String>
   <x:String x:Key="Text.AIAssistant.Use" xml:space="preserve">Use</x:String>
-  <x:String x:Key="Text.App.Hide" xml:space="preserve">Hide SourceGit</x:String>
+  <x:String x:Key="Text.App.Hide" xml:space="preserve">Hide GitStrand</x:String>
   <x:String x:Key="Text.App.HideOthers" xml:space="preserve">Hide Others</x:String>
   <x:String x:Key="Text.App.ShowAll" xml:space="preserve">Show All</x:String>
   <x:String x:Key="Text.Apply.3Way" xml:space="preserve">3-Way Merge</x:String>
@@ -37,7 +37,7 @@
   <x:String x:Key="Text.Archive.File.Placeholder" xml:space="preserve">Select archive file path</x:String>
   <x:String x:Key="Text.Archive.Revision" xml:space="preserve">Revision:</x:String>
   <x:String x:Key="Text.Archive.Title" xml:space="preserve">Archive</x:String>
-  <x:String x:Key="Text.Askpass" xml:space="preserve">SourceGit Askpass</x:String>
+  <x:String x:Key="Text.Askpass" xml:space="preserve">GitStrand Askpass</x:String>
   <x:String x:Key="Text.Askpass.Passphrase" xml:space="preserve">Enter passphrase:</x:String>
   <x:String x:Key="Text.AssumeUnchanged" xml:space="preserve">FILES ASSUME UNCHANGED</x:String>
   <x:String x:Key="Text.AssumeUnchanged.Empty" xml:space="preserve">NO FILES ASSUMED AS UNCHANGED</x:String>
@@ -204,6 +204,14 @@
   <x:String x:Key="Text.CommitDetail.Info.SHA" xml:space="preserve">SHA</x:String>
   <x:String x:Key="Text.CommitDetail.Info.Signer" xml:space="preserve">Signer:</x:String>
   <x:String x:Key="Text.CommitDetail.Info.WebLinks" xml:space="preserve">Open in Browser</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Authored" xml:space="preserve">authored</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Commit" xml:space="preserve">commit</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.CommittedBy" xml:space="preserve">committed by</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Parent" xml:space="preserve">parent</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Summary.Added" xml:space="preserve">added</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Summary.Deleted" xml:space="preserve">deleted</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Summary.Modified" xml:space="preserve">modified</x:String>
+  <x:String x:Key="Text.CommitDetail.Info.Summary.Renamed" xml:space="preserve">renamed</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.Placeholder" xml:space="preserve">Enter commit message. Please use an empty-line to separate subject and description!</x:String>
   <x:String x:Key="Text.CommitMessageTextBox.SubjectCount" xml:space="preserve">SUBJECT</x:String>
   <x:String x:Key="Text.Compare" xml:space="preserve">Compare</x:String>
@@ -275,7 +283,7 @@
   <x:String x:Key="Text.Configure.IssueTracker.URLTemplate.Tip" xml:space="preserve">Please use $1, $2 to access regex groups values.</x:String>
   <x:String x:Key="Text.Configure.OpenAI" xml:space="preserve">AI</x:String>
   <x:String x:Key="Text.Configure.OpenAI.Preferred" xml:space="preserve">Preferred Service:</x:String>
-  <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">If the 'Preferred Service' is set, SourceGit will only use it in this repository. Otherwise, if there is more than one service available, a context menu to choose one of them will be shown.</x:String>
+  <x:String x:Key="Text.Configure.OpenAI.Preferred.Tip" xml:space="preserve">If the 'Preferred Service' is set, GitStrand will only use it in this repository. Otherwise, if there is more than one service available, a context menu to choose one of them will be shown.</x:String>
   <x:String x:Key="Text.Configure.Proxy" xml:space="preserve">HTTP Proxy</x:String>
   <x:String x:Key="Text.Configure.Proxy.Placeholder" xml:space="preserve">HTTP proxy used by this repository</x:String>
   <x:String x:Key="Text.Configure.User" xml:space="preserve">User Name</x:String>
@@ -515,11 +523,19 @@
   <x:String x:Key="Text.GitLFS.TrackByExtension" xml:space="preserve">Track all *{0} files</x:String>
   <x:String x:Key="Text.GotoRevisionSelector" xml:space="preserve">Select Commit</x:String>
   <x:String x:Key="Text.Histories.AdvancedOptions" xml:space="preserve">Advanced Options</x:String>
+  <x:String x:Key="Text.Histories.CommitFileDiff" xml:space="preserve">Commit {0}</x:String>
   <x:String x:Key="Text.Histories.Header.Author" xml:space="preserve">AUTHOR</x:String>
   <x:String x:Key="Text.Histories.Header.AuthorTime" xml:space="preserve">AUTHOR TIME</x:String>
-  <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">COMMIT TIME</x:String>
+  <x:String x:Key="Text.Histories.Header.CommitTime" xml:space="preserve">COMMIT DATE / TIME</x:String>
   <x:String x:Key="Text.Histories.Header.GraphAndSubject" xml:space="preserve">GRAPH &amp; SUBJECT</x:String>
+  <x:String x:Key="Text.Histories.Header.Graph" xml:space="preserve">GRAPH</x:String>
+  <x:String x:Key="Text.Histories.Header.Message" xml:space="preserve">COMMIT MESSAGE</x:String>
+  <x:String x:Key="Text.Histories.Header.Refs" xml:space="preserve">BRANCH / TAG</x:String>
   <x:String x:Key="Text.Histories.Header.SHA" xml:space="preserve">SHA</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff" xml:space="preserve">Local change</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff.Close" xml:space="preserve">Close and return to the graph (Esc)</x:String>
+  <x:String x:Key="Text.Histories.LocalChangeDiff.Tip" xml:space="preserve">press Esc or ✕ to return to the graph</x:String>
+  <x:String x:Key="Text.Histories.WIP.Tip" xml:space="preserve">Uncommitted local changes. Click to review and commit them here, double-click to open the full Local Changes page.</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph" xml:space="preserve">HIGHLIGHTS IN GRAPH</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph.All" xml:space="preserve">All</x:String>
   <x:String x:Key="Text.Histories.HighlightsInGraph.CurrentBranchOnly" xml:space="preserve">Current Branch Only</x:String>
@@ -954,7 +970,7 @@
   <x:String x:Key="Text.Statistics.Overview" xml:space="preserve">OVERVIEW</x:String>
   <x:String x:Key="Text.Statistics.ThisMonth" xml:space="preserve">MONTH</x:String>
   <x:String x:Key="Text.Statistics.ThisWeek" xml:space="preserve">WEEK</x:String>
-  <x:String x:Key="Text.Statistics.Tips" xml:space="preserve">SourceGit will only get a maximum of 200,000 commits according to the target branch for analysis.</x:String>
+  <x:String x:Key="Text.Statistics.Tips" xml:space="preserve">GitStrand will only get a maximum of 200,000 commits according to the target branch for analysis.</x:String>
   <x:String x:Key="Text.Statistics.TopAuthors" xml:space="preserve">TOP AUTHORS</x:String>
   <x:String x:Key="Text.Statistics.TopAuthors.Count" xml:space="preserve">COMMITS</x:String>
   <x:String x:Key="Text.Statistics.TopAuthors.Percentage" xml:space="preserve">PERCENTAGE</x:String>
@@ -1002,6 +1018,15 @@
   <x:String x:Key="Text.TagCM.Merge" xml:space="preserve">Merge ${0}$ into ${1}$...</x:String>
   <x:String x:Key="Text.TagCM.Push" xml:space="preserve">Push ${0}$...</x:String>
   <x:String x:Key="Text.Terminate" xml:space="preserve">TERMINATE</x:String>
+  <x:String x:Key="Text.Toolbar.Branch" xml:space="preserve">Branch</x:String>
+  <x:String x:Key="Text.Toolbar.FetchNow" xml:space="preserve">Fetch now (all remotes)</x:String>
+  <x:String x:Key="Text.Toolbar.Open" xml:space="preserve">Open</x:String>
+  <x:String x:Key="Text.Toolbar.PullNow" xml:space="preserve">Pull now (default options)</x:String>
+  <x:String x:Key="Text.Toolbar.PullOptions" xml:space="preserve">Pull &amp; fetch options</x:String>
+  <x:String x:Key="Text.Toolbar.PullWithOptions" xml:space="preserve">Pull with options...</x:String>
+  <x:String x:Key="Text.Toolbar.Terminal" xml:space="preserve">Terminal</x:String>
+  <x:String x:Key="Text.Toolbar.Tools" xml:space="preserve">Tools</x:String>
+  <x:String x:Key="Text.Toolbar.ToolsTip" xml:space="preserve">Git Flow, LFS, bisect, cleanup and more</x:String>
   <x:String x:Key="Text.TrustRepository" xml:space="preserve">Untrusted Repository</x:String>
   <x:String x:Key="Text.TrustRepository.CommandTip" xml:space="preserve">Do you want to run `git config --global --add safe.directory {0}` command to trust this path?</x:String>
   <x:String x:Key="Text.TrustRepository.Description" xml:space="preserve">Git refused to access this repository:  </x:String>

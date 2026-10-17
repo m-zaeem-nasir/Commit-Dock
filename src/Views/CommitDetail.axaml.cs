@@ -24,9 +24,37 @@ namespace SourceGit.Views
             set => SetAndRaise(IsDetailsPanelExpandedProperty, ref _isDetailsPanelExpanded, value);
         }
 
+        public static readonly StyledProperty<bool> ShowDiffExternallyProperty =
+            AvaloniaProperty.Register<CommitDetail, bool>(nameof(ShowDiffExternally));
+
+        /// <summary>
+        ///     Files picked on the information page are previewed by the host (over the history graph).
+        /// </summary>
+        public bool ShowDiffExternally
+        {
+            get => GetValue(ShowDiffExternallyProperty);
+            set => SetValue(ShowDiffExternallyProperty, value);
+        }
+
         public CommitDetail()
         {
             InitializeComponent();
+        }
+
+        protected override void OnDataContextChanged(EventArgs e)
+        {
+            base.OnDataContextChanged(e);
+
+            if (DataContext is ViewModels.CommitDetail vm)
+                vm.EnablePreviewDiff = ShowDiffExternally;
+        }
+
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == ShowDiffExternallyProperty && DataContext is ViewModels.CommitDetail vm)
+                vm.EnablePreviewDiff = ShowDiffExternally;
         }
 
         public ContextMenu CreateChangeContextMenu(Models.Change change)

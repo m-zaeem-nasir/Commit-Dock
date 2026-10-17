@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -11,16 +12,140 @@ using Avalonia.VisualTree;
 
 namespace SourceGit.Views
 {
+    /// <summary>
+    ///     Lays out the change lists, splitter and diff/commit area side by side like a normal Grid, or stacks
+    ///     them vertically (lists on top) when <see cref="IsStacked"/> is set, e.g. inside the narrow history
+    ///     details panel. Stacking ignores the column definitions, so the saved column width is left untouched.
+    /// </summary>
+    public class WorkingCopyLayout : Grid
+    {
+        public bool IsStacked
+        {
+            get => _isStacked;
+            set
+            {
+                if (_isStacked == value)
+                    return;
+
+                _isStacked = value;
+                if (Children.Count > 1 && Children[1] is GridSplitter splitter)
+                {
+                    splitter.IsHitTestVisible = !value;
+                    splitter.BorderThickness = value ? new Thickness(0, 1, 0, 0) : new Thickness(1, 0, 0, 0);
+                }
+
+                InvalidateMeasure();
+            }
+        }
+
+        /// <summary>
+        ///     When greater than zero, the stacked bottom part gets exactly this height and the lists take the rest.
+        /// </summary>
+        public double StackedBottomHeight
+        {
+            get => _stackedBottomHeight;
+            set
+            {
+                if (Math.Abs(_stackedBottomHeight - value) < 0.01)
+                    return;
+
+                _stackedBottomHeight = value;
+                InvalidateMeasure();
+            }
+        }
+
+        protected override Type StyleKeyOverride => typeof(Grid);
+
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (!_isStacked || Children.Count < 3)
+                return base.MeasureOverride(availableSize);
+
+            var (top, splitter, bottom) = GetStackedHeights(availableSize.Height);
+            Children[0].Measure(new Size(availableSize.Width, top));
+            Children[1].Measure(new Size(availableSize.Width, splitter));
+            Children[2].Measure(new Size(availableSize.Width, bottom));
+            return availableSize;
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            if (!_isStacked || Children.Count < 3)
+                return base.ArrangeOverride(finalSize);
+
+            var (top, splitter, bottom) = GetStackedHeights(finalSize.Height);
+            Children[0].Arrange(new Rect(0, 0, finalSize.Width, top));
+            Children[1].Arrange(new Rect(0, top, finalSize.Width, splitter));
+            Children[2].Arrange(new Rect(0, top + splitter, finalSize.Width, bottom));
+            return finalSize;
+        }
+
+        private (double, double, double) GetStackedHeights(double height)
+        {
+            const double splitter = 4;
+            var top = _stackedBottomHeight > 0
+                ? Math.Max(120, height - _stackedBottomHeight - splitter)
+                : Math.Max(220, Math.Round(height * 0.4));
+            var bottom = Math.Max(0, height - top - splitter);
+            return (top, splitter, bottom);
+        }
+
+        private bool _isStacked = false;
+        private double _stackedBottomHeight = 0;
+    }
+
     public partial class WorkingCopy : UserControl
     {
+        public static readonly StyledProperty<bool> ShowDiffExternallyProperty =
+            AvaloniaProperty.Register<WorkingCopy, bool>(nameof(ShowDiffExternally));
+
+        /// <summary>
+        ///     The selected change's diff is shown by the host (e.g. over the history graph) instead of in this view,
+        ///     which then only keeps the change lists and the commit box.
+        /// </summary>
+        public bool ShowDiffExternally
+        {
+            get => GetValue(ShowDiffExternallyProperty);
+            set => SetValue(ShowDiffExternallyProperty, value);
+        }
+
         public WorkingCopy()
         {
             InitializeComponent();
         }
 
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+
+            if (change.Property == ShowDiffExternallyProperty)
+                ApplyDiffPlacement();
+        }
+
+        private void ApplyDiffPlacement()
+        {
+            var external = ShowDiffExternally;
+            DiffArea.IsVisible = !external;
+            DiffSplitter.IsVisible = !external;
+            RightPane.RowDefinitions[0].MinHeight = external ? 0 : 100;
+            RightPane.RowDefinitions[0].Height = external ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+            RightPane.RowDefinitions[1].Height = new GridLength(external ? 0 : 4);
+
+            // Avoid building a second, hidden diff viewer for the same change.
+            if (external)
+                DiffContent.Content = null;
+        }
+
         private void OnMainLayoutSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (sender is not Grid grid)
+            if (sender is not WorkingCopyLayout grid)
+                return;
+
+            // Too narrow for lists and diff side by side (e.g. in the history details panel): stack them.
+            // When the diff is shown elsewhere, always stack and keep just the commit box below the lists.
+            grid.IsStacked = ShowDiffExternally || grid.Bounds.Width < STACKED_LAYOUT_WIDTH;
+            grid.StackedBottomHeight = ShowDiffExternally ? STACKED_COMMIT_AREA_HEIGHT : 0;
+            if (grid.IsStacked)
                 return;
 
             var layout = ViewModels.Preferences.Instance.Layout;
@@ -1420,5 +1545,8 @@ namespace SourceGit.Views
             var view = new AIAssistant() { DataContext = assistant };
             view.Show(owner);
         }
+
+        private const double STACKED_LAYOUT_WIDTH = 820;
+        private const double STACKED_COMMIT_AREA_HEIGHT = 176;
     }
 }

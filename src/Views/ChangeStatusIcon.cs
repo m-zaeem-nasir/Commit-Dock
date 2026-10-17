@@ -14,14 +14,14 @@ namespace SourceGit.Views
         private static readonly Color[] COLOR =
         [
             Colors.Transparent,
-            Colors.Goldenrod,
-            Colors.Goldenrod,
-            Colors.LimeGreen,
-            Colors.Tomato,
-            Colors.Orchid,
-            Colors.Goldenrod,
-            Colors.SkyBlue,
-            Colors.OrangeRed,
+            Color.Parse("#E8A93A"), // modified
+            Color.Parse("#E8A93A"), // type changed
+            Color.Parse("#3FBF82"), // added
+            Color.Parse("#E5555D"), // deleted
+            Color.Parse("#4D8FE6"), // renamed
+            Color.Parse("#E8A93A"), // copied
+            Color.Parse("#4D8FE6"), // untracked
+            Color.Parse("#F06A3C"), // conflicted
         ];
 
         public static readonly DirectProperty<ChangeStatusIcon, bool> IsUnstagedChangeProperty =
@@ -53,12 +53,12 @@ namespace SourceGit.Views
             if (_change == null || Bounds.Width <= 0)
                 return;
 
-            var typeface = new Typeface("fonts:SourceGit#JetBrains Mono NL");
+            var typeface = new Typeface("fonts:GitStrand#JetBrains Mono NL");
             var idx = (int)(_isUnstagedChange ? _change.WorkTree : _change.Index);
             var indicator = INDICATOR[idx];
             var color = COLOR[idx];
             var hsl = color.ToHsl();
-            var color2 = ActualThemeVariant == ThemeVariant.Dark
+            var color2 = ActualThemeVariant.IsDark()
                 ? new HslColor(hsl.A, hsl.H, hsl.S, hsl.L - 0.1).ToRgb()
                 : new HslColor(hsl.A, hsl.H, hsl.S, hsl.L + 0.1).ToRgb();
 

@@ -60,7 +60,7 @@ namespace SourceGit.Native
             var dirs = new OS.Directories();
             var appDataDir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "SourceGit");
+                "GitStrand");
 
             if (!Directory.Exists(appDataDir))
                 Directory.CreateDirectory(appDataDir);
