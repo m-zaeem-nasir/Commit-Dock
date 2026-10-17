@@ -17,13 +17,13 @@
     </Grid.ColumnDefinitions>
 
     <!-- Left -->
-    <Grid Grid.Column="0" RowDefinitions="28,36,*,28,*" Background="{DynamicResource Brush.Window}">
+    <Grid Grid.Column="0" RowDefinitions="38,36,*,28,*" Background="{DynamicResource Brush.Window}">
       <!-- Stash Bar -->
       <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto">
-        <Path Grid.Column="0" Margin="8,0,0,0" Width="14" Height="14" Fill="{DynamicResource Brush.FG2}" Data="{StaticResource Icons.Stashes}"/>
-        <TextBlock Grid.Column="1" Foreground="{DynamicResource Brush.FG2}" FontWeight="Bold" Margin="4,0,0,0">
+        <Path Grid.Column="0" Margin="10,0,0,0" Width="14" Height="14" Fill="{DynamicResource Brush.Accent}" Data="{StaticResource Icons.Stashes}"/>
+        <TextBlock Grid.Column="1" FontWeight="SemiBold" Margin="8,0,0,0" VerticalAlignment="Center">
           <Run Text="{DynamicResource Text.Stashes.Stashes}"/>
-          <Run Text="{Binding Stashes, Converter={x:Static c:ListConverters.ToCount}, Mode=OneWay}"/>
+          <Run Text="{Binding Stashes, Converter={x:Static c:ListConverters.ToCount}, Mode=OneWay}" Foreground="{DynamicResource Brush.FG2}"/>
         </TextBlock>
         <Button Grid.Column="2"
                 Margin="0,0,6,0"
@@ -157,13 +157,12 @@
 
     <!-- Right -->
     <Grid Grid.Column="2" Margin="4,4,6,4">
-      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Path Width="64" Height="64" Data="{StaticResource Icons.Diff}" Fill="{DynamicResource Brush.FG2}"/>
-        <TextBlock Margin="0,16,0,0"
-                   Text="{DynamicResource Text.Diff.Welcome}"
-                   FontSize="18" FontWeight="Bold"
-                   Foreground="{DynamicResource Brush.FG2}"
-                   HorizontalAlignment="Center"/>
+      <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="6" MaxWidth="320">
+        <Border Width="64" Height="64" CornerRadius="32" Background="{DynamicResource Brush.Hover}" HorizontalAlignment="Center" Margin="0,0,0,10">
+          <Path Width="24" Height="24" Data="{StaticResource Icons.Diff}" Fill="{DynamicResource Brush.Accent}"/>
+        </Border>
+        <TextBlock HorizontalAlignment="Center" FontSize="15" FontWeight="SemiBold" Text="{DynamicResource Text.DiffView.Select.Title}"/>
+        <TextBlock HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Foreground="{DynamicResource Brush.FG2}" Text="{DynamicResource Text.DiffView.Select.Desc}"/>
       </StackPanel>
 
       <ContentControl Content="{Binding DiffContext}">
