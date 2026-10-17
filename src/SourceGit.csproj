@@ -9,12 +9,12 @@
     <SuppressTrimAnalysisWarnings>true</SuppressTrimAnalysisWarnings>
     <InvariantGlobalization>false</InvariantGlobalization>
 
-    <AssemblyName>GitStrand</AssemblyName>
+    <AssemblyName>CommitDock</AssemblyName>
     <RootNamespace>SourceGit</RootNamespace>
-    <Product>GitStrand</Product>
+    <Product>Commit Dock</Product>
     <Description>A graph-first Git client, based on SourceGit</Description>
-    <Company>GitStrand</Company>
-    <Copyright>Copyright © $([System.DateTime]::Now.Year) GitStrand contributors. Based on SourceGit © sourcegit-scm.</Copyright>
+    <Company>Commit Dock</Company>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) Commit Dock contributors. Based on SourceGit © sourcegit-scm.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Public</RepositoryType>
   </PropertyGroup>
@@ -65,7 +65,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TrimmerRootAssembly Include="GitStrand" />
+    <TrimmerRootAssembly Include="CommitDock" />
     <TrimmerRootAssembly Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
 

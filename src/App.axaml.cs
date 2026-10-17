@@ -63,8 +63,8 @@ namespace SourceGit
             builder.ConfigureFonts(manager =>
             {
                 var monospace = new EmbeddedFontCollection(
-                    new Uri("fonts:GitStrand", UriKind.Absolute),
-                    new Uri("avares://GitStrand/Resources/Fonts", UriKind.Absolute));
+                    new Uri("fonts:CommitDock", UriKind.Absolute),
+                    new Uri("avares://CommitDock/Resources/Fonts", UriKind.Absolute));
                 manager.AddFontCollection(monospace);
             });
 
@@ -193,7 +193,7 @@ namespace SourceGit
             {
                 if (!string.IsNullOrEmpty(defaultFont))
                 {
-                    monospaceFont = $"fonts:GitStrand#JetBrains Mono NL,{defaultFont}";
+                    monospaceFont = $"fonts:CommitDock#JetBrains Mono NL,{defaultFont}";
                     resDic.Add("Fonts.Monospace", FontFamily.Parse(monospaceFont));
                 }
             }
@@ -297,7 +297,7 @@ namespace SourceGit
             if (!dirInfo.Exists || !dirInfo.Name.Equals("rebase-merge", StringComparison.Ordinal))
                 return true;
 
-            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "gitstrand.interactive_rebase");
+            var jobsFile = Path.Combine(dirInfo.Parent!.FullName, "commitdock.interactive_rebase");
             if (!File.Exists(jobsFile))
                 return true;
 
@@ -326,7 +326,7 @@ namespace SourceGit
             var origHeadFile = Path.Combine(gitDir, "rebase-merge", "orig-head");
             var ontoFile = Path.Combine(gitDir, "rebase-merge", "onto");
             var doneFile = Path.Combine(gitDir, "rebase-merge", "done");
-            var jobsFile = Path.Combine(gitDir, "gitstrand.interactive_rebase");
+            var jobsFile = Path.Combine(gitDir, "commitdock.interactive_rebase");
             if (!File.Exists(ontoFile) || !File.Exists(origHeadFile) || !File.Exists(doneFile) || !File.Exists(jobsFile))
                 return true;
 

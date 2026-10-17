@@ -70,7 +70,7 @@ namespace SourceGit.Models
             {
                 if (grammar.Scope.Equals(scopeName, StringComparison.OrdinalIgnoreCase))
                 {
-                    var asset = AssetLoader.Open(new Uri($"avares://GitStrand/Resources/Grammars/{grammar.File}",
+                    var asset = AssetLoader.Open(new Uri($"avares://CommitDock/Resources/Grammars/{grammar.File}",
                         UriKind.RelativeOrAbsolute));
 
                     try
