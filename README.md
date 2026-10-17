@@ -1,29 +1,50 @@
-# SourceGit - Opensource Git GUI client.
+# Commit Dock
 
-[![stars](https://img.shields.io/github/stars/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/stargazers)
-[![forks](https://img.shields.io/github/forks/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/forks)
-[![license](https://img.shields.io/github/license/sourcegit-scm/sourcegit.svg)](LICENSE)
-[![latest](https://img.shields.io/github/v/release/sourcegit-scm/sourcegit.svg)](https://github.com/sourcegit-scm/sourcegit/releases/latest)
-[![downloads](https://img.shields.io/github/downloads/sourcegit-scm/sourcegit/total)](https://github.com/sourcegit-scm/sourcegit/releases)
+A fast, open-source Git GUI client for Windows, macOS and Linux, with a redesigned commit graph, a focused history view and a family of dark themes.
+
+Commit Dock is a fork of [SourceGit](https://github.com/sourcegit-scm/sourcegit) and keeps its full feature set while reworking the look and the day-to-day history workflow.
+
+[![license](https://img.shields.io/github/license/mzaeemnasir/Commit-Dock.svg)](LICENSE)
+[![stars](https://img.shields.io/github/stars/mzaeemnasir/Commit-Dock.svg)](https://github.com/mzaeemnasir/Commit-Dock/stargazers)
 
 ## Screenshots
 
-* Dark Theme
+**History**: commit graph with avatar nodes, branch/tag badges and a labeled toolbar
 
-  ![Theme Dark](./screenshots/theme_dark.png)
+![History](./screenshots/history.png)
 
-* Light Theme
+**Commit details**: message, author, parents and changed files in a single scrolling panel
 
-  ![Theme Light](./screenshots/theme_light.png)
+![Commit Details](./screenshots/commit_detail.png)
 
-* Custom
+**Diffs over the graph**: open any file of a commit (or of your local changes) in place of the graph; press `Esc` to return
 
-  You can find custom themes from [sourcegit-theme](https://github.com/sourcegit-scm/sourcegit-theme.git). And welcome to share your own themes.
+![Diff Over Graph](./screenshots/diff_over_graph.png)
+
+**Local changes**: uncommitted work shows up as a WIP row at the top of the graph
+
+![Local Changes](./screenshots/local_changes.png)
+
+**Themes**: Default, Dark, Obsidian, Abyss, Forest, Ember, Nebula, Arctic and Light, selectable in Preferences
+
+![Themes](./screenshots/themes.jpg)
+
+![Light Theme](./screenshots/theme_light.png)
+
+## What's New in Commit Dock
+
+* Redesigned commit graph with wider lanes, glowing nodes and author avatars, in its own column
+* Uncommitted local changes shown as a WIP row in the graph, opening the local changes in the details panel
+* File diffs (committed or local) open over the graph, with a close button and `Esc` to go back
+* Commit details restyled as one clear, single-scroll panel
+* Labeled toolbar buttons and a combined Tools menu
+* Responsive main window that adapts to narrow sizes
+* Indigo midnight dark theme by default, plus six more dark variants and a light theme
 
 ## Highlights
 
 * Supports Windows/macOS/Linux
-* Opensource/Free
+* Open source and free
 * Fast
 * Deutsch/English/Español/Bahasa Indonesia/Français/Italiano/Português/Русский/Українська/简体中文/繁體中文/日本語/தமிழ் (Tamil)/한국어
 * Built-in light/dark themes
@@ -61,129 +82,54 @@
 * Using AI to generate commit message
 * Built-in conventional commit message helper.
 
-> [!WARNING]
-> **Linux** only tested on **Debian 12** on both **X11** & **Wayland**.
-
 ## How to Use
 
-**To use this tool, you need to install Git(>=2.25.1) first.**
+**To use this tool, you need to install Git (>=2.25.1) first.**
 
-You can download the latest stable from [Releases](https://github.com/sourcegit-scm/sourcegit/releases/latest) or download workflow artifacts from [GitHub Actions](https://github.com/sourcegit-scm/sourcegit/actions) to try this app based on latest commits.
+Commit Dock does not publish pre-built releases yet. Build it from source (see [Building from Source](#building-from-source)).
 
-This software creates a folder, which is platform-dependent, to store user settings, downloaded avatars and crash logs.
+Commit Dock stores user settings, downloaded avatars and crash logs in a platform-dependent folder. It does not share settings with SourceGit, so both can be installed side by side.
 
-| OS      | PATH                                                                                             |
-|---------|--------------------------------------------------------------------------------------------------|
-| Windows | `%APPDATA%\SourceGit`                                                                            |
-| Linux   | `${XDG_CONFIG_HOME}/SourceGit` (preference.json) `${XDG_CACHE_HOME}/SourceGit` (avatars & logs)  |
-| macOS   | `~/Library/Application Support/SourceGit`                                                        |
+| OS      | PATH                                                                                                 |
+|---------|------------------------------------------------------------------------------------------------------|
+| Windows | `%APPDATA%\CommitDock`                                                                               |
+| Linux   | `${XDG_CONFIG_HOME}/CommitDock` (preference.json) `${XDG_CACHE_HOME}/CommitDock` (avatars & logs)   |
+| macOS   | `~/Library/Application Support/CommitDock`                                                           |
 
 > [!TIP]
 > * You can open this data storage directory from the main menu `Open Data Storage Directory`.
-> * You can create a `data` folder next to the `SourceGit` executable to force this app to store data (user settings, downloaded avatars and crash logs) into it (Portable-Mode). Only works with Windows packages and Linux AppImages.
+> * You can create a `data` folder next to the `CommitDock` executable to force this app to store data (user settings, downloaded avatars and crash logs) into it (Portable-Mode). Only works on Windows and with Linux AppImages.
 
 For **Windows** users:
 
 * **MSYS Git is NOT supported**. Please use official [Git for Windows](https://git-scm.com/download/win) instead.
-* You can install the latest stable by `scoop` with follow commands:
-  ```shell
-  scoop bucket add extras
-  scoop install sourcegit
-  ```
-* Pre-built binaries can be found in [Releases](https://github.com/sourcegit-scm/sourcegit/releases/latest)
 
 > [!NOTE]
 > `git-flow` is no longer shipped with **Git for Windows** since `2.51.1`. You can use it by following these steps:
 >  * Download [git-flow-next](https://github.com/gittower/git-flow-next/releases)
 >  * Unzip & Rename the `git-flow-next` to `git-flow`
->  * Copy to `$GIT_INSTALL_DIR/cmd` or just add its path to you `PATH` directly
+>  * Copy to `$GIT_INSTALL_DIR/cmd` or just add its path to your `PATH` directly
 
 For **macOS** users:
 
-* Thanks [@ybeapps](https://github.com/ybeapps) for making `SourceGit` available on `Homebrew`:
-  ```shell
-  brew install --cask sourcegit
-  ```
-* If you want to install `SourceGit.app` from GitHub Release manually, you need run following command to make sure it works:
-  ```shell
-  sudo xattr -cr /Applications/SourceGit.app
-  ```
-> [!NOTE]
-> macOS packages in the `Release` page of this project are all unsigned. If you are worried about potential security issues with the above command, you can download the signed package from the [distribution repository](https://github.com/ybeapps/homebrew-sourcegit/releases) provided by [@ybeapps](https://github.com/ybeapps) (there is no need to execute the above command while installing `SourceGit`).
-
 * Make sure [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) is installed on your mac.
-* You can run `echo $PATH > ~/Library/Application\ Support/SourceGit/PATH` to generate a custom PATH env file to introduce `PATH` env to SourceGit.
+* You can run `echo $PATH > ~/Library/Application\ Support/CommitDock/PATH` to generate a custom PATH env file to introduce `PATH` env to Commit Dock.
 
 For **Linux** users:
 
-* Thanks [@aikawayataro](https://github.com/aikawayataro) for providing `rpm` and `deb` repositories, hosted on [Codeberg](https://codeberg.org/yataro/-/packages).
-
-  `deb` how to:
-  ```shell
-  sudo mkdir -p /etc/apt/keyrings
-  curl https://codeberg.org/api/packages/yataro/debian/repository.key | sudo tee /etc/apt/keyrings/sourcegit.asc
-  echo "deb [signed-by=/etc/apt/keyrings/sourcegit.asc, arch=amd64,arm64] https://codeberg.org/api/packages/yataro/debian generic main" | sudo tee /etc/apt/sources.list.d/sourcegit.list
-  sudo apt update
-  sudo apt install sourcegit
-  ```
-
-  `rpm` how to:
-  ```shell
-  curl https://codeberg.org/api/packages/yataro/rpm.repo | sed -e 's/gpgcheck=1/gpgcheck=0/' > sourcegit.repo
-
-  # Fedora 41 and newer
-  sudo dnf config-manager addrepo --from-repofile=./sourcegit.repo
-  # Fedora 40 and earlier
-  sudo dnf config-manager --add-repo ./sourcegit.repo
-
-  sudo dnf install sourcegit
-  ```
-
-  If your distribution isn't using `dnf`, please refer to the documentation of your distribution on how to add an `rpm` repository.
-
-* Thanks [@gadfly3173](https://github.com/gadfly3173) for providing `deb` repository, hosted on https://deb-repo.gadfly.vip
-
-  ```shell
-  # Import GPG key
-  curl -fsSL https://deb-repo.gadfly.vip/public.key | sudo gpg --dearmor -o /usr/share/keyrings/deb-repo.gpg
-
-  # Add repository (DEB822 format, recommended for Bookworm+ / 22.04+)
-  echo "Types: deb
-  URIs: https://deb-repo.gadfly.vip
-  Suites: stable
-  Components: main
-  Architectures: $(dpkg --print-architecture)
-  Signed-By: /usr/share/keyrings/deb-repo.gpg" | sudo tee /etc/apt/sources.list.d/deb-repo.sources
-  
-  # Or use one‑line format for older releases:
-  # echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/deb-repo.gpg] https://deb-repo.gadfly.vip stable main" | sudo tee /  etc/apt/sources.list.d/deb-repo.list
-  
-  # Update and install
-  sudo apt update
-  sudo apt install sourcegit
-  ```
-
-* `AOSC OS`: In addition to AMD64 and ARM64, support for LoongArch and RISC-V has been added.
-  ```shell
-  sudo oma install sourcegit
-  ```
-  
-> [!NOTE]
-> RISC-V support is untested.
-
-* `AppImage` files can be found on [AppImage hub](https://appimage.github.io/SourceGit/), `xdg-open` (`xdg-utils`) must be installed to support open native file manager.
 * Make sure [git-credential-manager](https://github.com/git-ecosystem/git-credential-manager/releases) or [git-credential-libsecret](https://pkgs.org/search/?q=git-credential-libsecret) is installed on your Linux.
+* `xdg-open` (`xdg-utils`) must be installed to support opening the native file manager.
 * Maybe you need to set environment variable `AVALONIA_SCREEN_SCALE_FACTORS`. See https://github.com/AvaloniaUI/Avalonia/wiki/Configuring-X11-per-monitor-DPI.
 * If you can NOT type accented characters, such as `ê`, `ó`, try to set the environment variable `AVALONIA_IM_MODULE` to `none`.
 
 ## Commandline arguments
 
-Users can also launcher `SourceGit` from commandline. Usage:
+Users can also launch `CommitDock` from the commandline. Usage:
 
 ```
-<SOURCEGIT_EXEC> <DIR>                       // Open repository in existing `SourceGit` instance or a new one
-<SOURCEGIT_EXEC> --history <FILE_OR_DIR>     // Launch `SourceGit` to see the history of a file or dir
-<SOURCEGIT_EXEC> --blame <FILE_PATH>         // Launch `SourceGit` to blame a file (HEAD version only) 
+<COMMITDOCK_EXEC> <DIR>                       // Open repository in existing `Commit Dock` instance or a new one
+<COMMITDOCK_EXEC> --history <FILE_OR_DIR>     // Launch `Commit Dock` to see the history of a file or dir
+<COMMITDOCK_EXEC> --blame <FILE_PATH>         // Launch `Commit Dock` to blame a file (HEAD version only)
 ```
 
 ## OpenAI
@@ -280,29 +226,32 @@ You can define your own conventional commit types (per-repository) by following 
 ```
 2. Configure the `Conventional Commit Types` in repository configuration window.  
 
-## Contributing
+## Building from Source
 
-Everyone is welcome to submit a PR. Please make sure your PR is based on the latest `develop` branch and the target branch of PR is `develop`.
+This project has a submodule in `depends/AvaloniaEdit` which is a custom fork of [Official AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit).
+Clone with `--recurse-submodules`, or run `git submodule update --init` after cloning.
 
-This project has a submodule in `depends/AvaloniaEdit` which is a custom fork of [Official AvaloniaEdit](https://github.com/AvaloniaUI/AvaloniaEdit). 
-Please make sure it is initialized - enable `--recurse-submodules` option while cloning or run `git submodule update --init` after cloned.
-
-In short, here are the commands to get started once [.NET tools are installed](https://dotnet.microsoft.com/en-us/download):
+Once the [.NET SDK](https://dotnet.microsoft.com/en-us/download) is installed:
 
 ```sh
-dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
+git clone --recurse-submodules https://github.com/mzaeemnasir/Commit-Dock.git
+cd Commit-Dock
 dotnet restore
 dotnet build
 dotnet run --project src/SourceGit.csproj
 ```
 
-Thanks to all the people who contribute.
+## Contributing
 
-[![Contributors](https://contrib.rocks/image?repo=sourcegit-scm/sourcegit&columns=20)](https://github.com/sourcegit-scm/sourcegit/graphs/contributors)
+Everyone is welcome to submit a PR. Please base your work on the latest `master` branch, use a separate branch per feature, and target `master` with your PR.
+
+## Credits
+
+Commit Dock is built on [SourceGit](https://github.com/sourcegit-scm/sourcegit) by sourcegit-scm and its contributors. Thanks to everyone who made it possible.
 
 ## Translation Status
 
-You can find the current translation status in [TRANSLATION.md](https://github.com/sourcegit-scm/sourcegit/blob/develop/TRANSLATION.md)
+You can find the current translation status in [TRANSLATION.md](TRANSLATION.md)
 
 ### Translate Utility Script
 
