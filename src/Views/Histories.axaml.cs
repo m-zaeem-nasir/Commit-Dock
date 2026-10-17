@@ -852,6 +852,18 @@ namespace SourceGit.Views
 
         private void OnWipBarPointerPressed(object sender, PointerPressedEventArgs e)
         {
+            if (DataContext is ViewModels.Histories histories && e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+            {
+                // Show the local changes in the details panel; deselect commits so picking one again switches back.
+                CommitListContainer.SelectedItems.Clear();
+                histories.ShowLocalChangesInDetail();
+            }
+
+            e.Handled = true;
+        }
+
+        private void OnWipBarDoubleTapped(object sender, TappedEventArgs e)
+        {
             if (DataContext is ViewModels.Histories histories)
                 histories.Repo.SelectedViewIndex = 1;
 

@@ -154,8 +154,16 @@ namespace SourceGit.ViewModels
             set
             {
                 if (SetProperty(ref _detailContext, value))
+                {
                     OnPropertyChanged(nameof(IsOpenAsStandaloneVisible));
+                    OnPropertyChanged(nameof(IsLocalChangesInDetail));
+                }
             }
+        }
+
+        public bool IsLocalChangesInDetail
+        {
+            get => _detailContext is WorkingCopy;
         }
 
         public Models.Bisect Bisect
@@ -522,6 +530,12 @@ namespace SourceGit.ViewModels
             }
 
             SelectedCommits = selected;
+        }
+
+        public void ShowLocalChangesInDetail()
+        {
+            if (_repo.WorkingCopy != null)
+                DetailContext = _repo.WorkingCopy;
         }
 
         private void PostSelectedCommitsChanged()

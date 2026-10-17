@@ -320,9 +320,11 @@
               Cursor="Hand"
               ToolTip.Tip="{DynamicResource Text.Histories.WIP.Tip}"
               IsVisible="{Binding Repo.LocalChangesCount, Converter={x:Static c:IntConverters.IsGreaterThanZero}}"
-              PointerPressed="OnWipBarPointerPressed">
+              PointerPressed="OnWipBarPointerPressed"
+              DoubleTapped="OnWipBarDoubleTapped">
         <Grid>
           <Rectangle Margin="0,2" Fill="{DynamicResource Brush.Accent}" Opacity="0.14"/>
+          <Rectangle Margin="0,2" Fill="{DynamicResource Brush.Accent}" Opacity="0.3" IsVisible="{Binding IsLocalChangesInDetail}"/>
 
           <StackPanel x:Name="WipContent" Orientation="Horizontal" VerticalAlignment="Center" Spacing="10">
             <Border CornerRadius="4" Padding="8,2" Background="{DynamicResource Brush.Popup}" BorderBrush="{DynamicResource Brush.Border2}" BorderThickness="1">
@@ -422,6 +424,10 @@
 
           <DataTemplate DataType="vm:CommitDetail">
             <v:CommitDetail IsDetailsPanelExpanded="{Binding #ThisControl.IsDetailsPanelExpanded, Mode=OneWay}"/>
+          </DataTemplate>
+
+          <DataTemplate DataType="vm:WorkingCopy">
+            <v:WorkingCopy/>
           </DataTemplate>
 
           <DataTemplate DataType="vm:RevisionCompare">
