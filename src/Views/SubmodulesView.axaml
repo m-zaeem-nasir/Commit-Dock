@@ -55,12 +55,12 @@
                         HorizontalAlignment="Left" VerticalAlignment="Center"
                         Width="12" Height="12"
                         Data="{StaticResource Icons.Check}"
-                        Fill="Green"
+                        Fill="{DynamicResource Brush.Success}"
                         IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:SubmoduleStatus.Normal}}"/>
                   <Border Height="16"
                           Margin="6,0,0,0" Padding="4,0"
                           HorizontalAlignment="Left" VerticalAlignment="Center"
-                          Background="DarkOrange"
+                          Background="{DynamicResource Brush.Warning}"
                           CornerRadius="4"
                           IsVisible="{Binding Status, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:SubmoduleStatus.Normal}}">
                     <Grid>
@@ -128,7 +128,7 @@
 
                 <Path Grid.Column="3"
                       Width="8" Height="8"
-                      Fill="Goldenrod"
+                      Fill="{DynamicResource Brush.Modified}"
                       Data="{StaticResource Icons.Modified}"
                       IsVisible="{Binding IsDirty}"/>
               </Grid>
@@ -190,12 +190,12 @@
                             HorizontalAlignment="Left" VerticalAlignment="Center"
                             Width="12" Height="12"
                             Data="{StaticResource Icons.Check}"
-                            Fill="Green"
+                            Fill="{DynamicResource Brush.Success}"
                             IsVisible="{Binding Status, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static m:SubmoduleStatus.Normal}}"/>
                       <Border Height="16"
                               Margin="6,0,0,0" Padding="4,0"
                               HorizontalAlignment="Left" VerticalAlignment="Center"
-                              Background="DarkOrange"
+                              Background="{DynamicResource Brush.Warning}"
                               CornerRadius="4"
                               IsVisible="{Binding Status, Converter={x:Static ObjectConverters.NotEqual}, ConverterParameter={x:Static m:SubmoduleStatus.Normal}}">
                         <Grid>
@@ -241,7 +241,7 @@
                 </Border>
                 <Path Grid.Column="3"
                       Width="8" Height="8"
-                      Fill="Goldenrod"
+                      Fill="{DynamicResource Brush.Modified}"
                       Data="{StaticResource Icons.Modified}"
                       IsVisible="{Binding IsDirty}"/>
               </Grid>

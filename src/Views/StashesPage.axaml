@@ -99,7 +99,7 @@
                     ToolTip.Tip="{Binding Message}">
               <Grid RowDefinitions="Auto,*" >
                 <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-                  <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="DarkOrange"/>
+                  <TextBlock Grid.Column="0" Text="{Binding Name}" Foreground="{DynamicResource Brush.Warning}"/>
                   <v:DateTimePresenter Grid.Column="1"
                                        Margin="8,0,0,0"
                                        Timestamp="{Binding Time}"

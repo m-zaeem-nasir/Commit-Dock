@@ -51,7 +51,7 @@
               <TextBlock Grid.Column="2"
                          Text="{Binding Base.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                          FontFamily="{DynamicResource Fonts.Monospace}"
-                         Foreground="DarkOrange"
+                         Foreground="{DynamicResource Brush.Warning}"
                          Margin="8,0,0,0"
                          TextDecorations="Underline"
                          Cursor="Hand"/>
@@ -82,7 +82,7 @@
               <TextBlock Grid.Column="2"
                          Text="{Binding To.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                          FontFamily="{DynamicResource Fonts.Monospace}"
-                         Foreground="DarkOrange"
+                         Foreground="{DynamicResource Brush.Warning}"
                          Margin="8,0,0,0"
                          TextDecorations="Underline"
                          Cursor="Hand"/>

@@ -357,7 +357,7 @@
               <Border Background="Transparent"
                       ToolTip.Tip="{DynamicResource Text.Preferences.Git.Invalid}"
                       IsVisible="{Binding #ThisControl.ShowGitVersionWarning}">
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Error}" Fill="Red"/>
+                <Path Width="14" Height="14" Data="{StaticResource Icons.Error}" Fill="{DynamicResource Brush.Danger}"/>
               </Border>
             </StackPanel>
 

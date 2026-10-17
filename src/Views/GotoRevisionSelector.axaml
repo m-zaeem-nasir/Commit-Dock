@@ -86,7 +86,7 @@
                          Margin="4,0,0,0"
                          Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                          FontFamily="{DynamicResource Fonts.Monospace}"
-                         Foreground="DarkOrange"
+                         Foreground="{DynamicResource Brush.Warning}"
                          VerticalAlignment="Center"/>
 
               <v:DateTimePresenter Grid.Column="3"

@@ -56,7 +56,7 @@
                          FontFamily="{DynamicResource Fonts.Monospace}"
                          VerticalAlignment="Center"
                          Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                         Foreground="DarkOrange"
+                         Foreground="{DynamicResource Brush.Warning}"
                          Margin="6,0,4,0"/>
               <TextBlock Grid.Column="2"
                          VerticalAlignment="Center"
@@ -85,7 +85,7 @@
                            FontFamily="{DynamicResource Fonts.Monospace}"
                            VerticalAlignment="Center"
                            Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                           Foreground="DarkOrange"
+                           Foreground="{DynamicResource Brush.Warning}"
                            Margin="6,0,4,0"/>
                 <TextBlock Grid.Column="1"
                            VerticalAlignment="Center"

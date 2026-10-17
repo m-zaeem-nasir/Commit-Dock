@@ -45,11 +45,11 @@
               <Path Grid.Column="0"
                     Width="14" Height="14"
                     Data="{StaticResource Icons.Error}"
-                    Fill="DarkOrange"/>
+                    Fill="{DynamicResource Brush.Warning}"/>
               <TextBlock Grid.Column="1" Margin="8,0,0,0"
                          Text="{DynamicResource Text.Discard.Warning}"
                          TextWrapping="Wrap"
-                         Foreground="DarkOrange"/>
+                         Foreground="{DynamicResource Brush.Warning}"/>
             </Grid>
           </Grid>
         </DataTemplate>
@@ -70,11 +70,11 @@
               <Path Grid.Column="0"
                     Width="14" Height="14"
                     Data="{StaticResource Icons.Error}"
-                    Fill="DarkOrange"/>
+                    Fill="{DynamicResource Brush.Warning}"/>
               <TextBlock Grid.Column="1" Margin="8,0,0,0"
                          Text="{DynamicResource Text.Discard.Warning}"
                          TextWrapping="Wrap"
-                         Foreground="DarkOrange"/>
+                         Foreground="{DynamicResource Brush.Warning}"/>
             </Grid>
           </Grid>
         </DataTemplate>
@@ -95,11 +95,11 @@
               <Path Grid.Column="0"
                     Width="14" Height="14"
                     Data="{StaticResource Icons.Error}"
-                    Fill="DarkOrange"/>
+                    Fill="{DynamicResource Brush.Warning}"/>
               <TextBlock Grid.Column="1" Margin="8,0,0,0"
                          Text="{DynamicResource Text.Discard.Warning}"
                          TextWrapping="Wrap"
-                         Foreground="DarkOrange"/>
+                         Foreground="{DynamicResource Brush.Warning}"/>
             </Grid>
           </Grid>
         </DataTemplate>

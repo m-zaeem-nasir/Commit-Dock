@@ -91,7 +91,7 @@
                              FontFamily="{DynamicResource Fonts.Monospace}"
                              Cursor="Hand"
                              Background="Transparent"
-                             Foreground="DarkOrange"
+                             Foreground="{DynamicResource Brush.Warning}"
                              TextDecorations="Underline"
                              Margin="8,0,0,0"
                              PointerPressed="OnPressCommitSHA"/>

@@ -332,15 +332,15 @@
             </Border>
 
             <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesModified, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
-              <Run Text="✎" Foreground="#FFFFC857"/>
+              <Run Text="✎" Foreground="{DynamicResource Brush.Modified}"/>
               <Run Text="{Binding Repo.LocalChangesModified, Mode=OneWay}" FontWeight="SemiBold"/>
             </TextBlock>
             <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesAdded, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
-              <Run Text="+" Foreground="#FF5EE6A0" FontWeight="Bold"/>
+              <Run Text="+" Foreground="{DynamicResource Brush.Added}" FontWeight="Bold"/>
               <Run Text="{Binding Repo.LocalChangesAdded, Mode=OneWay}" FontWeight="SemiBold"/>
             </TextBlock>
             <TextBlock VerticalAlignment="Center" IsVisible="{Binding Repo.LocalChangesDeleted, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
-              <Run Text="−" Foreground="#FFFF6B6B" FontWeight="Bold"/>
+              <Run Text="−" Foreground="{DynamicResource Brush.Deleted}" FontWeight="Bold"/>
               <Run Text="{Binding Repo.LocalChangesDeleted, Mode=OneWay}" FontWeight="SemiBold"/>
             </TextBlock>
           </StackPanel>

@@ -535,7 +535,7 @@
   </Style>
   <Style Selector="Run.commit_link">
     <Setter Property="FontFamily" Value="{DynamicResource Fonts.Monospace}"/>
-    <Setter Property="Foreground" Value="DarkOrange"/>
+    <Setter Property="Foreground" Value="{DynamicResource Brush.Link}"/>
     <Setter Property="TextDecorations" Value="Underline"/>
   </Style>
   <Style Selector="Run.inline_code">
@@ -866,7 +866,7 @@
                   <DataTemplate DataType="vm:CustomActionContextMenuLabel">
                     <StackPanel Orientation="Horizontal">
                       <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-                      <Border Margin="4,0,0,0" Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center" IsVisible="{Binding IsGlobal}">
+                      <Border Margin="4,0,0,0" Height="16" Background="{DynamicResource Brush.SuccessBadge}" CornerRadius="8" VerticalAlignment="Center" IsVisible="{Binding IsGlobal}">
                         <TextBlock Text="GLOBAL" Margin="8,0" FontSize="10" Foreground="White"/>
                       </Border>
                     </StackPanel>

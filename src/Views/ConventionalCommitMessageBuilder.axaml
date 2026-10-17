@@ -54,7 +54,7 @@
           <DataTemplate DataType="m:ConventionalCommitType">
             <StackPanel Orientation="Horizontal">
               <TextBlock Text="{Binding Name}" Margin="0,0,8,0"/>
-              <Border Height="16" CornerRadius="8" Padding="8,0" VerticalAlignment="Center" Background="Green">
+              <Border Height="16" CornerRadius="8" Padding="8,0" VerticalAlignment="Center" Background="{DynamicResource Brush.SuccessBadge}">
                 <TextBlock Text="{Binding Type}" VerticalAlignment="Center" FontSize="11" Foreground="White"/>
               </Border>
             </StackPanel>
@@ -71,7 +71,7 @@
               </Grid.ColumnDefinitions>
 
               <TextBlock Grid.Column="0" Text="{Binding Name}"/>
-              <Border Grid.Column="1" Height="16" CornerRadius="8" Padding="8,0" Margin="8,0,16,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="Green">
+              <Border Grid.Column="1" Height="16" CornerRadius="8" Padding="8,0" Margin="8,0,16,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{DynamicResource Brush.SuccessBadge}">
                 <TextBlock Text="{Binding Type}" VerticalAlignment="Center" FontSize="11" Foreground="White"/>
               </Border>
               <TextBlock Grid.Column="2" Text="{Binding Description}" Foreground="{DynamicResource Brush.FG2}"/>

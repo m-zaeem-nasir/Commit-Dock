@@ -199,7 +199,7 @@
                             ToolTip.Tip="{DynamicResource Text.Statistics.Tips}">
                       <Path Width="14" Height="14"
                             Data="{StaticResource Icons.Info}"
-                            Fill="DarkOrange"/>
+                            Fill="{DynamicResource Brush.Warning}"/>
                     </Border>
                   </StackPanel>
                 </Grid>

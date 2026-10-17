@@ -160,7 +160,7 @@
                 <Path Margin="2,0,0,0"
                       Width="12" Height="12"
                       Data="{StaticResource Icons.Error}"
-                      Fill="Orange"
+                      Fill="{DynamicResource Brush.Warning}"
                       IsVisible="{Binding IsInvalid}"/>
               </StackPanel>
 

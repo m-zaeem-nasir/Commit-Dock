@@ -29,7 +29,7 @@
                    VerticalAlignment="Center"
                    FontFamily="{DynamicResource Fonts.Monospace}"
                    Text="{Binding Revision.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                   Foreground="DarkOrange"
+                   Foreground="{DynamicResource Brush.Warning}"
                    Margin="8,0,0,0"/>
         <TextBlock Grid.Column="2"
                    VerticalAlignment="Center"

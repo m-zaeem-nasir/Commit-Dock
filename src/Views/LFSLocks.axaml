@@ -75,7 +75,7 @@
                 <Path Width="14" Height="14" Data="{StaticResource Icons.Unlock}"/>
               </Button>
               <Button Grid.Column="4" Classes="icon_button" Click="OnForceUnlockButtonClicked" ToolTip.Tip="{DynamicResource Text.GitLFS.Locks.UnlockForce}">
-                <Path Width="14" Height="14" Fill="Red" Data="{StaticResource Icons.Unlock}"/>
+                <Path Width="14" Height="14" Fill="{DynamicResource Brush.Danger}" Data="{StaticResource Icons.Unlock}"/>
               </Button>
             </Grid>
           </DataTemplate>

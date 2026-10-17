@@ -97,7 +97,7 @@
                         <TextBlock Margin="4,0,0,0"
                                    FontFamily="{DynamicResource Fonts.Monospace}"
                                    Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                                   Foreground="DarkOrange"
+                                   Foreground="{DynamicResource Brush.Warning}"
                                    TextDecorations="Underline"
                                    Cursor="Hand"/>
                         <TextBlock Margin="4,0,0,0" Text="{Binding Subject}"/>
@@ -164,7 +164,7 @@
                         <TextBlock Margin="4,0,0,0"
                                    FontFamily="{DynamicResource Fonts.Monospace}"
                                    Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
-                                   Foreground="DarkOrange"
+                                   Foreground="{DynamicResource Brush.Warning}"
                                    TextDecorations="Underline"
                                    Cursor="Hand"/>
                         <TextBlock Margin="4,0,0,0" Text="{Binding Subject}"/>
@@ -309,7 +309,7 @@
             Effect="drop-shadow(0 0 12 #60000000)"
             IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
       <StackPanel Orientation="Vertical">
-        <Path Width="32" Height="32" Fill="Orange" Data="{StaticResource Icons.Error}"/>
+        <Path Width="32" Height="32" Fill="{DynamicResource Brush.Warning}" Data="{StaticResource Icons.Error}"/>
         <TextBlock Text="{Binding Error, Mode=OneWay}"
                    MaxWidth="500"
                    Margin="0,16"

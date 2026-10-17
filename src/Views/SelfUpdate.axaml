@@ -44,7 +44,7 @@
           <DataTemplate DataType="m:Version">
             <StackPanel Orientation="Vertical" Margin="16,8">
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8">
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="Green"/>
+                <Path Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="{DynamicResource Brush.Success}"/>
                 <TextBlock Margin="8,0,0,0" FontWeight="Bold" FontSize="14" Text="{DynamicResource Text.SelfUpdate.Available}"/>
                 <Border Margin="4,0,0,0" Height="20" CornerRadius="10" Background="{DynamicResource Brush.Accent}" Effect="drop-shadow(0 0 6 #40000000)">
                   <TextBlock Margin="8,0" Text="{Binding TagName}" FontSize="12" Foreground="White"/>
@@ -99,7 +99,7 @@
           <DataTemplate DataType="m:AlreadyUpToDate">
             <StackPanel Orientation="Vertical" Margin="16,8">
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8">
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="Green"/>
+                <Path Width="14" Height="14" Data="{StaticResource Icons.Info}" Fill="{DynamicResource Brush.Success}"/>
                 <TextBlock Margin="8,0,0,0" Text="{DynamicResource Text.SelfUpdate.UpToDate}"/>
               </StackPanel>
 
@@ -117,7 +117,7 @@
           <DataTemplate DataType="m:SelfUpdateFailed">
             <StackPanel Orientation="Vertical" Margin="16,8">
               <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Path Width="14" Height="14" Data="{StaticResource Icons.Error}" Fill="Red"/>
+                <Path Width="14" Height="14" Data="{StaticResource Icons.Error}" Fill="{DynamicResource Brush.Danger}"/>
                 <TextBlock Margin="8,0,0,0" FontWeight="Bold" FontSize="14" Text="{DynamicResource Text.SelfUpdate.Error}"/>
               </StackPanel>
 

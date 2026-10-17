@@ -278,7 +278,7 @@
                             IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}, Mode=OneWay}">
                       <TextBlock Classes="small"
                                  Text="{Binding ErrorMessage, Mode=OneWay}"
-                                 Foreground="DarkOrange"
+                                 Foreground="{DynamicResource Brush.Warning}"
                                  TextWrapping="Wrap"/>
                     </Border>
                   </StackPanel>

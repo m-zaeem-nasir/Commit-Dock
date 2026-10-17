@@ -58,10 +58,10 @@ namespace SourceGit.Views
             }
 
             Inlines ??= new InlineCollection();
-            Append("✎", modified, "CommitDetail.Info.Summary.Modified", s_modified);
-            Append("+", added, "CommitDetail.Info.Summary.Added", s_added);
-            Append("−", deleted, "CommitDetail.Info.Summary.Deleted", s_deleted);
-            Append("➜", renamed, "CommitDetail.Info.Summary.Renamed", s_renamed);
+            Append("✎", modified, "CommitDetail.Info.Summary.Modified", Brush("Brush.Modified"));
+            Append("+", added, "CommitDetail.Info.Summary.Added", Brush("Brush.Added"));
+            Append("−", deleted, "CommitDetail.Info.Summary.Deleted", Brush("Brush.Deleted"));
+            Append("➜", renamed, "CommitDetail.Info.Summary.Renamed", Brush("Brush.Renamed"));
         }
 
         private void Append(string glyph, int count, string key, IBrush brush)
@@ -77,9 +77,9 @@ namespace SourceGit.Views
             Inlines.Add(new Run(App.Text(key)) { Foreground = brush });
         }
 
-        private static readonly IBrush s_modified = new SolidColorBrush(Color.Parse("#FFC857"));
-        private static readonly IBrush s_added = new SolidColorBrush(Color.Parse("#5EE6A0"));
-        private static readonly IBrush s_deleted = new SolidColorBrush(Color.Parse("#FF6B6B"));
-        private static readonly IBrush s_renamed = new SolidColorBrush(Color.Parse("#5AA9FF"));
+        private IBrush Brush(string key)
+        {
+            return this.TryFindResource(key, ActualThemeVariant, out var res) && res is IBrush brush ? brush : Foreground;
+        }
     }
 }

@@ -61,7 +61,7 @@
                   IsVisible="{Binding !Target.IsLocal, Mode=OneWay}">
         <Path Width="14" Height="14"
               Data="{StaticResource Icons.Error}"
-              Fill="DarkOrange"/>
+              Fill="{DynamicResource Brush.Warning}"/>
         <TextBlock Margin="4,0,0,0"
                    Text="{DynamicResource Text.DeleteBranch.IsRemoteTip}"
                    Foreground="{DynamicResource Brush.FG2}"
