@@ -1547,6 +1547,6 @@ namespace SourceGit.Views
         }
 
         private const double STACKED_LAYOUT_WIDTH = 820;
-        private const double STACKED_COMMIT_AREA_HEIGHT = 176;
+        private const double STACKED_COMMIT_AREA_HEIGHT = 216;
     }
 }
