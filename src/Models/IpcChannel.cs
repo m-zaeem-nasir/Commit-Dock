@@ -126,16 +126,16 @@ namespace SourceGit.Models
             if (string.IsNullOrEmpty(runtimeDir) || !Directory.Exists(runtimeDir))
                 return new LockFile(Path.Combine(Native.OS.BasicDirectories.CacheDir, "process.lock"), false);
 
-            return new LockFile(Path.Combine(runtimeDir, "gitstrand.instance.lock"), true);
+            return new LockFile(Path.Combine(runtimeDir, "commitdock.instance.lock"), true);
         }
 
         private string GetPipeName()
         {
-            // GitStrand does not support multiple instances on macOS, so we can use a fixed pipe name for macOS.
+            // Commit Dock does not support multiple instances on macOS, so we can use a fixed pipe name for macOS.
             if (OperatingSystem.IsMacOS())
-                return "GitStrand";
+                return "CommitDock";
 
-            // Windows and Linux can have multiple instances of GitStrand running (portable-mode), so we need to generate a unique pipe name based on the data directory.
+            // Windows and Linux can have multiple instances of Commit Dock running (portable-mode), so we need to generate a unique pipe name based on the data directory.
             var dataDir = Native.OS.BasicDirectories.CacheDir.Replace('\\', '/').TrimEnd('/');
             var hashStr = $"{Environment.UserName}_{dataDir}";
             var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(hashStr))).Substring(0, 10);

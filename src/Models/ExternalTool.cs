@@ -39,7 +39,7 @@ namespace SourceGit.Models
 
             try
             {
-                var asset = AssetLoader.Open(new Uri($"avares://GitStrand/Resources/Images/ExternalToolIcons/{icon}.png",
+                var asset = AssetLoader.Open(new Uri($"avares://CommitDock/Resources/Images/ExternalToolIcons/{icon}.png",
                     UriKind.RelativeOrAbsolute));
                 IconImage = new Bitmap(asset);
             }
