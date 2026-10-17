@@ -386,10 +386,14 @@ namespace SourceGit.Views
         {
             InitializeComponent();
 
-            // Display order: commit time, branch/tag labels, graph, then the commit message.
-            CommitListContainer.Columns[4].DisplayIndex = 0;
-            CommitListContainer.Columns[5].DisplayIndex = 1;
-            CommitListContainer.Columns[6].DisplayIndex = 2;
+            // Display order: branch/tag labels, graph, commit message, then author, SHA and times.
+            CommitListContainer.Columns[5].DisplayIndex = 0;
+            CommitListContainer.Columns[6].DisplayIndex = 1;
+            CommitListContainer.Columns[0].DisplayIndex = 2;
+            CommitListContainer.Columns[1].DisplayIndex = 3;
+            CommitListContainer.Columns[2].DisplayIndex = 4;
+            CommitListContainer.Columns[3].DisplayIndex = 5;
+            CommitListContainer.Columns[4].DisplayIndex = 6;
         }
 
         public async Task GotoParent()
@@ -826,15 +830,15 @@ namespace SourceGit.Views
             if (listWidth <= 0)
                 return;
 
-            // Branch/tag labels give up space first as the list gets narrower, then hide entirely.
-            var visible = listWidth >= 620;
+            // Branch/tag labels shrink as the list gets narrower and only hide when it is very narrow.
+            var visible = listWidth >= 460;
             if (refsColumn.IsVisible != visible)
             {
                 refsColumn.IsVisible = visible;
                 CommitGraph.ShowRefConnectors = visible;
             }
 
-            var width = listWidth >= 1100 ? 170 : (listWidth >= 800 ? 130 : 96);
+            var width = listWidth >= 1100 ? 190 : (listWidth >= 800 ? 150 : 110);
             if (visible && Math.Abs(refsColumn.Width.Value - width) > 0.5)
                 refsColumn.Width = new(width, DataGridLengthUnitType.Pixel);
         }
