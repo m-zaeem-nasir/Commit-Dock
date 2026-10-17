@@ -1,2 +1,2 @@
-Remove-Item -Path build\SourceGit\*.pdb -Force
-Compress-Archive -Path build\SourceGit -DestinationPath "build\sourcegit_${env:VERSION}.${env:RUNTIME}.zip" -Force
+Remove-Item -Path build\CommitDock\*.pdb -Force
+Compress-Archive -Path build\CommitDock -DestinationPath "build\commitdock_${env:VERSION}.${env:RUNTIME}.zip" -Force

@@ -36,6 +36,10 @@ package-lock.json
 build/resources/
 build/SourceGit/
 build/SourceGit.app/
+build/CommitDock/
+build/CommitDock.app/
+build/CommitDock.AppDir/
+build/CommitDock-Setup-*.exe
 build/*.zip
 build/*.tar.gz
 build/*.deb
