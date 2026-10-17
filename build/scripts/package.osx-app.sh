@@ -24,4 +24,4 @@ clang -arch "$ARCH" ../tools/setsid-macos/setsid.c -o CommitDock.app/Contents/Ma
 codesign --force --deep --sign - CommitDock.app
 codesign --verify --deep --strict --verbose=2 CommitDock.app
 
-zip "commitdock_$VERSION.$RUNTIME.zip" -r CommitDock.app
+zip "CommitDock-v$VERSION-$RUNTIME.zip" -r CommitDock.app

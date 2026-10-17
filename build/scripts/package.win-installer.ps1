@@ -1,7 +1,7 @@
-# Builds the Commit Dock Windows installer (CommitDock-Setup-<version>-<arch>.exe).
+# Builds the Commit Dock Windows installer (CommitDock-v<version>-setup-<arch>.exe).
 #
 # Usage (from the repository root):
-#   pwsh build/scripts/package.win-installer.ps1 [-Runtime win-x64|win-arm64] [-Version 2026.22] [-PublishDir <dir>] [-SkipPublish]
+#   pwsh build/scripts/package.win-installer.ps1 [-Runtime win-x64|win-arm64] [-Version 0.0.1] [-PublishDir <dir>] [-SkipPublish]
 #
 # Requires the .NET 10 SDK, the Visual Studio C++ build tools (for the native AOT publish)
 # and Inno Setup 6 (winget install JRSoftware.InnoSetup). With -SkipPublish the app files
@@ -49,4 +49,4 @@ if (-not $iscc) { throw "Inno Setup 6 (ISCC.exe) not found. Install it with: win
     (Join-Path $root "build\windows\CommitDock.iss")
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup compile failed" }
 
-Write-Host "Installer: $(Join-Path $outputDir "CommitDock-Setup-$Version-$arch.exe")"
+Write-Host "Installer: $(Join-Path $outputDir "CommitDock-v$Version-setup-$arch.exe")"

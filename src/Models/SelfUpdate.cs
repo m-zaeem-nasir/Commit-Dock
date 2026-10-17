@@ -22,7 +22,7 @@ namespace CommitDock.Models
         public System.Version CurrentVersion { get; }
 
         [JsonIgnore]
-        public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor:D2}";
+        public string CurrentVersionStr => $"v{CurrentVersion.Major}.{CurrentVersion.Minor}.{CurrentVersion.Build}";
 
         [JsonIgnore]
         public bool IsNewVersion => CurrentVersion.CompareTo(new System.Version(TagName.Substring(1))) < 0;

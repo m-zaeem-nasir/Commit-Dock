@@ -34,7 +34,7 @@ build/resources/
 build/CommitDock/
 build/CommitDock.app/
 build/CommitDock.AppDir/
-build/CommitDock-Setup-*.exe
+build/CommitDock-v*-setup-*.exe
 build/*.zip
 build/*.tar.gz
 build/*.deb
