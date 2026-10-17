@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Models
+﻿namespace CommitDock.Models
 {
     public enum ConfirmButtonType
     {

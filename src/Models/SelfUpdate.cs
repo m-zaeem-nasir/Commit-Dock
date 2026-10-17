@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class Version
     {

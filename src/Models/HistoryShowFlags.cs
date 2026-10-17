@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     [Flags]
     public enum HistoryShowFlags

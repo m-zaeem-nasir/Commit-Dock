@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class ListBoxEx : ListBox
     {

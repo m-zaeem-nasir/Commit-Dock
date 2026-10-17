@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class CheckoutAsWorktree : Popup
     {

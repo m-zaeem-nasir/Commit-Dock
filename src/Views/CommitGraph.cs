@@ -9,7 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class CommitGraph : Control, Models.IAvatarHost
     {

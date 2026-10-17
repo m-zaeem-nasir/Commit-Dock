@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class PushToNewBranch : ObservableValidator
     {

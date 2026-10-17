@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class ChangeSelection
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace SourceGit.Commands
+namespace CommitDock.Commands
 {
     public class QueryConflictFileState : Command
     {

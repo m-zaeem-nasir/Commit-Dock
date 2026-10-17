@@ -2,7 +2,7 @@
 using System.IO;
 using Avalonia.Media.Imaging;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class RevisionBinaryFile
     {

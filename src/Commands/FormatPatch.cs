@@ -1,4 +1,4 @@
-﻿namespace SourceGit.Commands
+﻿namespace CommitDock.Commands
 {
     public class FormatPatch : Command
     {

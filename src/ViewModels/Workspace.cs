@@ -2,7 +2,7 @@
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class Workspace : ObservableObject
     {

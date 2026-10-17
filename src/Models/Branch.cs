@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public enum BranchSortMode
     {

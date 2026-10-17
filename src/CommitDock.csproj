@@ -10,11 +10,11 @@
     <InvariantGlobalization>false</InvariantGlobalization>
 
     <AssemblyName>CommitDock</AssemblyName>
-    <RootNamespace>SourceGit</RootNamespace>
+    <RootNamespace>CommitDock</RootNamespace>
     <Product>Commit Dock</Product>
-    <Description>A graph-first Git client, based on SourceGit</Description>
+    <Description>A graph-first Git client</Description>
     <Company>Commit Dock</Company>
-    <Copyright>Copyright © $([System.DateTime]::Now.Year) Commit Dock contributors. Based on SourceGit © sourcegit-scm.</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::Now.Year) Commit Dock contributors</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>Public</RepositoryType>
   </PropertyGroup>

@@ -6,7 +6,7 @@ using System.Threading;
 using Avalonia.Media;
 using Avalonia.Styling;
 
-namespace SourceGit
+namespace CommitDock
 {
     public static class ThemeVariantExtensions
     {

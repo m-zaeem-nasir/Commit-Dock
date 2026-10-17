@@ -8,7 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class BranchSelectorChoice : TextBlock
     {

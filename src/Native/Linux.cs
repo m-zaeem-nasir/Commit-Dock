@@ -9,7 +9,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
 
-namespace SourceGit.Native
+namespace CommitDock.Native
 {
     [SupportedOSPlatform("linux")]
     internal class Linux : OS.IBackend

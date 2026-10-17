@@ -31,7 +31,7 @@ if (-not $SkipPublish) {
     }
 
     if (Test-Path $PublishDir) { Remove-Item $PublishDir -Recurse -Force }
-    dotnet publish (Join-Path $root "src\SourceGit.csproj") -c Release -r $Runtime -o $PublishDir
+    dotnet publish (Join-Path $root "src\CommitDock.csproj") -c Release -r $Runtime -o $PublishDir
     if ($LASTEXITCODE -ne 0) { throw "dotnet publish failed" }
 }
 

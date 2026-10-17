@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class DealWithChangesAfterStashing(string label, string desc)
     {

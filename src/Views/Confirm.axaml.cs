@@ -1,6 +1,6 @@
 using Avalonia.Interactivity;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public partial class Confirm : ChromelessWindow
     {

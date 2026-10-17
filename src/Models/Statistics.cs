@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public enum StatisticsMode
     {

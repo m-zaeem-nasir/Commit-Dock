@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using Avalonia.Collections;
 
-namespace SourceGit.Models
+namespace CommitDock.Models
 {
     public class RepositoryUIStates
     {

@@ -1,4 +1,4 @@
-﻿namespace SourceGit.ViewModels
+﻿namespace CommitDock.ViewModels
 {
     public class CustomActionContextMenuLabel(string name, bool isGlobal)
     {

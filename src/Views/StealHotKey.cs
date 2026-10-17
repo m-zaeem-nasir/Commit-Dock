@@ -1,6 +1,6 @@
 ﻿using Avalonia.Input;
 
-namespace SourceGit.Views
+namespace CommitDock.Views
 {
     public class StealHotKey(Key key, KeyModifiers keyModifiers = KeyModifiers.None)
     {

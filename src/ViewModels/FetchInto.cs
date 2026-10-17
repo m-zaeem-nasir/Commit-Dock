@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SourceGit.ViewModels
+namespace CommitDock.ViewModels
 {
     public class FetchInto : Popup
     {
