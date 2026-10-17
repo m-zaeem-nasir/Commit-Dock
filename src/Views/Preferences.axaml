@@ -297,9 +297,6 @@
                     <Path Width="16" Height="16" Data="{StaticResource Icons.Folder.Open}" Margin="0,2,0,0" Fill="{DynamicResource Brush.FG1}"/>
                   </Button>
 
-                  <Button Classes="icon_button" Width="28" Height="28" Click="OpenThemeRepository">
-                    <Path Width="14" Height="14" Data="{StaticResource Icons.Remotes}" Fill="{DynamicResource Brush.FG1}"/>
-                  </Button>
                 </StackPanel>
               </TextBox.InnerRightContent>
             </TextBox>
