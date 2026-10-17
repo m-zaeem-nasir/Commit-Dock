@@ -12,33 +12,58 @@
              x:Name="ThisControl">  
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="49"/>
+      <ColumnDefinition Width="64"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
     <!-- Page Switcher -->
-    <Grid Grid.Column="0" Width="49" RowDefinitions="Auto,*,Auto,12">
+    <Grid Grid.Column="0" Width="64" RowDefinitions="Auto,*,Auto,8">
       <ListBox Background="Transparent" SelectedIndex="{Binding SelectedViewIndex, Mode=TwoWay}" SelectionMode="AlwaysSelected">
         <ListBox.Styles>
           <Style Selector="Path.icon">
             <Setter Property="Width" Value="18"/>
             <Setter Property="Height" Value="18"/>
-            <Setter Property="Fill" Value="{DynamicResource Brush.FG1}"/>
+            <Setter Property="Fill" Value="{DynamicResource Brush.FG2}"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
           </Style>
+          <Style Selector="TextBlock.rail_label">
+            <Setter Property="FontSize" Value="10.5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource Brush.FG2}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+          </Style>
           <Style Selector="ListBoxItem">
-            <Setter Property="Height" Value="42"/>
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Margin" Value="6,3"/>
             <Setter Property="Padding" Value="0"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="CornerRadius" Value="8"/>
           </Style>
           <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="#18888888"/>
+            <Setter Property="Background" Value="{DynamicResource Brush.Hover}"/>
+          </Style>
+          <Style Selector="ListBoxItem:pointerover Path.icon">
+            <Setter Property="Fill" Value="{DynamicResource Brush.FG1}"/>
+          </Style>
+          <Style Selector="ListBoxItem:pointerover TextBlock.rail_label">
+            <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
           </Style>
           <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource Brush.AccentHovered}"/>
+            <Setter Property="Background" Value="{DynamicResource Brush.Hover}"/>
+          </Style>
+          <Style Selector="ListBoxItem:selected Path.icon">
+            <Setter Property="Fill" Value="{DynamicResource Brush.Accent}"/>
+          </Style>
+          <Style Selector="ListBoxItem:selected TextBlock.rail_label">
+            <Setter Property="Foreground" Value="{DynamicResource Brush.FG1}"/>
+          </Style>
+          <Style Selector="ListBoxItem Border.rail_indicator">
+            <Setter Property="IsVisible" Value="False"/>
+          </Style>
+          <Style Selector="ListBoxItem:selected Border.rail_indicator">
+            <Setter Property="IsVisible" Value="True"/>
           </Style>
         </ListBox.Styles>
 
@@ -56,7 +81,13 @@
               <Run Text="{OnPlatform Ctrl+1, macOS=⌘+1}" FontSize="11" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
             </TextBlock>
           </ToolTip.Tip>
-          <Path Classes="icon" Data="{StaticResource Icons.Dashboard}"/>
+          <Grid>
+            <Border Classes="rail_indicator" Width="3" Height="20" Margin="-6,0,0,0" CornerRadius="0,2,2,0" HorizontalAlignment="Left" Background="{DynamicResource Brush.Accent}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="3">
+              <Path Classes="icon" Data="{StaticResource Icons.Dashboard}"/>
+              <TextBlock Classes="rail_label" Text="{DynamicResource Text.Rail.Graph}"/>
+            </StackPanel>
+          </Grid>
         </ListBoxItem>
 
         <ListBoxItem IsVisible="{Binding !IsBare}" ToolTip.Placement="Right">
@@ -68,20 +99,25 @@
             </TextBlock>
           </ToolTip.Tip>
           <Grid>
-            <Path Classes="icon" Data="{StaticResource Icons.Changes}"/>
-            <Border Height="14"
-                    Margin="0,4,4,0" Padding="5,0"
-                    CornerRadius="7"
+            <Border Classes="rail_indicator" Width="3" Height="20" Margin="-6,0,0,0" CornerRadius="0,2,2,0" HorizontalAlignment="Left" Background="{DynamicResource Brush.Accent}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="3">
+              <Path Classes="icon" Data="{StaticResource Icons.Changes}"/>
+              <TextBlock Classes="rail_label" Text="{DynamicResource Text.Rail.Changes}"/>
+            </StackPanel>
+            <Border Height="15"
+                    Margin="0,3,3,0" Padding="5,0"
+                    CornerRadius="8"
                     HorizontalAlignment="Right" VerticalAlignment="Top"
                     Background="{DynamicResource Brush.Accent}"
                     IsVisible="{Binding LocalChangesCount, Mode=OneWay, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
               <TextBlock Text="{Binding LocalChangesCount, Mode=OneWay, Converter={x:Static c:IntConverters.ToBadgeWithLimit}}"
-                         Foreground="White"
-                         FontFamily="{DynamicResource Fonts.Monospace}"
-                         FontSize="10"/>
+                         Foreground="{DynamicResource Brush.OnAccent}"
+                         FontWeight="Bold"
+                         FontSize="10"
+                         VerticalAlignment="Center"/>
             </Border>
             <Path Width="12" Height="12"
-                  Margin="0,0,4,4"
+                  Margin="0,0,4,16"
                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
                   Data="{StaticResource Icons.Info}"
                   Fill="{DynamicResource Brush.Warning}"
@@ -98,17 +134,22 @@
             </TextBlock>
           </ToolTip.Tip>
           <Grid>
-            <Path Classes="icon" Data="{StaticResource Icons.Stashes}"/>
-            <Border Height="14"
-                    Margin="0,4,4,0" Padding="5,0"
-                    CornerRadius="7"
+            <Border Classes="rail_indicator" Width="3" Height="20" Margin="-6,0,0,0" CornerRadius="0,2,2,0" HorizontalAlignment="Left" Background="{DynamicResource Brush.Accent}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="3">
+              <Path Classes="icon" Data="{StaticResource Icons.Stashes}"/>
+              <TextBlock Classes="rail_label" Text="{DynamicResource Text.Rail.Stashes}"/>
+            </StackPanel>
+            <Border Height="15"
+                    Margin="0,3,3,0" Padding="5,0"
+                    CornerRadius="8"
                     HorizontalAlignment="Right" VerticalAlignment="Top"
                     Background="{DynamicResource Brush.Accent}"
                     IsVisible="{Binding StashesCount, Mode=OneWay, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
               <TextBlock Text="{Binding StashesCount, Mode=OneWay, Converter={x:Static c:IntConverters.ToBadgeWithLimit}}"
-                         Foreground="White"
-                         FontFamily="{DynamicResource Fonts.Monospace}"
-                         FontSize="10"/>
+                         Foreground="{DynamicResource Brush.OnAccent}"
+                         FontWeight="Bold"
+                         FontSize="10"
+                         VerticalAlignment="Center"/>
             </Border>
           </Grid>
         </ListBoxItem>
@@ -116,12 +157,16 @@
       
       <Button Grid.Row="2"
               Classes="icon_button"
-              Width="40" Height="40"
-              Margin="4,0"
+              Width="52" Height="52"
+              Margin="6,0"
+              Padding="0"
               Click="OnOpenConfigure"
               ToolTip.Tip="{DynamicResource Text.Repository.Configure}"
               ToolTip.Placement="Right">
-        <Path Width="18" Height="18" Data="{StaticResource Icons.Settings}"/>
+        <StackPanel Orientation="Vertical" Spacing="3">
+          <Path Width="18" Height="18" Data="{StaticResource Icons.Settings}" Fill="{DynamicResource Brush.FG2}"/>
+          <TextBlock Text="{DynamicResource Text.Rail.Settings}" FontSize="10.5" FontWeight="SemiBold" Foreground="{DynamicResource Brush.FG2}" HorizontalAlignment="Center"/>
+        </StackPanel>
       </Button>
     </Grid>
 
@@ -134,8 +179,8 @@
       <Border CornerRadius="8" ClipToBounds="True">
         <Grid RowDefinitions="Auto,*">
           <!-- In-Progress Information Bar -->
-          <Grid Grid.Row="0" Height="28" ColumnDefinitions="*,Auto,Auto,Auto" Background="{DynamicResource Brush.Conflict}" IsVisible="{Binding InProgressContext, Converter={x:Static ObjectConverters.IsNotNull}}">
-            <ContentControl Grid.Column="0" Margin="8,0" Content="{Binding InProgressContext}">
+          <Grid Grid.Row="0" Height="36" ColumnDefinitions="*,Auto,Auto,Auto" Background="{DynamicResource Brush.Conflict}" IsVisible="{Binding InProgressContext, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <ContentControl Grid.Column="0" Margin="12,0" VerticalAlignment="Center" Content="{Binding InProgressContext}">
               <ContentControl.DataTemplates>
                 <DataTemplate DataType="m:Commit">
                   <StackPanel MinWidth="400" Orientation="Vertical">
@@ -159,7 +204,7 @@
                       <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.CherryPick.Head}"/>
                       <TextBlock FontWeight="Bold"
                                  Margin="4,0,0,0"
-                                 Foreground="DarkOrange"
+                                 Foreground="{DynamicResource Brush.Conflict.Foreground}" TextDecorations="Underline"
                                  FontFamily="{DynamicResource Fonts.Monospace}"
                                  Text="{Binding Head.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                                  ToolTip.Tip="{Binding Head}"/>
@@ -178,7 +223,7 @@
                                  IsVisible="{Binding StoppedAt, Converter={x:Static ObjectConverters.IsNotNull}}" />
                       <TextBlock FontWeight="Bold"
                                  Margin="4,0,0,0"
-                                 Foreground="DarkOrange"
+                                 Foreground="{DynamicResource Brush.Conflict.Foreground}" TextDecorations="Underline"
                                  Text="{Binding StoppedAt.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                                  FontFamily="{DynamicResource Fonts.Monospace}"
                                  IsVisible="{Binding StoppedAt, Converter={x:Static ObjectConverters.IsNotNull}}"
@@ -198,7 +243,7 @@
                       <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.Revert.Head}"/>
                       <TextBlock FontWeight="Bold"
                                  Margin="4,0,0,0"
-                                 Foreground="DarkOrange"
+                                 Foreground="{DynamicResource Brush.Conflict.Foreground}" TextDecorations="Underline"
                                  FontFamily="{DynamicResource Fonts.Monospace}"
                                  Text="{Binding Head.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                                  ToolTip.Tip="{Binding Head}"/>
@@ -212,9 +257,9 @@
                   <StackPanel Orientation="Horizontal">
                     <TextBlock FontWeight="Bold" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.Merge}"/>
                     <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="{DynamicResource Text.InProgress.Merge.Operating}"/>
-                    <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="DarkOrange" Text="{Binding SourceName}" ToolTip.Tip="{Binding Source}"/>
+                    <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" TextDecorations="Underline" Text="{Binding SourceName}" ToolTip.Tip="{Binding Source}"/>
                     <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" Text="→"/>
-                    <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="DarkOrange" Text="{Binding Current}"/>
+                    <TextBlock FontWeight="Bold" Margin="4,0,0,0" Foreground="{DynamicResource Brush.Conflict.Foreground}" TextDecorations="Underline" Text="{Binding Current}"/>
                   </StackPanel>
                 </DataTemplate>
               </ContentControl.DataTemplates>
@@ -226,26 +271,24 @@
                            IsVisible="{Binding IsSkippingOrAbortingMerge, Mode=OneWay}">
               <v:LoadingIcon.Styles>
                 <Style Selector="Path">
-                  <Setter Property="Fill" Value="Black"/>
+                  <Setter Property="Fill" Value="{DynamicResource Brush.Conflict.Foreground}"/>
                 </Style>
               </v:LoadingIcon.Styles>
             </v:LoadingIcon>
 
             <Button Grid.Column="2"
                     Classes="flat"
-                    FontWeight="Regular"
-                    BorderThickness="0"
+                    Height="26"
                     Content="{DynamicResource Text.Repository.Resolve}"
-                    Padding="8,2" Margin="0,0,8,0"
+                    Padding="12,0" Margin="0,0,8,0"
                     Click="OnResolveInProgress"
                     IsVisible="{Binding !IsWorkingCopyVisible}"/>
 
             <Button Grid.Column="3"
                     Classes="flat"
-                    FontWeight="Regular"
-                    BorderThickness="0"
+                    Height="26"
                     Content="{DynamicResource Text.Repository.Abort}"
-                    Padding="8,2" Margin="0,0,8,0"
+                    Padding="12,0" Margin="0,0,8,0"
                     Click="OnAbortInProgress"/>
           </Grid>
 
@@ -262,17 +305,17 @@
               <!-- Filter Branches/Tags/Submodules -->
               <TextBox Grid.Row="0"
                        x:Name="FilterBox"
-                       Height="24"
-                       Margin="6,6,4,0"
+                       Height="30"
+                       Margin="8,8,6,4"
                        BorderThickness="1"
-                       CornerRadius="13"
+                       CornerRadius="{DynamicResource Radius.Medium}"
                        BorderBrush="{DynamicResource Brush.Border2}"
                        Watermark="{DynamicResource Text.Repository.Filter}"
                        Text="{Binding Filter, Mode=TwoWay}"
                        VerticalContentAlignment="Center">
                 <TextBox.InnerLeftContent>
-                  <Path Width="14" Height="14"
-                        Margin="6,0,0,0"
+                  <Path Width="13" Height="13"
+                        Margin="8,0,0,0"
                         Fill="{DynamicResource Brush.FG2}"
                         Data="{StaticResource Icons.Search}"/>
                 </TextBox.InnerLeftContent>
@@ -292,19 +335,19 @@
                 </TextBox.InnerRightContent>
               </TextBox>
 
-              <Grid Grid.Row="1" x:Name="LeftSidebarGroups" Margin="0,4,0,0" RowDefinitions="28,Auto,28,Auto,28,Auto,28,Auto,28,Auto" SizeChanged="OnLeftSidebarSizeChanged">
+              <Grid Grid.Row="1" x:Name="LeftSidebarGroups" Margin="0,4,0,0" RowDefinitions="32,Auto,32,Auto,32,Auto,32,Auto,32,Auto" SizeChanged="OnLeftSidebarSizeChanged">
                 <!-- Local Branches -->
                 <ToggleButton Grid.Row="0" Classes="group_expander" IsChecked="{Binding IsLocalBranchGroupExpanded, Mode=TwoWay}">
-                  <Grid ColumnDefinitions="16,*,Auto">
-                    <Path Grid.Column="0" Width="11" Height="11" HorizontalAlignment="Left" Data="{StaticResource Icons.Local}" Fill="{DynamicResource Brush.FG2}"/>
+                  <Grid ColumnDefinitions="16,*,Auto" Margin="0,0,6,0">
+                    <Path Grid.Column="0" Width="13" Height="13" HorizontalAlignment="Left" Data="{StaticResource Icons.Local}" Fill="{DynamicResource Brush.FG2}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                       <TextBlock Classes="group_header_label" Text="{DynamicResource Text.Repository.LocalBranches}"/>
-                      <TextBlock Classes="group_header_label" Text="{Binding LocalBranchesCount, StringFormat='({0})'}" Margin="4,0,0,0"/>
+                      <Border Classes="count_badge"><TextBlock Text="{Binding LocalBranchesCount}"/></Border>
                     </StackPanel>
                     <Button Grid.Column="2"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Click="OnOpenSortLocalBranchMenu"
                             ToolTip.Tip="{DynamicResource Text.Repository.BranchSort}">
                       <Grid>
@@ -317,7 +360,7 @@
                 <v:BranchTree Grid.Row="1"
                               x:Name="LocalBranchTree"
                               Height="0"
-                              Margin="6,0,4,0"
+                              Margin="4,0,4,0"
                               Nodes="{Binding LocalBranchTrees}"
                               IsVisible="{Binding IsLocalBranchGroupExpanded}"
                               SelectionChanged="OnLocalBranchTreeSelectionChanged"
@@ -326,16 +369,16 @@
 
                 <!-- Remotes -->
                 <ToggleButton Grid.Row="2" Classes="group_expander" IsChecked="{Binding IsRemoteGroupExpanded, Mode=TwoWay}">
-                  <Grid ColumnDefinitions="16,*,Auto,Auto">
-                    <Path Grid.Column="0" Width="11" Height="11" HorizontalAlignment="Left" Data="{StaticResource Icons.Remotes}" Fill="{DynamicResource Brush.FG2}"/>
+                  <Grid ColumnDefinitions="16,*,Auto,Auto" Margin="0,0,6,0">
+                    <Path Grid.Column="0" Width="13" Height="13" HorizontalAlignment="Left" Data="{StaticResource Icons.Remotes}" Fill="{DynamicResource Brush.FG2}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                       <TextBlock Classes="group_header_label" Text="{DynamicResource Text.Repository.Remotes}"/>
-                      <TextBlock Classes="group_header_label" Text="{Binding Remotes, Converter={x:Static c:ListConverters.ToCount}}" Margin="4,0,0,0"/>
+                      <Border Classes="count_badge"><TextBlock Text="{Binding Remotes, Converter={x:Static c:ListConverters.ToCountNumber}}"/></Border>
                     </StackPanel>
                     <Button Grid.Column="2"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0,0,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Click="OnOpenSortRemoteBranchMenu"
                             ToolTip.Tip="{DynamicResource Text.Repository.BranchSort}">
                       <Grid>
@@ -343,7 +386,7 @@
                         <Path Width="12" Height="12" Data="{StaticResource Icons.OrderByTime}" IsVisible="{Binding !IsSortingRemoteBranchByName, Mode=OneWay}"/>
                       </Grid>
                     </Button>
-                    <Button Grid.Column="3" Classes="icon_button" Width="14" Margin="8,0" Command="{Binding AddRemote}" ToolTip.Tip="{DynamicResource Text.Repository.Remotes.Add}">
+                    <Button Grid.Column="3" Classes="icon_button" Width="22" Height="22" Margin="2,0,0,0" Command="{Binding AddRemote}" ToolTip.Tip="{DynamicResource Text.Repository.Remotes.Add}">
                       <Path Width="12" Height="12" Data="{StaticResource Icons.Remote.Add}"/>
                     </Button>
                   </Grid>
@@ -351,7 +394,7 @@
                 <v:BranchTree Grid.Row="3"
                               x:Name="RemoteBranchTree"
                               Height="0"
-                              Margin="6,0,4,0"
+                              Margin="4,0,4,0"
                               Nodes="{Binding RemoteBranchTrees}"
                               IsVisible="{Binding IsRemoteGroupExpanded}"
                               SelectionChanged="OnRemoteBranchTreeSelectionChanged"
@@ -360,23 +403,23 @@
 
                 <!-- Tags -->
                 <ToggleButton Grid.Row="4" Classes="group_expander" IsChecked="{Binding IsTagGroupExpanded, Mode=TwoWay}">
-                  <Grid ColumnDefinitions="16,*,Auto,Auto,Auto">
-                    <Path Grid.Column="0" Width="11" Height="11" Margin="0,1,0,0" HorizontalAlignment="Left" Data="{StaticResource Icons.Tags}" Fill="{DynamicResource Brush.FG2}"/>
+                  <Grid ColumnDefinitions="16,*,Auto,Auto,Auto" Margin="0,0,6,0">
+                    <Path Grid.Column="0" Width="13" Height="13" HorizontalAlignment="Left" Data="{StaticResource Icons.Tags}" Fill="{DynamicResource Brush.FG2}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                       <TextBlock Classes="group_header_label" Text="{DynamicResource Text.Repository.Tags}"/>
-                      <TextBlock Classes="group_header_label" Text="{Binding Tags, Converter={x:Static c:ListConverters.ToCount}}" Margin="4,0,0,0"/>
+                      <Border Classes="count_badge"><TextBlock Text="{Binding Tags, Converter={x:Static c:ListConverters.ToCountNumber}}"/></Border>
                     </StackPanel>
                     <ToggleButton Grid.Column="2"
                                   Classes="line_path"
-                                  Width="14"
+                                  Width="22" Height="22"
                                   IsChecked="{Binding ShowTagsAsTree, Mode=TwoWay}"
                                   ToolTip.Tip="{DynamicResource Text.Repository.ShowTagsAsTree}">
                       <Path Width="11" Height="11" Data="{DynamicResource Icons.Tree}"/>
                     </ToggleButton>
                     <Button Grid.Column="3"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0,0,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Click="OnOpenSortTagMenu"
                             ToolTip.Tip="{DynamicResource Text.Repository.Tags.Sort}">
                       <Grid>
@@ -386,8 +429,8 @@
                     </Button>
                     <Button Grid.Column="4"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Command="{Binding CreateNewTag}"
                             ToolTip.Tip="{DynamicResource Text.Repository.Tags.Add}">
                       <Path Width="12" Height="12" Data="{StaticResource Icons.Tag.Add}"/>
@@ -397,7 +440,7 @@
                 <v:TagsView Grid.Row="5"
                             x:Name="TagsList"
                             Height="0"
-                            Margin="6,0,4,0"
+                            Margin="4,0,4,0"
                             Background="Transparent"
                             Content="{Binding VisibleTags}"
                             Focusable="False"
@@ -408,15 +451,15 @@
 
                 <!-- Submodules -->
                 <ToggleButton Grid.Row="6" Classes="group_expander" IsChecked="{Binding IsSubmoduleGroupExpanded, Mode=TwoWay}">
-                  <Grid ColumnDefinitions="16,*,Auto,Auto,Auto">
-                    <Path Grid.Column="0" Width="11" Height="11" HorizontalAlignment="Left" Data="{StaticResource Icons.Submodules}" Fill="{DynamicResource Brush.FG2}"/>
+                  <Grid ColumnDefinitions="16,*,Auto,Auto,Auto" Margin="0,0,6,0">
+                    <Path Grid.Column="0" Width="13" Height="13" HorizontalAlignment="Left" Data="{StaticResource Icons.Submodules}" Fill="{DynamicResource Brush.FG2}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                       <TextBlock Classes="group_header_label" Text="{DynamicResource Text.Repository.Submodules}"/>
-                      <TextBlock Classes="group_header_label" Text="{Binding Submodules, Converter={x:Static c:ListConverters.ToCount}}" Margin="4,0,0,0"/>
+                      <Border Classes="count_badge"><TextBlock Text="{Binding Submodules, Converter={x:Static c:ListConverters.ToCountNumber}}"/></Border>
                     </StackPanel>
                     <ToggleButton Grid.Column="2"
                                   Classes="line_path"
-                                  Width="14"
+                                  Width="22" Height="22"
                                   IsChecked="{Binding ShowSubmodulesAsTree, Mode=TwoWay}"
                                   IsVisible="{Binding Submodules, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"
                                   ToolTip.Tip="{DynamicResource Text.Repository.ShowSubmodulesAsTree}">
@@ -424,17 +467,17 @@
                     </ToggleButton>
                     <Button Grid.Column="3"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Command="{Binding UpdateSubmodules}"
                             IsVisible="{Binding Submodules, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"
                             ToolTip.Tip="{DynamicResource Text.Repository.Submodules.Update}">
-                      <Path Width="12" Height="12" Data="{StaticResource Icons.Loading}"/>
+                      <Path Width="12" Height="12" Data="{StaticResource Icons.Pull}"/>
                     </Button>
                     <Button Grid.Column="4"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="0,0,8,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Command="{Binding AddSubmodule}"
                             ToolTip.Tip="{DynamicResource Text.Repository.Submodules.Add}">
                       <Path Width="12" Height="12" Data="{StaticResource Icons.Submodule.Add}"/>
@@ -444,7 +487,7 @@
                 <v:SubmodulesView Grid.Row="7"
                                   x:Name="SubmoduleList"
                                   Height="0"
-                                  Margin="6,0,4,0"
+                                  Margin="4,0,4,0"
                                   Content="{Binding VisibleSubmodules}"
                                   RowsChanged="OnLeftSidebarRowsChanged"
                                   Focusable="False"
@@ -453,25 +496,25 @@
 
                 <!-- Worktrees -->
                 <ToggleButton Grid.Row="8" Classes="group_expander" IsChecked="{Binding IsWorktreeGroupExpanded, Mode=TwoWay}">
-                  <Grid ColumnDefinitions="16,*,Auto,Auto">
-                    <Path Grid.Column="0" Width="11" Height="11" HorizontalAlignment="Left" Data="{StaticResource Icons.Worktrees}" Fill="{DynamicResource Brush.FG2}"/>
+                  <Grid ColumnDefinitions="16,*,Auto,Auto" Margin="0,0,6,0">
+                    <Path Grid.Column="0" Width="13" Height="13" HorizontalAlignment="Left" Data="{StaticResource Icons.Worktrees}" Fill="{DynamicResource Brush.FG2}"/>
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                       <TextBlock Classes="group_header_label" Text="{DynamicResource Text.Repository.Worktrees}"/>
-                      <TextBlock Classes="group_header_label" Text="{Binding Worktrees, Converter={x:Static c:ListConverters.ToCount}}" Margin="4,0,0,0"/>
+                      <Border Classes="count_badge"><TextBlock Text="{Binding Worktrees, Converter={x:Static c:ListConverters.ToCountNumber}}"/></Border>
                     </StackPanel>
                     <Button Grid.Column="2"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="8,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Click="OnPruneWorktrees"
                             IsVisible="{Binding Worktrees, Converter={x:Static c:ListConverters.IsNotNullOrEmpty}}"
                             ToolTip.Tip="{DynamicResource Text.Repository.Worktrees.Prune}">
-                      <Path Width="12" Height="12" Data="{StaticResource Icons.Loading}"/>
+                      <Path Width="12" Height="12" Data="{StaticResource Icons.Clean}"/>
                     </Button>
                     <Button Grid.Column="3"
                             Classes="icon_button"
-                            Width="14"
-                            Margin="0,0,9,0"
+                            Width="22" Height="22"
+                            Margin="2,0,0,0"
                             Command="{Binding AddWorktree}"
                             ToolTip.Tip="{DynamicResource Text.Repository.Worktrees.Add}"
                             ToolTip.Placement="Right">
@@ -495,7 +538,7 @@
                   </ListBox.Styles>
                   <ListBox.ItemTemplate>
                     <DataTemplate DataType="vm:Worktree">
-                      <Border Height="24"
+                      <Border Height="26"
                               Background="Transparent"
                               DoubleTapped="OnWorktreeDoubleTapped"
                               ContextRequested="OnWorktreeContextRequested"
