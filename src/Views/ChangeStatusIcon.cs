@@ -11,17 +11,17 @@ namespace SourceGit.Views
     public class ChangeStatusIcon : Control
     {
         private static readonly string[] INDICATOR = ["?", "M", "T", "+", "−", "➜", "❏", "?", "!"];
-        private static readonly Color[] COLOR =
+        private static readonly string[] COLOR_KEY =
         [
-            Colors.Transparent,
-            Color.Parse("#E8A93A"), // modified
-            Color.Parse("#E8A93A"), // type changed
-            Color.Parse("#3FBF82"), // added
-            Color.Parse("#E5555D"), // deleted
-            Color.Parse("#4D8FE6"), // renamed
-            Color.Parse("#E8A93A"), // copied
-            Color.Parse("#4D8FE6"), // untracked
-            Color.Parse("#F06A3C"), // conflicted
+            null,
+            "Color.Modified",  // modified
+            "Color.Modified",  // type changed
+            "Color.Added",     // added
+            "Color.Deleted",   // deleted
+            "Color.Renamed",   // renamed
+            "Color.Modified",  // copied
+            "Color.Untracked", // untracked
+            "Color.Warning",   // conflicted
         ];
 
         public static readonly DirectProperty<ChangeStatusIcon, bool> IsUnstagedChangeProperty =
@@ -56,30 +56,22 @@ namespace SourceGit.Views
             var typeface = new Typeface("fonts:CommitDock#JetBrains Mono NL");
             var idx = (int)(_isUnstagedChange ? _change.WorkTree : _change.Index);
             var indicator = INDICATOR[idx];
-            var color = COLOR[idx];
-            var hsl = color.ToHsl();
-            var color2 = ActualThemeVariant.IsDark()
-                ? new HslColor(hsl.A, hsl.H, hsl.S, hsl.L - 0.1).ToRgb()
-                : new HslColor(hsl.A, hsl.H, hsl.S, hsl.L + 0.1).ToRgb();
-
-            var background = new LinearGradientBrush
-            {
-                GradientStops = [new GradientStop(color, 0), new GradientStop(color2, 1)],
-                StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-            };
+            var key = COLOR_KEY[idx];
+            if (key == null || !this.TryFindResource(key, ActualThemeVariant, out var res) || res is not Color color)
+                return;
 
             var txt = new FormattedText(
                 indicator,
                 CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                typeface,
-                Bounds.Width * 0.8,
-                Brushes.White);
+                new Typeface(typeface.FontFamily, FontStyle.Normal, FontWeight.Bold),
+                Bounds.Width * 0.72,
+                new SolidColorBrush(color));
 
-            var corner = (float)Math.Max(2, Bounds.Width / 16);
+            var fill = new SolidColorBrush(Color.FromArgb(ActualThemeVariant.IsDark() ? (byte)0x33 : (byte)0x26, color.R, color.G, color.B));
+            var corner = (float)Math.Max(3, Bounds.Width / 4);
             var textOrigin = new Point((Bounds.Width - txt.Width) * 0.5, (Bounds.Height - txt.Height) * 0.5);
-            context.DrawRectangle(background, null, new Rect(0, 0, Bounds.Width, Bounds.Height), corner, corner);
+            context.DrawRectangle(fill, null, new Rect(0, 0, Bounds.Width, Bounds.Height), corner, corner);
             context.DrawText(txt, textOrigin);
         }
 

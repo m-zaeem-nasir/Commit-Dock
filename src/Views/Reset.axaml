@@ -39,7 +39,7 @@
                    Text="{Binding To.SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                    FontFamily="{DynamicResource Fonts.Monospace}"
                    VerticalAlignment="Center"
-                   Foreground="DarkOrange"/>
+                   Foreground="{DynamicResource Brush.Warning}"/>
         <TextBlock Grid.Column="2"
                    Text="{Binding To.Subject}"
                    Margin="8,0,0,0"

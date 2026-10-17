@@ -137,7 +137,7 @@
             <TextBlock FontSize="11"
                        Text="{Binding #Editor.SubjectGuideLength, Mode=OneWay}"
                        VerticalAlignment="Center"/>
-            <Path Width="10" Height="10" Margin="4,0,0,0" Data="{StaticResource Icons.Error}" Fill="DarkGoldenrod" IsVisible="{Binding #Editor.WarnSubjectLength, Mode=OneWay}"/>
+            <Path Width="10" Height="10" Margin="4,0,0,0" Data="{StaticResource Icons.Error}" Fill="{DynamicResource Brush.Warning}" IsVisible="{Binding #Editor.WarnSubjectLength, Mode=OneWay}"/>
           </StackPanel>
         </Grid>
       </Border>

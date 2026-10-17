@@ -90,7 +90,7 @@
                              FontFamily="{DynamicResource Fonts.Monospace}"
                              Cursor="Hand"
                              Background="Transparent"
-                             Foreground="DarkOrange"
+                             Foreground="{DynamicResource Brush.Warning}"
                              TextDecorations="Underline"
                              Margin="8,0,0,0"
                              PointerPressed="OnPressCommitSHA"/>
@@ -197,7 +197,7 @@
                         <TextBlock Grid.Column="2"
                                    Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                                    FontFamily="{DynamicResource Fonts.Monospace}"
-                                   Foreground="DarkOrange"
+                                   Foreground="{DynamicResource Brush.Warning}"
                                    Margin="8,0,0,0"
                                    TextDecorations="Underline"
                                    Cursor="Hand"

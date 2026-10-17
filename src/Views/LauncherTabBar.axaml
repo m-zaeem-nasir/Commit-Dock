@@ -38,31 +38,48 @@
           <ListBox.Styles>
             <Style Selector="ListBoxItem">
               <Setter Property="Padding" Value="0"/>
+              <Setter Property="Margin" Value="0,0,2,0"/>
             </Style>
             <Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
               <Setter Property="Background" Value="Transparent"/>
-              <Setter Property="Opacity" Value=".5"/>
+              <Setter Property="CornerRadius" Value="8,8,0,0"/>
+              <Setter Property="Opacity" Value=".62"/>
             </Style>
             <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-              <Setter Property="Background" Value="Transparent"/>
-              <Setter Property="Opacity" Value=".85"/>
+              <Setter Property="Background" Value="{DynamicResource Brush.Hover}"/>
+              <Setter Property="Opacity" Value=".9"/>
             </Style>
             <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
-              <Setter Property="Background" Value="Transparent"/>
+              <Setter Property="Background" Value="{DynamicResource Brush.ToolBar}"/>
+              <Setter Property="Opacity" Value="1"/>
+            </Style>
+            <Style Selector="ListBoxItem:selected TextBlock.tab_title">
+              <Setter Property="FontWeight" Value="SemiBold"/>
+            </Style>
+            <Style Selector="ListBoxItem Border.tab_indicator">
+              <Setter Property="IsVisible" Value="False"/>
+            </Style>
+            <Style Selector="ListBoxItem:selected Border.tab_indicator">
+              <Setter Property="IsVisible" Value="True"/>
+            </Style>
+            <Style Selector="ListBoxItem Button.tab_close">
+              <Setter Property="Opacity" Value="0"/>
+            </Style>
+            <Style Selector="ListBoxItem:pointerover Button.tab_close, ListBoxItem:selected Button.tab_close">
               <Setter Property="Opacity" Value="1"/>
             </Style>
           </ListBox.Styles>
 
           <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-              <StackPanel Orientation="Horizontal" Height="30"/>
+              <StackPanel Orientation="Horizontal" Height="34" VerticalAlignment="Bottom"/>
             </ItemsPanelTemplate>
           </ListBox.ItemsPanel>
 
           <ListBox.ItemTemplate>
             <DataTemplate DataType="vm:LauncherPage">
-              <v:LauncherTabSizeBox UseFixedWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseFixedTabWidth}" Height="30"
-                                    Padding="0,2,0,0"
+              <v:LauncherTabSizeBox UseFixedWidth="{Binding Source={x:Static vm:Preferences.Instance}, Path=UseFixedTabWidth}" Height="34"
+                                    Padding="0"
                                     Background="Transparent"
                                     PointerPressed="OnPointerPressedTab"
                                     PointerMoved="OnPointerMovedOverTab"
@@ -82,6 +99,13 @@
                 </ToolTip.Tip>
 
                 <Grid ColumnDefinitions="Auto,*,Auto">
+                  <Border Grid.Column="0" Grid.ColumnSpan="3"
+                          Classes="tab_indicator"
+                          Height="2" Margin="10,0"
+                          VerticalAlignment="Top"
+                          CornerRadius="0,0,2,2"
+                          Background="{DynamicResource Brush.Accent}"
+                          IsHitTestVisible="False"/>
                   <v:Bookmark Grid.Column="0"
                               Width="12" Height="12"
                               Margin="12,0"
@@ -107,24 +131,25 @@
                              Fill="{Binding DirtyState, Converter={x:Static c:DirtyStateConverters.ToBrush}}"/>
 
                     <TextBlock Grid.Column="1"
+                               Classes="tab_title"
                                VerticalAlignment="Center"
-                               FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                                TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
                                Text="{Binding Node.Name}"
                                IsHitTestVisible="False"/>
                   </Grid>
 
                   <TextBlock Grid.Column="1"
+                             Classes="tab_title"
                              HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                             FontSize="{Binding Source={x:Static vm:Preferences.Instance}, Path=DefaultFontSize, Converter={x:Static c:DoubleConverters.Decrease}}"
                              TextAlignment="Center"
                              Text="{DynamicResource Text.PageTabBar.Welcome.Title}"
                              IsVisible="{Binding !Node.IsRepository}"
                              IsHitTestVisible="False"/>
 
                   <Button Grid.Column="2"
-                          Classes="icon_button"
-                          Width="14" Height="12" Margin="12,0"
+                          Classes="icon_button tab_close"
+                          Width="20" Height="20" Margin="8,0"
                           Click="OnCloseTab">
                     <ToolTip.Tip>
                       <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -136,7 +161,7 @@
                                    Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
                       </StackPanel>
                     </ToolTip.Tip>
-                    <Path Width="9" Height="9" Data="{StaticResource Icons.Close}"/>
+                    <Path Width="8" Height="8" Data="{StaticResource Icons.Close}"/>
                   </Button>
                 </Grid>
               </v:LauncherTabSizeBox>
@@ -145,8 +170,9 @@
         </ListBox>
 
         <Button Classes="icon_button"
-                Width="16" Height="16"
-                Margin="8,2,8,0"
+                Width="26" Height="26"
+                Margin="6,0,8,0"
+                VerticalAlignment="Center"
                 Command="{Binding AddNewTab}"
                 IsVisible="{Binding !#ThisControl.IsScrollButtonVisible}">
           <ToolTip.Tip>
@@ -170,7 +196,7 @@
         <Path Width="8" Height="14" Stretch="Fill" Data="{StaticResource Icons.TriangleRight}"/>
       </RepeatButton>
 
-      <Button Classes="icon_button" Width="16" Height="28" Margin="4,2,0,0" Command="{Binding AddNewTab}">
+      <Button Classes="icon_button" Width="26" Height="26" Margin="4,0,0,0" Command="{Binding AddNewTab}">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
             <TextBlock Text="{DynamicResource Text.PageTabBar.New}" VerticalAlignment="Center"/>

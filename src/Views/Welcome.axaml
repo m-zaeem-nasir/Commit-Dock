@@ -12,35 +12,48 @@
   <Grid RowDefinitions="*,Auto" Margin="8">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="2*" MinWidth="600"/>
+      <ColumnDefinition Width="2*" MinWidth="600" MaxWidth="980"/>
       <ColumnDefinition Width="1*"/>
     </Grid.ColumnDefinitions>
 
     <!-- Managed Repositories -->
-    <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,*">
+    <Grid Grid.Row="0" Grid.Column="1" RowDefinitions="Auto,Auto,*" Margin="0,24,0,0">
+      <!-- Hero: what this screen is for, and the two ways to get a repository in -->
+      <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,20">
+        <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="4" VerticalAlignment="Center">
+          <TextBlock Text="{DynamicResource Text.Welcome.Empty.Title}" FontSize="22" FontWeight="SemiBold"/>
+          <TextBlock Text="{DynamicResource Text.Welcome.Empty.Desc}" Foreground="{DynamicResource Brush.FG2}" TextWrapping="Wrap"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="16,0,0,0">
+          <Button Classes="flat" Height="34" Padding="14,0" Command="{Binding OpenLocalRepository}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Path Width="14" Height="14" Data="{StaticResource Icons.Folder.Open}"/>
+              <TextBlock Text="{DynamicResource Text.Toolbar.Open}" VerticalAlignment="Center"/>
+            </StackPanel>
+          </Button>
+          <Button Classes="flat primary" Height="34" Padding="14,0" Command="{Binding Clone}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Path Width="14" Height="14" Data="{StaticResource Icons.Clone}"/>
+              <TextBlock Text="{DynamicResource Text.Toolbar.Clone}" VerticalAlignment="Center" Foreground="{DynamicResource Brush.OnAccent}"/>
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </Grid>
+
       <!-- Search Box -->
-      <TextBox Grid.Row="0"
+      <TextBox Grid.Row="1"
                x:Name="SearchBox"
-               Height="32"
+               Height="38"
                Padding="0"
-               CornerRadius="16"
-               BorderBrush="{DynamicResource Brush.Border0}"
+               CornerRadius="{DynamicResource Radius.Large}"
                BorderThickness="1"
                Background="{DynamicResource Brush.Contents}"
                Watermark="{DynamicResource Text.Welcome.Search}"
                VerticalContentAlignment="Center"
                Text="{Binding SearchFilter, Mode=TwoWay}">
-        <TextBox.Styles>
-          <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
-          </Style>
-          <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
-            <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border0}"/>
-          </Style>
-        </TextBox.Styles>
-
         <TextBox.InnerLeftContent>
-          <Path Width="16" Height="16" Margin="6,0,3,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
+          <Path Width="15" Height="15" Margin="12,0,6,0" Data="{StaticResource Icons.Search}" Fill="{DynamicResource Brush.FG2}"/>
         </TextBox.InnerLeftContent>
 
         <TextBox.InnerRightContent>
@@ -52,16 +65,16 @@
                     HotKey="{OnPlatform Ctrl+F, macOS=⌘+F}"/>
 
             <Button Classes="icon_button" IsVisible="{Binding SearchFilter, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Click="OnClearSearchFilter">
-              <Path Width="16" Height="16" Margin="0,0,0,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG1}"/>
+              <Path Width="15" Height="15" Margin="0,0,8,0" Data="{StaticResource Icons.Clear}" Fill="{DynamicResource Brush.FG2}"/>
             </Button>
           </StackPanel>
         </TextBox.InnerRightContent>
       </TextBox>
 
       <!-- Repository Tree -->
-      <v:RepositoryListBox Grid.Row="1"
+      <v:RepositoryListBox Grid.Row="2"
                            x:Name="TreeContainer"
-                           Margin="0,8,8,0"
+                           Margin="0,10,0,0"
                            Focusable="True"
                            Background="Transparent"
                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -84,13 +97,16 @@
           <Style Selector="ListBoxItem" x:DataType="vm:RepositoryNode">
             <Setter Property="Margin" Value="0"/>
             <Setter Property="Padding" Value="0"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="CornerRadius" Value="{DynamicResource Radius.Medium}"/>
             <Setter Property="FocusAdorner">
               <FocusAdornerTemplate>
                 <Border Background="Transparent" BorderThickness="0"/>
               </FocusAdornerTemplate>
             </Setter>
+          </Style>
+          <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource Brush.Hover}"/>
           </Style>
         </ListBox.Styles>
 
@@ -113,8 +129,8 @@
         <ListBox.ItemTemplate>
           <DataTemplate DataType="vm:RepositoryNode">
             <Grid Background="Transparent"
-                  Height="30"
-                  ColumnDefinitions="16,18,*,Auto,8"
+                  Height="36"
+                  ColumnDefinitions="20,22,*,Auto,10"
                   Margin="{Binding Depth, Converter={x:Static c:IntConverters.ToTreeMargin}}"
                   ClipToBounds="True"
                   ContextRequested="OnTreeNodeContextRequested"
@@ -148,8 +164,8 @@
                             IsVisible="{Binding !IsRepository}"/>
 
               <StackPanel Grid.Column="2" Orientation="Horizontal" ClipToBounds="True">
-                <TextBlock VerticalAlignment="Center" Text="{Binding Name}"/>
-                <TextBlock Margin="4,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Id, StringFormat=({0}), Converter={x:Static c:PathConverters.RelativeToHome}}">
+                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Name}"/>
+                <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource Brush.FG2}" Text="{Binding Id, Converter={x:Static c:PathConverters.RelativeToHome}}">
                   <TextBlock.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                       <Binding Path="IsRepository"/>
@@ -160,7 +176,7 @@
                 <Path Margin="2,0,0,0"
                       Width="12" Height="12"
                       Data="{StaticResource Icons.Error}"
-                      Fill="Orange"
+                      Fill="{DynamicResource Brush.Warning}"
                       IsVisible="{Binding IsInvalid}"/>
               </StackPanel>
 
@@ -171,34 +187,35 @@
                 <ContentControl.DataTemplates>
                   <DataTemplate DataType="m:RepositoryStatus">
                     <StackPanel Orientation="Horizontal">
-                      <Border Margin="3,0"
-                              Height="18"
-                              CornerRadius="9"
-                              Padding="6,0"
-                              Background="{DynamicResource Brush.FG1}"
+                      <Border Margin="4,0"
+                              Height="20"
+                              CornerRadius="10"
+                              Padding="7,0"
+                              Background="{DynamicResource Brush.Hover}"
                               VerticalAlignment="Center"
+                              ToolTip.Tip="{DynamicResource Text.WorkingCopy}"
                               IsVisible="{Binding LocalChanges, Converter={x:Static c:IntConverters.IsGreaterThanZero}}">
-                        <TextBlock Text="{Binding LocalChanges}"
-                                   FontFamily="{DynamicResource Fonts.Monospace}"
-                                   FontSize="11"
-                                   Foreground="{DynamicResource Brush.Window}"/>
+                        <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                          <Ellipse Width="6" Height="6" Fill="{DynamicResource Brush.Modified}" VerticalAlignment="Center"/>
+                          <TextBlock Text="{Binding LocalChanges}" FontSize="11" FontWeight="SemiBold"/>
+                        </StackPanel>
                       </Border>
 
-                      <TextBlock Margin="3,0"
+                      <TextBlock Margin="4,0"
                                  Text="{Binding TrackingDescription}"
-                                 FontFamily="{DynamicResource Fonts.Monospace}"
                                  FontSize="12"
+                                 Foreground="{DynamicResource Brush.FG2}"
+                                 VerticalAlignment="Center"
                                  IsVisible="{Binding IsTrackingStatusVisible}"/>
 
-                      <Border Margin="3,0,0,0"
-                              BorderThickness="1"
-                              BorderBrush="{DynamicResource Brush.FG2}"
-                              Height="20"
-                              CornerRadius="4"
-                              Padding="4,0">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                          <Path Width="12" Height="12" Data="{StaticResource Icons.Branch}"/>
-                          <TextBlock Margin="2,0,0,0" Text="{Binding CurrentBranch}" FontSize="12"/>
+                      <Border Margin="4,0,0,0"
+                              Height="22"
+                              CornerRadius="11"
+                              Padding="8,0"
+                              Background="{DynamicResource Brush.Hover}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="5">
+                          <Path Width="11" Height="11" Data="{StaticResource Icons.Branch}" Fill="{DynamicResource Brush.Accent}"/>
+                          <TextBlock Text="{Binding CurrentBranch}" FontSize="12"/>
                         </StackPanel>
                       </Border>
                     </StackPanel>
@@ -216,10 +233,9 @@
             Margin="0,8,0,0"
             HorizontalAlignment="Center" VerticalAlignment="Center"
             IsVisible="{OnPlatform True, Linux=False}">
-      <TextBlock Classes="italic"
-                 FontSize="12"
+      <TextBlock FontSize="12"
                  Text="{DynamicResource Text.Welcome.DragDropTip}"
-                 Opacity=".5"/>
+                 Foreground="{DynamicResource Brush.FG2}"/>
     </Border>
   </Grid>
 </UserControl>

@@ -191,10 +191,10 @@ namespace SourceGit.Views
                 if (allowWrap && x > 1.5 && x + item.Width > Bounds.Width)
                 {
                     x = 1.5;
-                    y += 20.0;
+                    y += PILL_HEIGHT + 4;
                 }
 
-                var entireRect = new RoundedRect(new Rect(x, y, item.Width, 16), new CornerRadius(4));
+                var entireRect = new RoundedRect(new Rect(x, y, item.Width, PILL_HEIGHT), new CornerRadius(5));
                 if (item.IsHead)
                 {
                     if (useGraphColor)
@@ -211,32 +211,32 @@ namespace SourceGit.Views
                     if (bg != null)
                         context.DrawRectangle(bg, null, entireRect);
 
-                    var labelRect = new RoundedRect(new Rect(x + 16, y, item.Width - 16, 16), new CornerRadius(4, 0, 0, 4));
+                    var labelRect = new RoundedRect(new Rect(x + 18, y, item.Width - 18, PILL_HEIGHT), new CornerRadius(0, 5, 5, 0));
                     using (context.PushOpacity(.2))
                         context.DrawRectangle(item.Brush, null, labelRect);
                 }
 
-                context.DrawLine(new Pen(item.Brush), new Point(x + 16, y), new Point(x + 16, y + 16));
-                context.DrawText(item.Label, new Point(x + 20, y + 8.0 - item.Label.Height * 0.5));
+                context.DrawLine(new Pen(item.Brush), new Point(x + 18, y), new Point(x + 18, y + PILL_HEIGHT));
+                context.DrawText(item.Label, new Point(x + 23, y + PILL_HEIGHT * 0.5 - item.Label.Height * 0.5));
 
                 if (item.Remotes.Count > 0)
                 {
-                    var rx = x + 20 + item.Label.WidthIncludingTrailingWhitespace + 4;
+                    var rx = x + 23 + item.Label.WidthIncludingTrailingWhitespace + 4;
 
                     if (hasSingleRemote)
                     {
-                        context.DrawLine(new Pen(item.Brush), new Point(rx, y), new Point(rx, y + 16));
-                        using (context.PushTransform(Matrix.CreateTranslation(rx + 4, y + 4)))
+                        context.DrawLine(new Pen(item.Brush), new Point(rx, y), new Point(rx, y + PILL_HEIGHT));
+                        using (context.PushTransform(Matrix.CreateTranslation(rx + 4, y + PILL_HEIGHT * 0.5 - 4)))
                             context.DrawGeometry(fg, null, remoteIcon);
                     }
                     else
                     {
                         foreach (var remote in item.Remotes)
                         {
-                            context.DrawLine(new Pen(item.Brush), new Point(rx, y), new Point(rx, y + 16));
-                            using (context.PushTransform(Matrix.CreateTranslation(rx + 4, y + 4)))
+                            context.DrawLine(new Pen(item.Brush), new Point(rx, y), new Point(rx, y + PILL_HEIGHT));
+                            using (context.PushTransform(Matrix.CreateTranslation(rx + 4, y + PILL_HEIGHT * 0.5 - 4)))
                                 context.DrawGeometry(fg, null, remoteIcon);
-                            context.DrawText(remote, new Point(rx + 16, y + 8.0 - remote.Height * 0.5));
+                            context.DrawText(remote, new Point(rx + 16, y + PILL_HEIGHT * 0.5 - remote.Height * 0.5));
                             rx += remote.WidthIncludingTrailingWhitespace + 22;
                         }
                     }
@@ -245,7 +245,7 @@ namespace SourceGit.Views
                 context.DrawRectangle(null, new Pen(item.Brush), entireRect);
 
                 var icon = CommitRefsIconCache.Instance.GetIcon(item.Decorator.Type);
-                using (context.PushTransform(Matrix.CreateTranslation(x + 3, y + 3)))
+                using (context.PushTransform(Matrix.CreateTranslation(x + 4, y + PILL_HEIGHT * 0.5 - 5)))
                     context.DrawGeometry(fg, null, icon);
 
                 x += item.Width + 4;
@@ -296,7 +296,7 @@ namespace SourceGit.Views
             var fg = Foreground;
             var normalBG = UseGraphColor ? Models.CommitGraph.Pens[commit.Color].Brush : Brushes.Gray;
             var labelSize = FontSize;
-            var requiredHeight = 16.0;
+            var requiredHeight = PILL_HEIGHT;
             var x = 0.0;
             var allowWrap = AllowWrap;
             var showTags = ShowTags;
@@ -314,7 +314,7 @@ namespace SourceGit.Views
                 var item = new RenderItem()
                 {
                     Decorator = decorator,
-                    Brush = decorator.Type == Models.DecoratorType.Tag ? Brushes.Gray : normalBG,
+                    Brush = decorator.Type == Models.DecoratorType.Tag ? TAG_BRUSH : normalBG,
                     IsHead = decorator.Type is Models.DecoratorType.CurrentBranchHead or Models.DecoratorType.CurrentCommitHead,
                 };
                 _items.Add(item);
@@ -340,7 +340,7 @@ namespace SourceGit.Views
                         fg);
                 }
 
-                item.Width = item.Label.Width + 24;
+                item.Width = item.Label.Width + 30;
 
                 var findRemotes = useCompactBranchNames && (decorator.Type == Models.DecoratorType.CurrentBranchHead || decorator.Type == Models.DecoratorType.LocalBranchHead);
                 if (findRemotes)
@@ -383,7 +383,7 @@ namespace SourceGit.Views
                 {
                     if (x > availableSize.Width)
                     {
-                        requiredHeight += 20.0;
+                        requiredHeight += PILL_HEIGHT + 4;
                         x = item.Width;
                     }
                 }
@@ -392,7 +392,7 @@ namespace SourceGit.Views
             double requiredWidth = 0;
             if (_items.Count > 0)
             {
-                if (allowWrap && requiredHeight > 16.0)
+                if (allowWrap && requiredHeight > PILL_HEIGHT)
                     requiredWidth = double.IsInfinity(availableSize.Width) ? x + 2 : availableSize.Width;
                 else
                     requiredWidth = x + 2;
@@ -401,6 +401,9 @@ namespace SourceGit.Views
             InvalidateVisual();
             return new Size(requiredWidth, requiredHeight);
         }
+
+        private const double PILL_HEIGHT = 20.0;
+        private static readonly IBrush TAG_BRUSH = new SolidColorBrush(Color.FromRgb(0xC8, 0x96, 0x2E));
 
         private List<RenderItem> _items = new List<RenderItem>();
     }

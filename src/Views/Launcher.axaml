@@ -19,10 +19,10 @@
     </Grid.RowDefinitions>
 
     <!-- Custom TitleBar -->
-    <Grid Grid.Row="0" ColumnDefinitions="Auto,32,32,*,Auto,Auto">
-      <!-- Bottom border -->
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+      <!-- Background (tabs merge into the toolbar below, so no bottom border) -->
       <Border Grid.Column="0" Grid.ColumnSpan="6"
-              BorderThickness="0,0,0,1" BorderBrush="{DynamicResource Brush.Border0}"
+              BorderThickness="0"
               Background="{DynamicResource Brush.TitleBar}"
               DoubleTapped="MaximizeOrRestoreWindow"
               PointerPressed="BeginMoveWindow"/>
@@ -34,7 +34,7 @@
                                   IsVisible="{OnPlatform False, macOS=True}"/>
 
       <!-- Menu (Windows/Linux) -->
-      <Button Grid.Column="0" Classes="icon_button" VerticalAlignment="Bottom" Margin="6,0,0,3" IsVisible="{OnPlatform True, macOS=False}">
+      <Button Grid.Column="0" Classes="icon_button" Width="30" Height="30" VerticalAlignment="Center" Margin="6,0,0,0" IsVisible="{OnPlatform True, macOS=False}" ToolTip.Tip="{DynamicResource Text.Preferences}">
         <Button.Flyout>
           <MenuFlyout Placement="BottomEdgeAlignedLeft" VerticalOffset="-6">
             <MenuItem Header="{DynamicResource Text.Preferences}" Command="{x:Static s:App.OpenPreferencesCommand}" InputGesture="Ctrl+,">
@@ -84,11 +84,11 @@
             </MenuItem>
           </MenuFlyout>
         </Button.Flyout>
-        <Path Width="12" Height="12" Data="{StaticResource Icons.Menu}"/>
+        <Path Width="14" Height="14" Data="{StaticResource Icons.Menu}"/>
       </Button>
 
       <!-- Workspace Dropdown Menu -->
-      <Button Grid.Column="1" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenWorkspaceMenu" HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
+      <Button Grid.Column="1" Classes="icon_button" Height="30" Padding="8,0" VerticalAlignment="Center" Margin="2,0,0,0" Click="OnOpenWorkspaceMenu" HotKey="{OnPlatform Ctrl+Alt+P, macOS=⌘+Alt+P}">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{DynamicResource Text.Workspace}" FontWeight="Bold" Foreground="{DynamicResource MenuFlyoutItemKeyboardAcceleratorTextForeground}"/>
@@ -100,13 +100,22 @@
                        VerticalAlignment="Center"/>
           </StackPanel>
         </ToolTip.Tip>
-        <Path Width="14" Height="14"
-              Data="{StaticResource Icons.Workspace}"
-              Fill="{Binding ActiveWorkspace.Brush}"/>
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <Path Width="14" Height="14"
+                Data="{StaticResource Icons.Workspace}"
+                Fill="{Binding ActiveWorkspace.Brush}"/>
+          <TextBlock Text="{Binding ActiveWorkspace.Name}"
+                     MaxWidth="120"
+                     TextTrimming="CharacterEllipsis"
+                     FontWeight="SemiBold"
+                     Foreground="{DynamicResource Brush.FG2}"
+                     VerticalAlignment="Center"/>
+          <Path Width="8" Height="8" Data="{StaticResource Icons.Down}" Fill="{DynamicResource Brush.FG2}" VerticalAlignment="Center"/>
+        </StackPanel>
       </Button>
 
       <!-- Pages Switcher Toggle Button -->
-      <Button Grid.Column="2" Classes="icon_button" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
+      <Button Grid.Column="2" Classes="icon_button" Width="30" Height="30" VerticalAlignment="Center" Margin="2,0,6,0" Click="OnOpenPagesCommandPalette" HotKey="{OnPlatform Ctrl+P, macOS=⌘+P}">
         <ToolTip.Tip>
           <StackPanel Orientation="Horizontal">
             <TextBlock Text="{DynamicResource Text.Launcher.Pages}"
@@ -118,22 +127,22 @@
                        VerticalAlignment="Center"/>
           </StackPanel>
         </ToolTip.Tip>
-        <Path Width="13" Height="13" Margin="0,2,0,0" Data="{StaticResource Icons.Tabs}"/>
+        <Path Width="14" Height="14" Data="{StaticResource Icons.Tabs}"/>
       </Button>
 
       <!-- Pages Tabs -->
-      <v:LauncherTabBar Grid.Column="3" Height="30" Margin="0,0,16,0" VerticalAlignment="Bottom"/>
+      <v:LauncherTabBar Grid.Column="3" Height="34" Margin="0,0,16,0" VerticalAlignment="Bottom"/>
 
       <!-- Update Available Button -->
       <Button Grid.Column="4"
               Classes="icon_button"
-              Height="30"
+              Width="30" Height="30"
               Margin="0,0,4,0"
-              VerticalAlignment="Top"
+              VerticalAlignment="Center"
               IsVisible="{Binding NewVersion, Converter={x:Static ObjectConverters.IsNotNull}}"
               Click="OnShowNewVersion"
               ToolTip.Tip="{DynamicResource Text.Launcher.NewVersion}">
-        <Path Width="15" Height="15" Margin="0,4,0,0" Data="{StaticResource Icons.SoftwareUpdate}" Fill="{DynamicResource Brush.Accent}"/>
+        <Path Width="15" Height="15" Data="{StaticResource Icons.SoftwareUpdate}" Fill="{DynamicResource Brush.Accent}"/>
       </Button>
 
       <!-- Caption Buttons (Windows/Linux) -->

@@ -50,7 +50,7 @@
                          VerticalAlignment="Center"
                          Text="{Binding SHA, Converter={x:Static c:StringConverters.ToShortSHA}}"
                          FontFamily="{DynamicResource Fonts.Monospace}"
-                         Foreground="DarkOrange"
+                         Foreground="{DynamicResource Brush.Warning}"
                          Margin="8,0,0,0"/>
               <TextBlock Grid.Column="2"
                          VerticalAlignment="Center"
@@ -91,7 +91,7 @@
                     IsVisible="{Binding TestingState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:RebaseTestingState.NoConflicts}}">
           <Path Width="14" Height="14"
                 Data="{DynamicResource Icons.CheckCircled}"
-                Fill="Green"/>
+                Fill="{DynamicResource Brush.Success}"/>
 
           <TextBlock Margin="8,0,0,0"
                      VerticalAlignment="Center"
@@ -103,7 +103,7 @@
                     IsVisible="{Binding TestingState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:RebaseTestingState.WillCauseConflicts}}">
           <Path Width="14" Height="14"
                 Data="{DynamicResource Icons.Error}"
-                Fill="Goldenrod"/>
+                Fill="{DynamicResource Brush.Modified}"/>
 
           <TextBlock Margin="8,0,0,0"
                      VerticalAlignment="Center"
@@ -115,7 +115,7 @@
                     IsVisible="{Binding TestingState, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:RebaseTestingState.UnknownError}}">
           <Path Width="14" Height="14"
                 Data="{DynamicResource Icons.Error}"
-                Fill="Goldenrod"/>
+                Fill="{DynamicResource Brush.Modified}"/>
 
           <TextBlock Margin="8,0,0,0"
                      VerticalAlignment="Center"

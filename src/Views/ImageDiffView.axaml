@@ -43,7 +43,7 @@
 
         <Grid RowDefinitions="Auto,*" Margin="16,0" IsVisible="{Binding New, Converter={x:Static ObjectConverters.IsNotNull}}">
           <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Border Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center">
+            <Border Height="16" Background="{DynamicResource Brush.SuccessBadge}" CornerRadius="8" VerticalAlignment="Center">
               <TextBlock Text="{DynamicResource Text.Diff.New}" Margin="8,0" FontSize="10" Foreground="White"/>
             </Border>
 
@@ -76,7 +76,7 @@
           <TextBlock Grid.Column="1" Text="{Binding OldImageSize}" Margin="8,0,0,0"/>
           <TextBlock Grid.Column="2" Text="{Binding OldFileSize, Converter={x:Static c:LongConverters.ToFileSize}}" Foreground="{DynamicResource Brush.FG2}" Margin="16,0,0,0"/>
 
-          <Border Grid.Column="3" Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
+          <Border Grid.Column="3" Height="16" Background="{DynamicResource Brush.SuccessBadge}" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
             <TextBlock Text="{DynamicResource Text.Diff.New}" Margin="8,0" FontSize="10" Foreground="White"/>
           </Border>
 
@@ -110,7 +110,7 @@
           <TextBlock Grid.Column="1" Text="{Binding OldImageSize}" Margin="8,0,0,0"/>
           <TextBlock Grid.Column="2" Text="{Binding OldFileSize, Converter={x:Static c:LongConverters.ToFileSize}}" Foreground="{DynamicResource Brush.FG2}" Margin="16,0,0,0"/>
 
-          <Border Grid.Column="3" Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
+          <Border Grid.Column="3" Height="16" Background="{DynamicResource Brush.SuccessBadge}" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
             <TextBlock Text="{DynamicResource Text.Diff.New}" Margin="8,0" FontSize="10" Foreground="White"/>
           </Border>
 
@@ -171,7 +171,7 @@
           <TextBlock Grid.Column="1" Text="{Binding OldImageSize}" Margin="8,0,0,0"/>
           <TextBlock Grid.Column="2" Text="{Binding OldFileSize, Converter={x:Static c:LongConverters.ToFileSize}}" Foreground="{DynamicResource Brush.FG2}" Margin="16,0,0,0"/>
 
-          <Border Grid.Column="3" Height="16" Background="Green" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
+          <Border Grid.Column="3" Height="16" Background="{DynamicResource Brush.SuccessBadge}" CornerRadius="8" VerticalAlignment="Center" Margin="32,0,0,0">
             <TextBlock Text="{DynamicResource Text.Diff.New}" Margin="8,0" FontSize="10" Foreground="White"/>
           </Border>
 

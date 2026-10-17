@@ -30,7 +30,7 @@
               HorizontalAlignment="Left" VerticalAlignment="Center"
               Data="{StaticResource Icons.Stashes}"/>
 
-        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Target.Name}" Foreground="DarkOrange"/>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Target.Name}" Foreground="{DynamicResource Brush.Warning}"/>
         <TextBlock Grid.Column="2" VerticalAlignment="Center" Text="{Binding Target.Subject}" TextTrimming="CharacterEllipsis" Margin="4,0,0,0"/>
       </Grid>
 
