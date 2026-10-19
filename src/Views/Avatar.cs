@@ -183,7 +183,7 @@ namespace CommitDock.Views
 
             if (change.Property == UserProperty)
             {
-                ToolTip.SetTip(this, GetToolTipText(_user));
+                ToolTip.SetTip(this, _user?.DisplayName);
 
                 if (_user == null)
                     return;
@@ -288,17 +288,6 @@ namespace CommitDock.Views
             menu.Items.Add(saveAs);
 
             menu.Open(this);
-        }
-
-        private static string GetToolTipText(Models.User user)
-        {
-            if (user == null)
-                return null;
-
-            if (!string.IsNullOrWhiteSpace(user.Name))
-                return user.Name;
-
-            return string.IsNullOrWhiteSpace(user.Email) ? null : user.Email;
         }
 
         private string GetFallbackString(string name)
