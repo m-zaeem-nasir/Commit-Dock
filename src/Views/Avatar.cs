@@ -41,6 +41,15 @@ namespace CommitDock.Views
             set => SetAndRaise(UseGitHubStyleAvatarProperty, ref _useGitHubStyleAvatar, value);
         }
 
+        public static readonly StyledProperty<bool> IsContextMenuEnabledProperty =
+            AvaloniaProperty.Register<Avatar, bool>(nameof(IsContextMenuEnabled), true);
+
+        public bool IsContextMenuEnabled
+        {
+            get => GetValue(IsContextMenuEnabledProperty);
+            set => SetValue(IsContextMenuEnabledProperty, value);
+        }
+
         public Avatar()
         {
             RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
@@ -174,6 +183,8 @@ namespace CommitDock.Views
 
             if (change.Property == UserProperty)
             {
+                ToolTip.SetTip(this, GetToolTipText(_user));
+
                 if (_user == null)
                     return;
 
@@ -189,6 +200,10 @@ namespace CommitDock.Views
 
         private void OnContextRequested(object sender, ContextRequestedEventArgs e)
         {
+            // Leave the event unhandled so it bubbles up to the owner's own context menu.
+            if (!IsContextMenuEnabled)
+                return;
+
             var toplevel = TopLevel.GetTopLevel(this);
             if (toplevel == null)
             {
@@ -273,6 +288,17 @@ namespace CommitDock.Views
             menu.Items.Add(saveAs);
 
             menu.Open(this);
+        }
+
+        private static string GetToolTipText(Models.User user)
+        {
+            if (user == null)
+                return null;
+
+            if (!string.IsNullOrWhiteSpace(user.Name))
+                return user.Name;
+
+            return string.IsNullOrWhiteSpace(user.Email) ? null : user.Email;
         }
 
         private string GetFallbackString(string name)

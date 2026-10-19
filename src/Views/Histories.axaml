@@ -189,7 +189,7 @@
                             VerticalAlignment="Center"
                             User="{Binding Author}"
                             Opacity="{Binding IsMerged, Converter={x:Static c:BoolConverters.IsMergedToOpacity}}"
-                            IsHitTestVisible="False"/>
+                            IsContextMenuEnabled="False"/>
 
                   <Border Grid.Column="1" Padding="8,0" ClipToBounds="True">
                     <TextBlock Text="{Binding Author.Name}"
