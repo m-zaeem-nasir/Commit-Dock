@@ -214,7 +214,7 @@ namespace CommitDock.Views
                 {
                     var start = new Point(link.Start.X, startY);
                     ctx.BeginFigure(start, false);
-                    HorizontalThenDown(ctx, start, new Point(link.End.X, endY));
+                    MergeOut(ctx, start, new Point(link.End.X, endY), rowHeight, IsCrossingForks(link.Start, link.End));
                     ctx.EndFigure(false);
                 }
 
@@ -237,53 +237,44 @@ namespace CommitDock.Views
                 var hasSegments = false;
                 using (var ctx = geo.Open())
                 {
-                    // A lane that joins its fork point needs room above the row boundary to round its first corner.
                     var cursor = new Point(points[0].X, startY);
-                    if (IsForkSegment(points, 1))
-                        cursor = new Point(cursor.X, startY - GetForkCorner(points[0], points[1]));
-
                     ctx.BeginFigure(cursor, false);
 
                     for (var i = 1; i < points.Count; i++)
                     {
+                        var from = points[i - 1];
                         var to = new Point(points[i].X, points[i].Y * rowHeight);
 
-                        if (Math.Abs(points[i].X - points[i - 1].X) < 0.01)
+                        if (Math.Abs(points[i].X - from.X) < 0.01)
                         {
-                            if (IsForkSegment(points, i + 1))
-                                to = new Point(to.X, to.Y - GetForkCorner(points[i], points[i + 1]));
-
                             if (to.Y > cursor.Y)
                             {
                                 ctx.LineTo(to);
+                                cursor = to;
                                 hasSegments = true;
                             }
                         }
-                        else if (IsRowCenter(points[i - 1].Y))
+                        else if (IsRowCenter(from.Y))
                         {
                             // Out of a merge commit, into the merged branch's lane.
-                            if (IsForkSegment(points, i + 1))
-                                to = new Point(to.X, Math.Max(cursor.Y, to.Y - GetForkCorner(points[i], points[i + 1])));
-
-                            HorizontalThenDown(ctx, cursor, to);
+                            cursor = MergeOut(ctx, cursor, to, rowHeight, IsCrossingForks(from, points[i]));
                             hasSegments = true;
                         }
                         else
                         {
-                            // Down a branch's lane, joining the commit it forked from just above its node. Drawn on its
-                            // own, so where several lanes join one commit the nearer ones can be layered on top.
+                            // Down a branch's lane and into the side of the commit it started from. Drawn on its own, so
+                            // where several branches start from one commit the nearer ones can be layered on top.
                             var junction = new StreamGeometry();
                             using (var jctx = junction.Open())
                             {
                                 jctx.BeginFigure(cursor, false);
-                                ForkJunction(jctx, cursor, to, rowHeight);
+                                DownThenHorizontal(jctx, cursor, to);
                                 jctx.EndFigure(false);
                             }
 
                             (path.IsHighlighted ? highlightedJunctions : dimmedJunctions).Add((junction, path.Color, Math.Abs(to.X - cursor.X)));
+                            cursor = to;
                         }
-
-                        cursor = to;
                     }
 
                     ctx.EndFigure(false);
@@ -403,37 +394,57 @@ namespace CommitDock.Views
             ctx.LineTo(to);
         }
 
-        private static void ForkJunction(StreamGeometryContext ctx, Point from, Point to, double rowHeight)
+        private static void DownThenHorizontal(StreamGeometryContext ctx, Point from, Point to)
         {
-            // Like "|/" in `git log --graph`: the lane turns along the row boundary above the commit it forked from, then
-            // drops into that commit's node from the top. Merges use the node's center line, so the two never overlap.
-            var boundary = to.Y - rowHeight * 0.5;
             var dir = Math.Sign(to.X - from.X);
-            var half = Math.Abs(to.X - from.X) * 0.5;
-            var r1 = Math.Min(Math.Min(CORNER_RADIUS, half), Math.Max(0, boundary - from.Y));
-            var r2 = Math.Min(CORNER_RADIUS, half);
+            var r = Math.Min(CORNER_RADIUS, Math.Min(Math.Abs(to.X - from.X), to.Y - from.Y));
+            var c0 = new Point(from.X, to.Y - r);
+            var c1 = new Point(from.X + dir * r, to.Y);
 
-            if (boundary - r1 > from.Y)
-                ctx.LineTo(new Point(from.X, boundary - r1));
-
-            var c0 = new Point(from.X + dir * r1, boundary);
-            ctx.CubicBezierTo(new Point(from.X, boundary - r1 + r1 * KAPPA), new Point(c0.X - dir * r1 * KAPPA, boundary), c0);
-
-            var c1 = new Point(to.X - dir * r2, boundary);
-            var c2 = new Point(to.X, boundary + r2);
-            ctx.LineTo(c1);
-            ctx.CubicBezierTo(new Point(c1.X + dir * r2 * KAPPA, boundary), new Point(to.X, c2.Y - r2 * KAPPA), c2);
+            ctx.LineTo(c0);
+            ctx.CubicBezierTo(new Point(c0.X, c0.Y + r * KAPPA), new Point(c1.X - dir * r * KAPPA, c1.Y), c1);
             ctx.LineTo(to);
         }
 
-        private static bool IsForkSegment(List<Point> points, int i)
+        /// <summary>
+        ///     Draws a merge line from a merge commit into the merged branch's lane and returns where it ends.
+        /// </summary>
+        private static Point MergeOut(StreamGeometryContext ctx, Point from, Point to, double rowHeight, bool fromBelow)
         {
-            return i > 0 && i < points.Count && Math.Abs(points[i].X - points[i - 1].X) >= 0.01 && !IsRowCenter(points[i - 1].Y);
+            if (!fromBelow)
+            {
+                HorizontalThenDown(ctx, from, to);
+                return to;
+            }
+
+            // Like "|\" in `git log --graph`: drop out of the bottom of the merge commit, run along the row boundary
+            // below it, then turn down into the merged branch's lane.
+            var boundary = from.Y + rowHeight * 0.5;
+            var dir = Math.Sign(to.X - from.X);
+            var r = Math.Min(CORNER_RADIUS, Math.Abs(to.X - from.X) * 0.5);
+
+            ctx.LineTo(new Point(from.X, boundary - r));
+            var c0 = new Point(from.X + dir * r, boundary);
+            ctx.CubicBezierTo(new Point(from.X, boundary - r + r * KAPPA), new Point(c0.X - dir * r * KAPPA, boundary), c0);
+
+            var c1 = new Point(to.X - dir * r, boundary);
+            var c2 = new Point(to.X, boundary + r);
+            ctx.LineTo(c1);
+            ctx.CubicBezierTo(new Point(c1.X + dir * r * KAPPA, boundary), new Point(to.X, c2.Y - r * KAPPA), c2);
+            return c2;
         }
 
-        private static double GetForkCorner(Point from, Point to)
+        /// <summary>
+        ///     Branches that start from a commit come into the right side of its node. A merge line heading right from the
+        ///     same commit would run over them, so it leaves from below the node instead.
+        /// </summary>
+        private bool IsCrossingForks(Point mergeCommit, Point target)
         {
-            return Math.Min(CORNER_RADIUS, Math.Abs(to.X - from.X) * 0.5);
+            if (target.X <= mergeCommit.X)
+                return false;
+
+            var row = (int)Math.Floor(mergeCommit.Y);
+            return row >= 0 && row < _graph.Dots.Count && _graph.Dots[row].IsForkPoint;
         }
 
         private static bool IsRowCenter(double y)
